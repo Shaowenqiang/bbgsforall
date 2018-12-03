@@ -1,0 +1,482 @@
+body {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-flow: column;
+    min-height: 100vh;
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif;
+    font-size: 16px;
+    color: #333333;
+    background-color: #e2e2e2;
+    overflow: hidden!important;
+}
+
+.header {
+    width: 100%;
+    min-width: 1280px;
+    height: 60px;
+    background: #FFFFFF;
+    display: flex;
+}
+
+.header .logo {
+    float: left;
+    line-height: 60px;
+    padding-left: 10px;
+}
+
+.header .logo {
+    float: left;
+    line-height: 60px;
+    padding-left: 10px;
+}
+
+#login-area {
+    float: right;
+    position: relative;
+}
+
+.logined {
+    list-style: none;
+}
+
+.logined > li {
+    float: left;
+    position: relative;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    cursor: pointer;
+}
+
+.user-card-box {
+    border-left: 1px solid #d7d7d7;
+}
+
+.user-card-box .dropdown-menu {
+    min-width: 150px;
+    left: -20px;
+}
+
+.user-card-box a:link, .user-card-box a:visited, .user-card-box a:hover, .user-card-box a:active {
+    color: #333333;
+    text-decoration: none;
+}
+
+.containerBox {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.left {
+    flex: 0 0 279px;
+    min-height: 100%;
+    background-color: #273947;
+}
+
+.left .l-tree {
+    overflow-y: auto;
+    text-align: center;
+    min-height: 100%;
+}
+
+.right {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 100%;
+    padding: 5px;
+}
+
+.fixDiv {
+    position: fixed;
+    width: 279px;
+    height: 32px;
+    background: #334a5c;
+    z-index: 10;
+}
+
+.fixTree {
+    position: relative;
+    z-index: 12;
+}
+
+.createNew {
+    margin-top: 10px;
+    height: 32px;
+    line-height: 32px;
+    background: #354a5b;
+    color: #becbd4;
+    cursor: pointer;
+}
+
+.mgr-small-xs {
+    margin-right: 6px;
+}
+
+.treeItemBtn {
+    color: #ffffff;
+    line-height: inherit;
+    font-size: 18px;
+    float: right;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+/*右侧内容介绍*/
+.rightInfo {
+    flex: 1;
+    height: 60px;
+    line-height: 60px;
+    background-color: #FFFFFF;
+}
+
+.rightInfo > #rightInfoBtn {
+}
+
+.tabNav {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+    min-height: 100%;
+    min-width: 1000px;
+    background-color: #FFFFFF;
+}
+
+.tab-pane {
+    background-color: #f0f0f0;
+}
+
+.iframeHeight {
+    /*padding: 10px;*/
+    border: 1px #d7d7d7 solid;
+}
+
+.flexboxDiv {
+    display: inline-flex;
+    justify-content: center;
+}
+
+.flexbox {
+    display: inline-flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+.dropdown-menu {
+    min-width: 170px;
+}
+
+#infoTittle {
+    /*visibility: hidden;*/
+}
+
+#rightInfoBtn {
+    /*visibility: hidden;*/
+}
+
+/*logo 绿色数线*/
+.borderLine {
+    float: left;
+    width: 3px;
+    height: 26px;
+    background: #18ab8e;
+    margin-left: 16px;
+    margin-top: 17px;
+}
+
+/*logo 文字*/
+.logoText {
+    float: left;
+    margin-left: 10px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 22px;
+    color: #18ab8e;
+}
+
+.nav-tabs > li {
+    float: left;
+    margin-bottom: -1px;
+}
+
+.active:hover .tabTitleText {
+    /*display: none;*/
+}
+
+/*tab页Css start*/
+.nav > li > a {
+    /*display: inline-flex;*/
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    /*max-width: 200px;*/
+    /*min-width: 50px;*/
+    position: relative;
+    padding: 5px 10px;
+    text-align: center;
+}
+
+.nav-tabs .dropdown-menu {
+    margin-top: 10px;
+    margin-left: -150px;
+}
+
+/*bootstrap.css 中修改的*/
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:focus, .dropdown-menu > .active > a:hover {
+    /* color: #fff; */
+    /* text-decoration: none; */
+    /* background-color: transparent; */
+    /* outline: 0; */
+}
+
+.nav-tabs {
+    flex: 0 0 34px;
+    border: none;
+    align-items: baseline;
+}
+
+.tab-content {
+    display: flex;
+    flex: 1;
+}
+
+.tab-content > .active {
+    display: flex;
+    flex: 1;
+    min-height: 100%;
+}
+
+.dorpdown_item {
+    cursor: pointer;
+}
+
+.dorpdown_item1 {
+    cursor: pointer;
+}
+
+.bgColor_tab {
+    color: #FFFFFF;
+    background-color: #18ab8e;
+}
+
+.bgColor_tab:hover {
+    color: #FFFFFF;
+    background-color: #18ab8e;
+!important;
+}
+
+.bgColor_tab > .tabTitleText {
+    color: #FFFFFF;
+}
+
+.bgColor_tab > .close {
+    color: #FFFFFF;
+}
+
+.nav > li > a:focus, .nav > li > a:hover {
+    text-decoration: none;
+    background-color: #18ab8e;
+}
+
+.nav > li > a:focus, .nav > li > a:hover > span {
+    color: #FFFFFF;
+}
+
+/*tab页Css end*/
+
+.b-upload {
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    line-height: 30px;
+    height: 32px;
+}
+
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.flexRow {
+    display: inline-flex;
+    flex-direction: row;
+}
+
+.flexRow > label {
+    flex: 0;
+    min-width: 80px;
+    line-height: 32px;
+    height: 32px;
+}
+
+.flexRow > select {
+    flex: 1;
+}
+
+.flexRow > input {
+    flex: 1;
+}
+
+.m8 {
+    margin: 8px;
+}
+
+.box {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.4);
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    z-index: 999;
+    display: none;
+}
+
+.box .loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+@-webkit-keyframes loading-3 {
+    50% {
+        transform: scale(0.4);
+        opacity: 0.3;
+    }
+
+    100% {
+        transform: scale(1);
+
+        opacity: 1;
+    }
+}
+
+.loading-3 {
+    position: absolute;
+}
+
+.loading-3 i {
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    /*background-color: #18ab8f;*/
+    background-color: #06735e;
+    position: absolute;
+}
+
+.loading-3 i:nth-child(1) {
+    top: 25px;
+    left: 0;
+    -webkit-animation: loading-3 1s ease 0s infinite;
+}
+
+.loading-3 i:nth-child(2) {
+    top: 17px;
+    left: 17px;
+    -webkit-animation: loading-3 1s ease -0.12s infinite;
+}
+
+.loading-3 i:nth-child(3) {
+    top: 0;
+    left: 25px;
+    -webkit-animation: loading-3 1s ease -0.24s infinite;
+}
+
+.loading-3 i:nth-child(4) {
+    top: -17px;
+    left: 17px;
+    -webkit-animation: loading-3 1s ease -0.36s infinite;
+}
+
+.loading-3 i:nth-child(5) {
+    top: -25px;
+    left: 0;
+    -webkit-animation: loading-3 1s ease -0.48s infinite;
+}
+
+.loading-3 i:nth-child(6) {
+    top: -17px;
+    left: -17px;
+    -webkit-animation: loading-3 1s ease -0.6s infinite;
+}
+
+.loading-3 i:nth-child(7) {
+    top: 0;
+    left: -25px;
+    -webkit-animation: loading-3 1s ease -0.72s infinite;
+}
+
+.loading-3 i:nth-child(8) {
+    top: 17px;
+    left: -17px;
+    -webkit-animation: loading-3 1s ease -0.84s infinite;
+}
+
+.desc {
+    position: relative;
+    top: 55px;
+    left: 7px;
+    color: #fff;
+    text-shadow: 1px 1px black, 2px 2px black, 3px 3px black, 4px 4px black, 5px 5px black, 6px 6px black, 7px 7px black, 8px 8px black;
+}
+
+.stepA {
+    position: absolute;
+    left: 289px;
+    height: 373px;
+}
+
+.stepA::before, .stepA::after {
+    box-sizing: border-box;
+    content: '';
+    position: absolute;
+    border: 3px dashed transparent;
+    border-radius: 8px;
+    width: 0;
+    height: 0;
+}
+
+.stepA::before {
+    top: 0;
+    left: 0;
+}
+
+.stepA::after {
+    bottom: 0;
+    right: 0;
+}
+.draw::before, .draw::after {
+    width: 100%;
+    height: 100%;
+}
+.draw::before {
+    border-top-color: #18ab8f;
+    border-right-color: #18ab8f;
+    -webkit-transition: width 0.25s ease-out, height 0.25s ease-out 0.25s;
+    transition: width 0.25s ease-out, height 0.25s ease-out 0.25s;
+}
+
+.draw::after {
+    border-bottom-color: #18ab8f;
+    border-left-color: #18ab8f;
+    -webkit-transition: border-color 0s ease-out 0.5s, width 0.25s ease-out 0.5s, height 0.25s ease-out 0.75s;
+    transition: border-color 0s ease-out 0.5s, width 0.25s ease-out 0.5s, height 0.25s ease-out 0.75s;
+}
+
+@-webkit-keyframes bounce {
+    0%, 100% {
+        -webkit-transform: scale(0.0)
+    }
+    50% {
+        -webkit-transform: scale(1.0)
+    }
+}

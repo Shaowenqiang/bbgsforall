@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.templet.dao.percentDao">
+    <sql id="DefaultTableName">TBL_BBGS_WEIGHT_PERCENT </sql>
+    <sql id="DefaultSelects"> ID , WEIGHT_NAME , WEIGHT_CONTENT ,ISDEFAULT</sql>
+    <resultMap id="DefaultResultMap" type="cn.com.hqep.templet.model.tblBbgsWeightPercentModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="WEIGHT_NAME" jdbcType="VARCHAR" property="weightName"/>
+        <result column="WEIGHT_CONTENT" jdbcType="VARCHAR" property="weightContent"/>
+        <result column="ISDEFAULT" jdbcType="VARCHAR" property="isDefault"/>
+    </resultMap>
+    <insert id="save" parameterType="cn.com.hqep.templet.model.tblBbgsTendererModel">
+        INSERT INTO
+        <include refid="DefaultTableName"/>
+        (
+        <include refid="DefaultSelects"/>
+        )
+        VALUES (
+        #{id,jdbcType=VARCHAR},
+        #{weightName,jdbcType=VARCHAR},
+        #{weightContent,jdbcType=VARCHAR},
+        #{isDefault,jdbcType=VARCHAR}
+        )
+    </insert>
+    <update id="updateModel" parameterType="cn.com.hqep.templet.model.tblBbgsWeightPercentModel">
+        UPDATE
+        <include refid="DefaultTableName"/>
+        <trim prefix="set" prefixOverrides=",">
+            <if test="id != null">
+                id = #{id,jdbcType=VARCHAR}
+            </if>
+            <if test="weightName != null">
+                , WEIGHT_NAME = #{weightName,jdbcType=VARCHAR}
+            </if>
+            <if test="weightContent != null">
+                , WEIGHT_CONTENT = #{weightContent,jdbcType=VARCHAR}
+            </if>
+            <if test="isDefault != null">
+                , ISDEFAULT = #{isDefault,jdbcType=VARCHAR}
+            </if>
+        </trim>
+        <trim prefix="where" prefixOverrides="and">
+            <if test="id != null">
+                id = #{id,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </update>
+    <select id="queryAll" parameterType="cn.com.hqep.templet.model.tblBbgsWeightPercentModel"
+            resultMap="DefaultResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        <include refid="DefaultTableName"/>
+        <trim prefix="where" prefixOverrides="and">
+            <if test="id != null">
+                id = #{id,jdbcType=VARCHAR}
+            </if>
+            <if test="weightName != null">
+                AND WEIGHT_NAME = #{weightName,jdbcType=VARCHAR}
+            </if>
+            <if test="weightContent != null">
+                AND WEIGHT_CONTENT = #{weightContent,jdbcType=VARCHAR}
+            </if>
+            <if test="isDefault != null">
+                AND ISDEFAULT = #{isDefault,jdbcType=VARCHAR}
+            </if>
+        </trim>
+        ORDER BY ISDEFAULT DESC
+    </select>
+    <delete id="delete" parameterType="String">
+        DELETE FROM
+        <include refid="DefaultTableName"/>
+        WHERE ID = #{id,jdbcType=VARCHAR}
+    </delete>
+</mapper>

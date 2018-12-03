@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>唱标</title>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.3.7/css/bootstrap.css">
+    <link rel="stylesheet" href="../plugins/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" href="../css/bidCSS.css">
+    <script src="../plugins/jquery-1.9.1.min.js"></script>
+    <script src="../plugins/bootstrap-3.3.7/js/bootstrap.js"></script>
+    <script src="../plugins/bootstrap-table/bootstrap-table.js"></script>
+    <script src="../plugins/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+</head>
+<body>
+    <!--<button type="button" class="gw-button" onclick="test()">测试导出</button>-->
+<div style="margin: 0 0;">
+    <div class="">
+    <table
+            style="border-collapse: separate; border-spacing: 0px 8px;" id="toolbar">
+        <tr>
+            <td class="textright pl10"><label>标段简称:</label></td>
+            <td class="textleft pl10"><input class="form-control search_bind" id="search_sort_bidAbbreviaion" placeholder="请输入标段简称"></td>
+            <td class="textright pl30"><label>供应商名称:</label></td>
+            <td class="textleft pl10"><input class="form-control search_bind" id = "search_sort_supplier" placeholder="请输入供应商名称"></td>
+
+            <td class="textright pl30"><button type="button" class="gw-l-button" onclick="queryAction()">查询</button></td>
+            <td class="textright pl30"><button type="button" class="gw-l-button" onclick="exportSortExcelAction()">导出</button></td>
+            <td class="textright pl30"><button type="button" class="gw-l-button" onclick="comprehensiveSortAction()">计算综合排名</button></td>
+        </tr>
+    </table>
+    <div class="bootstrapTableCssDesign mr10 ml10">
+        <table id="tb_comprehensiveSort"></table>
+    </div>
+</div>
+
+<!-- 操作成功 start -->
+<div class="modal fade bootstrapModalDesign" id="promptSuccessModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/创建成功.png" style="margin-top: -6px;"><label
+                        class="bold-size16">&nbsp;&nbsp;操作成功！</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button"  data-dismiss="modal">知道了</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 操作成功  end -->
+
+<!-- 操作失败 start -->
+<div class="modal fade bootstrapModalDesign" id="promptFailModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/操作失败.png" style="margin-top: -6px;"></img><label
+                        class="bold-size16">&nbsp;&nbsp;操作失败！</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button"  data-dismiss="modal">知道了</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 操作失败  end -->
+
+<!-- 至少选择一条 start -->
+<div class="modal fade bootstrapModalDesign" id="promptLessOneModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/至少选择.png" style="margin-top: -6px;"></img><label
+                        class="bold-size16">&nbsp;&nbsp;至少选择一条记录！</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button"  data-dismiss="modal">知道了</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 至少选择一条  end -->
+
+<!-- 是否确认删除 start -->
+<div class="modal fade bootstrapModalDesign" id="promptChoiseModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="close" data-dismiss="modal"
+                         aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/垃圾桶.png" style="margin-top: -6px;"></img><label
+                        class="bold-size16">&nbsp;&nbsp;是否确认删除？</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" id="btn_promptChoise">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 是否确认删除  end -->
+
+<!-- 不能为空 start -->
+<div class="modal fade bootstrapModalDesign" id="NoticeModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">警告提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/操作失败.png" style="margin-top: -6px;"></img>
+                    <label id="NoticeShow" class="bold-size16">&nbsp;&nbsp;</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 不能为空  end -->
+</div>
+<script>
+    /**
+     * 页面加载执行
+     * 初始化 方法
+     */
+    $(document).ready(function(){
+
+    });
+
+    //提示文本框不能为空的方法
+    function notNull(str) {
+        $('#NoticeModal').on('shown.bs.modal', function(e) {
+            document.getElementById('NoticeShow').innerHTML = str;
+        });
+        $("#NoticeModal").modal("show");
+    }
+
+    //综合排序的表格
+    $('#tb_comprehensiveSort').bootstrapTable({
+        url: '/bidder/queryList',          //请求后台的URL（*）
+        method: 'get',                        //请求方式（*）
+//        toolbar: '#toolbar',                  //工具按钮用哪个容器
+        striped: true,                        //是否显示行间隔色
+        cache: false,                         //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        sortable: false,                     //是否启用排序
+        strictSearch: true,                	//设置为 true启用 全匹配搜索，否则为模糊搜索
+        clickToSelect: true,                //是否启用点击选中行
+        height: 470,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        columns: [{
+            field: 'id',
+            title: 'id',
+            visible: false,
+            valign: 'middle',
+            align: "center"
+        }, {
+            formatter: function (value, row, index) {
+                return ++index;
+            },
+            title: '序号',
+            valign: 'middle',
+            align: "center",
+            width: "80"
+        }, {
+            field: 'bidAbbreviaion',
+            title: '标段简称',
+            width: "100",
+            valign: 'middle',
+            align: "center",
+            sortable:"true"
+        }, {
+            field: 'supplier',
+            title: '供应商名称',
+            valign: 'middle',
+            align: "center",
+            width: "320",
+            sortable:"true"
+        }, {
+            field: 'offer',
+            title: '投标报价（万元）',
+            valign: 'middle',
+            align: "center",
+            width: "80",
+            sortable:"true"
+        }, {
+            field: 'technologyScore',
+            title: '技术得分',
+            valign: 'middle',
+            align: "center",
+            width: "80",
+            sortable:"true"
+        }, {
+            field: 'priceScore',
+            title: '报价得分',
+            valign: 'middle',
+            align: "center",
+            width: "80",
+            sortable:"true"
+        }, {
+            field: 'businessScore',
+            title: '商务得分',
+            valign: 'middle',
+            align: "center",
+            width: "80",
+            sortable:"true"
+        }, {
+            field: 'totalScore',
+            title: '总分',
+            valign: 'middle',
+            align: "center",
+            width: "80",
+            sortable:"true"
+        }, {
+            field: 'sort',
+            title: '排名',
+            valign: 'middle',
+            align: "center",
+            width: "80",
+            sortable:"true"
+        }]
+    });
+
+
+    // 综合排序的表格选中样式添加方法
+    $("#tb_comprehensiveSort").on('click-row.bs.table', function(e, row, element) {
+        $('.selected').removeClass('selected');// 去除之前选中的行的，选中样式
+        $(element).addClass('selected');// 添加当前选中的 success样式用于区别
+    });
+
+
+    /**
+     * 查询按钮点击事件
+     * （根据标段简称 和 供应商 查询符合条件的数据）
+     */
+    function queryAction() {
+        var bidAbbreviaion = $("#search_sort_bidAbbreviaion").val();
+        var supplier = $("#search_sort_supplier").val();
+        var url = "/sort/queryList";
+        var subDate = {
+            "bidAbbreviaion" : bidAbbreviaion,
+                "supplier" : supplier
+    };
+        console.log(subDate);
+        $('#tb_comprehensiveSort')
+            .bootstrapTable(
+                'refresh',
+                {
+                    url : url,
+                    query:subDate,
+                    cache:false
+                });
+    }
+
+
+    /**
+     * 导出综合排序的表格
+     * */
+    function exportSortExcelAction(){
+        var bidAbbreviaion = $("#search_sort_bidAbbreviaion").val();
+        var supplier = $("#search_sort_supplier").val();
+        console.log(bidAbbreviaion)
+        console.log(supplier)
+        window.location.target = '_blank'
+        window.location.href = "/sort/exportSortExcel?bidAbbreviaion="+ bidAbbreviaion +"&supplier="+supplier;
+    }
+
+    /***
+     * 计算综合排名
+     * comprehensiveSortAction()
+     */
+    function comprehensiveSortAction() {
+        var url = "/sort/computeComprehensiveSort";
+        $.post(url,function (data) {
+            if(data){
+                //弹出操作成功提示框
+                $('#promptSuccessModal').modal('show');
+            }else {
+                //弹出操作失败提示框
+                $('#promptFailModal').modal('show');
+                console.log(data.msg);
+            }
+        })
+    }
+</script>
+</body>
+</html>

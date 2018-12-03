@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.templet.dao.batchDao">
+    <sql id="DefaultTableName">TBL_BBGS_BATCH</sql>
+    <sql id="DefaultSelects"> ID , BATCH_NAME , IS_MATERIAL </sql>
+    <resultMap id="DefaultResultMap" type="cn.com.hqep.templet.model.tblBbgsBatchModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="BATCH_NAME" jdbcType="VARCHAR" property="batchName"/>
+        <result column="IS_MATERIAL" jdbcType="VARCHAR" property="isMaterial"/>
+    </resultMap>
+    <insert id="saveBatch" parameterType="cn.com.hqep.templet.model.tblBbgsBatchModel">
+        INSERT INTO
+        <include refid="DefaultTableName"/>
+        (
+        <include refid="DefaultSelects"/>
+        )
+        VALUES (
+        #{id,jdbcType=VARCHAR},
+        #{batchName,jdbcType=VARCHAR},
+        #{isMaterial,jdbcType=VARCHAR}
+        )
+    </insert>
+    <select id="listAll" resultMap="DefaultResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        <include refid="DefaultTableName"/>
+    </select>
+</mapper>

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.templet.dao.bidInfoDao">
+    <sql id="DefaultTableName">TBL_BBGS_BID_INFORMATION</sql>
+    <sql id="DefaultSelects"> ID , BID_ABBREVIAION , TECHNOLOGY_TEMPLATE , BUSINESS_TEMPLATE , TECHNOLOGY_BID_RECORD , BUSINESS_BID_RECORD , BIDDER_LIST , PRICE_SCORE_TEMPLATE , BUSINESS_EXPERT_GROUP , TECHNOLOGY_EXPERT_GROUP , BUSINESS_WEIGHT , TECHNOLOGY_WEIGHT , PRICE_WEIGHT , INVALID , FLAG , PRICE_FORMULA , M </sql>
+    <resultMap id="DefaultResultMap" type="cn.com.hqep.templet.model.tblBbgsBidInformationModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="BID_ABBREVIAION" jdbcType="VARCHAR" property="bidAbbreviaion"/>
+        <result column="TECHNOLOGY_TEMPLATE" jdbcType="VARCHAR" property="technologyTemplate"/>
+        <result column="BUSINESS_TEMPLATE" jdbcType="VARCHAR" property="businessTemplate"/>
+        <result column="TECHNOLOGY_BID_RECORD" jdbcType="VARCHAR" property="technologyBidRecord"/>
+        <result column="BUSINESS_BID_RECORD" jdbcType="VARCHAR" property="businessBidRecord"/>
+        <result column="BIDDER_LIST" jdbcType="VARCHAR" property="bidderList"/>
+        <result column="PRICE_SCORE_TEMPLATE" jdbcType="VARCHAR" property="priceScoreTemplate"/>
+        <result column="BUSINESS_EXPERT_GROUP" jdbcType="VARCHAR" property="businessExpertGroup"/>
+        <result column="TECHNOLOGY_EXPERT_GROUP" jdbcType="VARCHAR" property="technologyExpertGroup"/>
+        <result column="BUSINESS_WEIGHT" jdbcType="VARCHAR" property="businessWeight"/>
+        <result column="TECHNOLOGY_WEIGHT" jdbcType="VARCHAR" property="technologyWeight"/>
+        <result column="PRICE_WEIGHT" jdbcType="VARCHAR" property="priceWeight"/>
+        <result column="INVALID" jdbcType="VARCHAR" property="invalid"/>
+        <result column="FLAG" jdbcType="VARCHAR" property="flag"/>
+        <result column="PRICE_FORMULA" jdbcType="VARCHAR" property="priceFormula"/>
+        <result column="M" jdbcType="VARCHAR" property="m"/>
+        <result column="TECHNOLOGY_TEMPLATE_CHN" jdbcType="VARCHAR" property="technologyTemplateChn"/>
+        <result column="TECHNOLOGY_TEMPLATE_PATH" jdbcType="VARCHAR" property="technologyTemplatePath"/>
+        <result column="BUSINESS_TEMPLATE_CHN" jdbcType="VARCHAR" property="businessTemplateChn"/>
+        <result column="BUSINESS_TEMPLATE_PATH" jdbcType="VARCHAR" property="businessTemplatePath"/>
+        <result column="TECHNOLOGY_BID_RECORD_CHN" jdbcType="VARCHAR" property="technologyBidRecordChn"/>
+        <result column="BUSINESS_BID_RECORD_CHN" jdbcType="VARCHAR" property="businessBidRecordChn"/>
+        <result column="BIDDER_LIST_CHN" jdbcType="VARCHAR" property="bidderListChn"/>
+        <result column="PRICE_SCORE_TEMPLATE_CHN" jdbcType="VARCHAR" property="priceScoreTemplateChn"/>
+        <result column="DESCRIBE_NAME" jdbcType="VARCHAR" property="describeName"/>
+        <result column="TECHNOLOGY_EXPERT_GROUP_NAME" jdbcType="VARCHAR" property="technologyExpertGroupName"/>
+        <result column="BUSINESS_EXPERT_GROUP_NAME" jdbcType="VARCHAR" property="businessExpertGroupName"/>
+        <result column="TECHNOLOGY_BID_RECORD_PATH" jdbcType="VARCHAR" property="technologyBidRecordPath"/>
+        <result column="BUSINESS_BID_RECORD_PATH" jdbcType="VARCHAR" property="businessBidRecordPath"/>
+        <result column="BIDDER_LIST_PATH" jdbcType="VARCHAR" property="bidderListPath"/>
+    </resultMap>
+    <!--插入标段-包记录-->
+    <insert id="saveBidInfo" parameterType="cn.com.hqep.templet.model.tblBbgsBidInformationModel">
+        INSERT INTO
+        <include refid="DefaultTableName"/>
+        (
+        <include refid="DefaultSelects"/>
+        )
+        VALUES (
+        #{id,jdbcType=VARCHAR},
+        #{bidAbbreviaion,jdbcType=VARCHAR},
+        #{technologyTemplate,jdbcType=VARCHAR},
+        #{businessTemplate,jdbcType=VARCHAR},
+        #{technologyBidRecord,jdbcType=VARCHAR},
+        #{businessBidRecord,jdbcType=VARCHAR},
+        #{bidderList,jdbcType=VARCHAR},
+        #{priceScoreTemplate,jdbcType=VARCHAR},
+        #{businessExpertGroup,jdbcType=VARCHAR},
+        #{technologyExpertGroup,jdbcType=VARCHAR},
+        #{businessWeight,jdbcType=VARCHAR},
+        #{technologyWeight,jdbcType=VARCHAR},
+        #{priceWeight,jdbcType=VARCHAR},
+        #{invalid,jdbcType=VARCHAR},
+        #{flag,jdbcType=VARCHAR},
+        #{priceFormula,jdbcType=VARCHAR},
+        #{m,jdbcType=VARCHAR}
+        )
+    </insert>
+    <!--查询所有未绑定模板的 标段-包-->
+    <select id="queryAllBid" resultMap="DefaultResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        <include refid="DefaultTableName"/>
+
+        WHERE FlAG = 'N'
+        ORDER BY
+        left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+''
+    </select>
+
+    <!--查询所有未绑定模板的 标段-包-->
+    <select id="queryAllBidUseIN" resultMap="DefaultResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        <include refid="DefaultTableName"/>
+
+        WHERE FlAG = 'N'
+        AND substring_index(BID_ABBREVIAION,'包',1) IN
+        <foreach item="item" index="index" collection="list"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY
+        left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+''
+    </select>
+    <select id="queryAllByModel" resultMap="DefaultResultMap">
+        select
+        T1.ID ID,
+        T1.BID_ABBREVIAION BID_ABBREVIAION,
+        T1.TECHNOLOGY_TEMPLATE TECHNOLOGY_TEMPLATE,
+        T1.BUSINESS_TEMPLATE BUSINESS_TEMPLATE,
+        T1.TECHNOLOGY_BID_RECORD TECHNOLOGY_BID_RECORD,
+        T1. BUSINESS_BID_RECORD BUSINESS_BID_RECORD,
+        T1.BIDDER_LIST BIDDER_LIST,
+        T1.PRICE_SCORE_TEMPLATE PRICE_SCORE_TEMPLATE,
+        T1.BUSINESS_EXPERT_GROUP BUSINESS_EXPERT_GROUP,
+        T1.TECHNOLOGY_EXPERT_GROUP TECHNOLOGY_EXPERT_GROUP,
+        T1.BUSINESS_WEIGHT BUSINESS_WEIGHT,
+        T1.TECHNOLOGY_WEIGHT TECHNOLOGY_WEIGHT,
+        T1.PRICE_WEIGHT PRICE_WEIGHT,
+        T1.INVALID INVALID,
+        T1.FLAG FLAG,
+        T1.PRICE_FORMULA,
+        T1.M,
+        T2.FILE_NAME TECHNOLOGY_TEMPLATE_CHN ,
+        T2.FILE_PATH TECHNOLOGY_TEMPLATE_PATH,
+        T3.FILE_NAME BUSINESS_TEMPLATE_CHN ,
+        T3.FILE_PATH BUSINESS_TEMPLATE_PATH,
+        T4.FILE_NAME TECHNOLOGY_BID_RECORD_CHN ,
+        T5.FILE_NAME BUSINESS_BID_RECORD_CHN ,
+        T6.FILE_NAME BIDDER_LIST_CHN ,
+        T7.FILE_NAME PRICE_SCORE_TEMPLATE_CHN,
+        T8.DESCRIPT DESCRIBE_NAME,
+        T9.EXPERT_GROUP_NAME TECHNOLOGY_EXPERT_GROUP_NAME,
+        T10.EXPERT_GROUP_NAME BUSINESS_EXPERT_GROUP_NAME,
+        T4.FILE_PATH TECHNOLOGY_BID_RECORD_PATH,
+        T5.FILE_PATH BUSINESS_BID_RECORD_PATH,
+        T6.FILE_PATH BIDDER_LIST_PATH
+        FROM TBL_BBGS_BID_INFORMATION T1
+        left join TBL_BBGS_TEMPLATE T2 ON T1.TECHNOLOGY_TEMPLATE = T2.ID
+        left join TBL_BBGS_TEMPLATE T3 ON T1.BUSINESS_TEMPLATE = T3.ID
+        left join TBL_BBGS_TEMPLATE T4 ON T1.TECHNOLOGY_BID_RECORD = T4.ID
+        left join TBL_BBGS_TEMPLATE T5 ON T1.BUSINESS_BID_RECORD = T5.ID
+        left join TBL_BBGS_TEMPLATE T6 ON T1.BIDDER_LIST = T6.ID
+        left join TBL_BBGS_TEMPLATE T7 ON T1.PRICE_SCORE_TEMPLATE = T7.ID
+        left join TBL_BBGS_FORMULA_EXECUTEFUN T8 ON T1.PRICE_FORMULA = T8.EXECUTEFUN
+        left join TBL_BBGS_EXPERT_GROUP T9 ON T1.TECHNOLOGY_EXPERT_GROUP = T9.ID
+        left join TBL_BBGS_EXPERT_GROUP T10 ON T1.BUSINESS_EXPERT_GROUP = T10.ID
+        <where>
+            1 = 1
+            <if test="id != null">
+                AND ID = #{id,jdbcType=VARCHAR}
+            </if>
+            <if test="bidAbbreviaion != null">
+                AND BID_ABBREVIAION LIKE CONCAT('%',#{bidAbbreviaion,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="technologyTemplate != null">
+                AND TECHNOLOGY_TEMPLATE = #{technologyTemplate,jdbcType=VARCHAR}
+            </if>
+            <if test="businessTemplate != null">
+                AND BUSINESS_TEMPLATE = #{businessTemplate,jdbcType=VARCHAR}
+            </if>
+            <if test="technologyBidRecord != null">
+                AND TECHNOLOGY_BID_RECORD = #{technologyBidRecord,jdbcType=VARCHAR}
+            </if>
+            <if test="businessBidRecord != null">
+                AND BUSINESS_BID_RECORD = #{businessBidRecord,jdbcType=VARCHAR}
+            </if>
+            <if test="bidderList != null">
+                AND BIDDER_LIST = #{bidderList,jdbcType=VARCHAR}
+            </if>
+            <if test="priceScoreTemplate != null">
+                AND PRICE_SCORE_TEMPLATE = #{priceScoreTemplate,jdbcType=VARCHAR}
+            </if>
+            <if test="businessExpertGroup != null">
+                AND BUSINESS_EXPERT_GROUP = #{businessExpertGroup,jdbcType=VARCHAR}
+            </if>
+            <if test=" technologyExpertGroup != null">
+                AND TECHNOLOGY_EXPERT_GROUP = #{ technologyExpertGroup,jdbcType=VARCHAR}
+            </if>
+            <if test="businessExpertGroup != null">
+                AND BUSINESS_EXPERT_GROUP = #{businessExpertGroup,jdbcType=VARCHAR}
+            </if>
+            <if test="businessWeight != null">
+                AND BUSINESS_WEIGHT = #{businessWeight,jdbcType=VARCHAR}
+            </if>
+            <if test="technologyWeight != null">
+                AND TECHNOLOGY_WEIGHT = #{technologyWeight,jdbcType=VARCHAR}
+            </if>
+            <if test="priceWeight != null">
+                AND PRICE_WEIGHT = #{priceWeight,jdbcType=VARCHAR}
+            </if>
+            <if test="invalid != null">
+                AND INVALID = #{invalid,jdbcType=VARCHAR}
+            </if>
+            <if test="flag != null">
+                AND FLAG = #{flag,jdbcType=VARCHAR}
+            </if>
+            <if test="priceFormula != null">
+                AND PRICE_FORMULA = #{priceFormula,jdbcType=VARCHAR}
+            </if>
+            <if test="m != null">
+                AND M = #{m,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY
+        left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+''
+    </select>
+    <!--查询所有绑定模板的 标段-包信息-->
+    <select id="queryAllBidRecord" resultMap="DefaultResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        <include refid="DefaultTableName"/>
+        WHERE FLAG = 'Y'
+        ORDER BY
+        left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+''
+    </select>
+    <!--通过 标段简称 来更新-->
+    <update id="updateBidInfo" parameterType="cn.com.hqep.templet.model.tblBbgsBidInformationModel">
+        UPDATE
+        <include refid="DefaultTableName"/>
+        <set>
+            <if test="technologyTemplate !=null ">
+                TECHNOLOGY_TEMPLATE =#{technologyTemplate,jdbcType=VARCHAR},
+            </if>
+            <if test="businessTemplate !=null ">
+                BUSINESS_TEMPLATE =#{businessTemplate,jdbcType=VARCHAR},
+            </if>
+            <if test="technologyBidRecord !=null ">
+                TECHNOLOGY_BID_RECORD =#{technologyBidRecord,jdbcType=VARCHAR},
+            </if>
+            <if test="businessBidRecord !=null ">
+                BUSINESS_BID_RECORD=#{businessBidRecord,jdbcType=VARCHAR},
+            </if>
+            <if test="bidderList !=null ">
+                BIDDER_LIST=#{bidderList,jdbcType=VARCHAR},
+            </if>
+            <if test="priceScoreTemplate !=null ">
+                PRICE_SCORE_TEMPLATE =#{priceScoreTemplate,jdbcType=VARCHAR},
+            </if>
+            <if test="businessExpertGroup !=null ">
+                BUSINESS_EXPERT_GROUP=#{businessExpertGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="technologyExpertGroup !=null ">
+                TECHNOLOGY_EXPERT_GROUP =#{technologyExpertGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="businessWeight !=null ">
+                BUSINESS_WEIGHT=#{businessWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="technologyWeight !=null ">
+                TECHNOLOGY_WEIGHT=#{technologyWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="priceWeight !=null ">
+                PRICE_WEIGHT = #{priceWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="invalid !=null ">
+                INVALID =#{invalid,jdbcType=VARCHAR},
+            </if>
+            <if test="flag !=null ">
+                FLAG =#{flag,jdbcType=VARCHAR},
+            </if>
+            <if test="priceFormula !=null ">
+                PRICE_FORMULA =#{priceFormula,jdbcType=VARCHAR},
+            </if>
+            <if test="m !=null ">
+                M =#{m,jdbcType=VARCHAR}
+            </if>
+        </set>
+        WHERE BID_ABBREVIAION = #{bidAbbreviaion}
+    </update>
+    <!--通过 主键 ID 更新-->
+    <update id="updateBidInfoFlag" parameterType="cn.com.hqep.templet.model.tblBbgsBidInformationModel">
+        UPDATE
+        <include refid="DefaultTableName"/>
+        <set>
+            <if test="bidAbbreviaion !=null ">
+                BID_ABBREVIAION =#{bidAbbreviaion,jdbcType=VARCHAR},
+            </if>
+            <if test="technologyTemplate !=null ">
+                TECHNOLOGY_TEMPLATE =#{technologyTemplate,jdbcType=VARCHAR},
+            </if>
+            <if test="businessTemplate !=null ">
+                BUSINESS_TEMPLATE =#{businessTemplate,jdbcType=VARCHAR},
+            </if>
+            <if test="technologyBidRecord !=null ">
+                TECHNOLOGY_BID_RECORD =#{technologyBidRecord,jdbcType=VARCHAR},
+            </if>
+            <if test="businessBidRecord !=null ">
+                BUSINESS_BID_RECORD=#{businessBidRecord,jdbcType=VARCHAR},
+            </if>
+            <if test="bidderList !=null ">
+                BIDDER_LIST=#{bidderList,jdbcType=VARCHAR},
+            </if>
+            <if test="priceScoreTemplate !=null ">
+                PRICE_SCORE_TEMPLATE =#{priceScoreTemplate,jdbcType=VARCHAR},
+            </if>
+            <if test="businessExpertGroup !=null ">
+                BUSINESS_EXPERT_GROUP=#{businessExpertGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="technologyExpertGroup !=null ">
+                TECHNOLOGY_EXPERT_GROUP =#{technologyExpertGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="businessWeight !=null ">
+                BUSINESS_WEIGHT=#{businessWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="technologyWeight !=null ">
+                TECHNOLOGY_WEIGHT=#{technologyWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="priceWeight !=null ">
+                PRICE_WEIGHT = #{priceWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="invalid !=null ">
+                INVALID =#{invalid,jdbcType=VARCHAR},
+            </if>
+            <if test="flag !=null ">
+                FLAG =#{flag,jdbcType=VARCHAR},
+            </if>
+            <if test="priceFormula !=null ">
+                PRICE_FORMULA =#{priceFormula,jdbcType=VARCHAR},
+            </if>
+            <if test="m !=null ">
+                M =#{m,jdbcType=VARCHAR}
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+    <!--查询所有绑定模板的 标段-包信息-->
+    <select id="getBidNameList" resultType="String">
+        SELECT
+        DISTINCT substring_index(BID_ABBREVIAION,'包',1)
+        FROM
+        TBL_BBGS_BID_INFORMATION
+        WHERE FLAG != 'Y'
+        ORDER BY
+        left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+''
+    </select>
+</mapper>

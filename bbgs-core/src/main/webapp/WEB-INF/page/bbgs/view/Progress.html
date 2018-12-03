@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Progress</title>
+
+    <link rel="stylesheet" href="../plugins/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" href="../css/boostrapTableCss.css">
+    <link rel="stylesheet" href="../css/Progress.css">
+</head>
+<body>
+<div class="progressContainer">
+    <div class="repository-lang-stats">
+        <ol class="repository-lang-stats-numbers">
+            <li>
+                <div>
+                    <span class="color-block progress-color" style="background-color:#f1e05a;"></span>
+                    <span class="lang">技术：</span>
+                    <span class="percent" id="js-percent">
+                        <input type="text" value="60" class="form-control percentInput" autocomplete="off">%
+                    </span>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <span class="color-block progress-color" style="background-color:#e34c26;"></span>
+                    <span class="lang">商务：</span>
+                    <span class="percent" id="sw-percent">
+                        <input type="text" value="30" class="form-control percentInput" autocomplete="off">%
+                    </span>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <span class="color-block progress-color" style="background-color:#4F5D95;"></span>
+                    <span class="lang">价格：</span>
+                    <span class="percent" id="jg-percent">
+                        <input type="text" value="10" class="form-control percentInput" autocomplete="off">%
+                    </span>
+                </div>
+            </li>
+            <li>
+                <div class="text-right">
+                    <button class="gw-l-button" onclick="saveWeight()">新增</button>
+                </div>
+            </li>
+        </ol>
+    </div>
+    <div class="progress-runway" id="main-progress">
+        <div class="progress-btn-wrapper" draggable="true" id="js" style="left: 60%;">
+            <div class="progress-btn js-btn"></div>
+        </div>
+        <div class="progress-btn-wrapper" draggable="true" id="sw" style="left: 90%;">
+            <div class="progress-btn sw-btn"></div>
+        </div>
+        <div class="progress-btn-wrapper" id="jg" style="left: 100%;">
+            <div class="progress-btn jg-btn"></div>
+        </div>
+        <span class="progress-color" id="js-progress" title="技术 60%" style="width:60%;"></span>
+        <span class="progress-color" id="sw-progress" title="商务 30%" style="width:30%;left: 60%;"></span>
+        <span class="progress-color" id="jg-progress" title="价格 10%" style="width:10%;left: 90%;"></span>
+    </div>
+
+</div>
+<div class="containerMine bootstrapTableCssDesign flex1" style="margin: 10px;">
+    <table id="table"></table>
+</div>
+<span class="dragImage" id="dragImage"></span>
+<script src="../js/Progress.js"></script>
+<script src="../plugins/jquery-1.9.1.min.js"></script>
+<script src="../plugins/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="../plugins/bootstrap-table/bootstrap-table.js"></script>
+<script src="../plugins/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+<script>
+    function saveWeight() {
+        console.log()
+        console.log($("#sw-percent>input:first").val())
+        console.log($("#jg-percent>input:first").val())
+        $.post("/percent/saveOne", {
+            js: $("#js-percent>input:first").val(),
+            sw: $("#sw-percent>input:first").val(),
+            jg: $("#jg-percent>input:first").val()
+        }, function (result) {
+            if (result.state === "success") {
+                parent.window.alertSuccess("新增成功")
+                $("#table").bootstrapTable("refresh")
+            } else if (result.state === "error") {
+                parent.window.alertModal(result.msg)
+            } else {
+                parent.window.alertModal("新增失败")
+            }
+
+        })
+    }
+    //初始化Table
+    $('#table').bootstrapTable({
+        url: "/percent/queryAll",          //请求后台的URL（*）
+        method: 'get',                        //请求方式（*）
+        striped: true,                        //是否显示行间隔色
+        cache: false,                         //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        clickToSelect: true,                //是否启用点击选中行
+        height: $(window).height() - 110,
+//        showColumns:true,
+//        showRefresh:true,
+//        showFooter:true,
+//        showHeader:true,
+        columns: [{
+            field: 'id',
+            title: 'ID',
+            visible: false,
+            align: "center"
+        }, {
+            formatter: function (value, row, index) {
+                return ++index;
+            },
+            title: '序号',
+            align: "center",
+            width: 40
+        }, {
+            field: 'weightName',
+            title: '权重名称',
+            align: "center",
+            formatter:function (value, row, index) {
+                return '<div style="text-align: left">'+value+'</div>'
+            }
+        }, {
+            field: 'weightName',
+            title: '技术权重',
+            align: "center",
+            formatter: function (value, row, index) {
+                var m = value.split("，");
+                for (var i = 0; i < m.length; i++) {
+                    if (m[i].indexOf("技术") === 0) {
+                        return m[i].replace("技术", "").replace("，", "").replace("：", "")
+                    }
+                }
+            }
+        }, {
+            field: 'weightName',
+            title: '商务权重',
+            align: "center",
+            formatter: function (value, row, index) {
+                var m = value.split("，");
+                for (var i = 0; i < m.length; i++) {
+                    if (m[i].indexOf("商务") === 0) {
+                        return m[i].replace("商务", "").replace("，", "").replace("：", "")
+                    }
+                }
+            }
+        }, {
+            field: 'weightName',
+            title: '价格权重',
+            align: "center",
+            formatter: function (value, row, index) {
+                var m = value.split("，");
+                for (var i = 0; i < m.length; i++) {
+                    if (m[i].indexOf("价格") === 0) {
+                        return m[i].replace("价格", "").replace("，", "").replace("：", "")
+                    }
+                }
+            }
+        },
+            {
+                field: 'isDefault',
+                title: '状态',
+                valign: 'middle',
+                align: "center",
+                formatter: function (value, row, index) {
+                    if (value === 'Y') {
+                        return '<div class="circle_contain"><span class="circle_b"></span><span>默认</span></div>'
+                    }
+                    var id = row.id
+                    return '<div class="circle_contain"><span class="circle_o"></span><a style="cursor: pointer" onclick="setDefault(\'' + id + '\')">设为默认</a></div>'
+
+                }
+            },
+            {
+                field: '',
+                title: '操作',
+                align: "center",
+                formatter: function (value, row) {
+                    var id = row.id;
+                    return '<a  style="cursor: pointer" onclick="deleteRow(\'' + id + '\')">删除</a>'
+                }
+            }]
+    });
+    function setDefault(id) {
+        $.post("/percent/setDefault", {id: id}, function (result) {
+            console.log(result)
+            if (result.state === "success") {
+                parent.alertSuccess("设置成功")
+                $("#table").bootstrapTable("refresh")
+            }
+        })
+    }
+    function deleteRow(id) {
+        parent.window.deletePercentModal(id)
+    }
+    function freshTable() {
+        $("#table").bootstrapTable("refresh")
+    }
+</script>
+</body>
+</html>

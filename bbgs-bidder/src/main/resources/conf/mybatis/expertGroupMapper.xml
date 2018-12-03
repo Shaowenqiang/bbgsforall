@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="cn.com.hqep.bidder.dao.expertGroupDao">
+
+    <sql id="DefaultTableName">TBL_BBGS_EXPERT_GROUP</sql>
+
+    <sql id="DefaultSelects"> ID,EXPERT_GROUP_NAME,TYPE,SORTID </sql>
+
+    <resultMap id="expertGroupResultMap" type="cn.com.hqep.bidder.model.tblBbgsExpertGroupModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="EXPERT_GROUP_NAME" jdbcType="VARCHAR" property="expertGroupName"/>
+        <result column="TYPE" jdbcType="VARCHAR" property="type"/>
+    </resultMap>
+
+    <insert id="saveExpertGroup" parameterType="cn.com.hqep.bidder.model.tblBbgsExpertGroupModel">
+        INSERT INTO
+        <include refid="DefaultTableName"/>
+        (
+        <include refid="DefaultSelects"/>
+        )
+        VALUES (
+        #{id,jdbcType=VARCHAR},
+        #{expertGroupName,jdbcType=VARCHAR},
+        #{type,jdbcType=TIMESTAMP},
+        #{sortid,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <select id="queryGroupList" parameterType="cn.com.hqep.bidder.model.tblBbgsExpertGroupModel" resultMap="expertGroupResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        <include refid="DefaultTableName"/>
+        ORDER BY TYPE DESC,SORTID
+
+    </select>
+
+    <update id="updateGroupById" parameterType="cn.com.hqep.bidder.model.tblBbgsExpertGroupModel" >
+        UPDATE
+        <include refid="DefaultTableName"/>
+        SET EXPERT_GROUP_NAME = #{expertGroupName,jdbcType=VARCHAR},
+        TYPE = #{type,jdbcType=VARCHAR},
+        SORTID = #{sortid,jdbcType=TIMESTAMP}
+        WHERE ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="delExpertGroup" parameterType="cn.com.hqep.bidder.model.tblBbgsExpertGroupModel">
+        DELETE FROM
+        <include refid="DefaultTableName"/>
+        WHERE ID = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="queryCount" parameterType="cn.com.hqep.bidder.model.tblBbgsExpertGroupModel" resultMap="expertGroupResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        <include refid="DefaultTableName"/>
+        WHERE
+        EXPERT_GROUP_NAME = #{expertGroupName,jdbcType=VARCHAR}
+        and TYPE = #{type,jdbcType=VARCHAR}
+    </select>
+
+    <select id="queryName" parameterType="cn.com.hqep.bidder.model.tblBbgsExpertGroupModel" resultMap="expertGroupResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        <include refid="DefaultTableName"/>
+        WHERE
+        ID = #{id,jdbcType=VARCHAR}
+    </select>
+</mapper>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>专家组信息维护</title>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.3.7/css/bootstrap.css">
+    <link rel="stylesheet" href="../plugins/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" href="../css/expertCSS.css">
+    <link rel="stylesheet" href="../css/boostrapTableCss.css">
+    <link rel="stylesheet" href="../css/button.css">
+</head>
+<body>
+
+<div class="flexForm containerMine">
+
+    <form id="filesForm" onsubmit="return saveReport()" action="/basicInfo/expertExcel" method="post"
+          enctype="multipart/form-data">
+        <div style="border: 1px solid #cccccc;border-radius: 5px;width: 300px;float: left;line-height: 30px;height: 32px;background-color: white"
+             class="b-upload">
+            <div style="float: left">
+                <input id="showFileInfo1"
+                       style="background: white;padding-left: 10px;height: 30px;border: 0px solid white;width: 100%"
+                       placeholder="请选择专家Excel文件" disabled>
+            </div>
+            <a href="javascript:;" class="a-upload" style="float: right;">
+                <!--<input type="file" id="exampleInputFile" name="file">-->
+                <input type="file" id="exampleInputFile1" name="expertFile">
+                文件上传
+            </a>
+        </div>
+        <button class="gw-l-button" disabled="disabled" id="importExcelBtn" style="margin-left: 8px;" type="submit">导入</button>
+    </form>
+    <div class="flex1 text-right" style="margin-right: 110px;">
+        <button type="button" class="gw-l-button" onclick="delAllExpert()">删除全部专家组及其下全部专家</button>
+    </div>
+</div>
+</div>
+
+<div class="greenLine"></div>
+<div style="width: 100%;">
+    <div class="col-sm-6 col-lg-6 col-xs-6 col-md-6" style="padding:0;margin:0;">
+        <div class="flexRow mb8 " style="width: 100%;line-height: 32px;height: 32px;">
+            <div class="InfoType flexRow">
+                <label style="font-weight: normal">类别:</label>
+                <input type="radio" name="grouptype" checked value="技术"/>技术
+                <input type="radio" name="grouptype" value="商务"/>商务
+            </div>
+
+            <div class="flexRow" style="margin-left: 50px;">
+                <label style="font-weight: normal; width: 80px; line-height: 32px;">组名:</label>
+                <select id="expertType" class="form-control">
+                    <option value="1">一组</option>
+                    <option value="2">二组</option>
+                    <option value="3">三组</option>
+                    <option value="4">四组</option>
+                    <option value="5">五组</option>
+                    <option value="6">六组</option>
+                    <option value="7">七组</option>
+                    <option value="8">八组</option>
+                    <option value="9">九组</option>
+                    <option value="10">十组</option>
+                </select>
+            </div>
+            <div class="flexRow flex1">
+                <div style="width: 100%;text-align: right">
+                    <button class="gw-l-button mb8"
+                            onclick="addGroup()">新增专家组
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="bootstrapTableCssDesign groupTable">
+            <table id="groupTable"></table>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-6 col-xs-6 col-md-6 ">
+        <div class="flexColumn" style="margin-left: 50px; margin-right: 100px">
+            <div class="flexSpace" style="text-align: right;min-width: 400px;line-height: 32px;">
+                <div class="flex0">
+                    <div class="inputExpert flexRow">
+                        <label style="width: 80px; font-weight: normal; ">专家姓名:&nbsp&nbsp</label>
+                        <input style="width: 200px" class="form-control" id="expertName"/>
+                    </div>
+                </div>
+                <div class="flex1">
+                    <button class="gw-l-button" style="line-height: 34px" onclick="addExpert()">新增专家</button>
+                </div>
+            </div>
+            <div class="flex1 mt8">
+                <div class="bootstrapTableCssDesign eptTable" style="min-width: 400px">
+                    <table id="eptTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="../plugins/jquery-1.9.1.min.js"></script>
+<script src="../plugins/jquery.form.js"></script>
+<!--<script src="../plugins/bootstrap-3.3.7/js/bootstrap.js"></script>-->
+<script src="../plugins/bootstrap-table/bootstrap-table.js"></script>
+<script src="../plugins/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+<script>
+
+    var selGroupId;                                 //左侧表格选中行id
+
+    $('#groupTable').bootstrapTable({
+        url: '/expert/queryGroupList',   //请求后台的URL（*）
+        method: 'get',                      //请求方式（*）
+        striped: true,                       //是否显示行间隔色
+        cache: false,                      //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        sortable: false,                            //是否启用排序
+        clickToSelect: true,                       //是否启用点击选中行
+        height: $(window).height() - 68,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        width: "100%",
+        columns: [{
+            field: 'id',
+            title: 'id',
+            visible: false,
+            valign: 'middle',
+            align: "center"
+        }, {
+            formatter: function (value, row, index) {
+                return ++index;
+            },
+            title: '序号',
+            valign: 'middle',
+            align: "center",
+            width: "40"
+        }, {
+            field: 'expertGroupName',
+            title: '组名',
+//            width:      "120",
+            valign: 'middle',
+            align: "center",
+            sortable: "true"
+        }, {
+            field: 'invalid',
+            formatter: function (value, row, index) {
+                return "<a onclick='delGroupOption(\"" + value + "," + row.id + "," + row.expertGroupName + "," + index + "\")'>删除</a>"
+            },
+            title: '操作',
+            valign: 'middle',
+            align: "center",
+//            width:      "50"
+        }]
+    });
+
+    $('#eptTable').bootstrapTable({
+        striped: true,                  //是否显示行间隔色
+        cache: false,                 //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        sortable: false,                 //是否启用排序
+        strictSearch: true,                  //设置为 true启用 全匹配搜索，否则为模糊搜索
+        clickToSelect: true,                  //是否启用点击选中行
+        height: $(window).height() - 110,                   //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        width: "100%",
+        columns: [{
+            field: 'id',
+            title: 'id',
+            visible: false,
+            valign: 'middle',
+            align: "center"
+        }, {
+            formatter: function (value, row, index) {
+                return ++index;
+            },
+            title: '序号',
+            valign: 'middle',
+            align: "center",
+            width: "40"
+        }, {
+            field: 'expertName',
+            title: '专家姓名',
+//            width:      "150",
+            valign: 'middle',
+            align: "center",
+            sortable: "true"
+        }, {
+            field: 'invalid',
+            formatter: function (value, row, index) {
+                return "<a onclick='delExpertOption(\"" + value + "," + row.id + "," + row.expertName + "," + index + "\")'>删除</a>"
+            },
+            title: '操作',
+            valign: 'middle',
+            align: "center",
+//            width:      "50"
+        }]
+    });
+
+    /**
+     * 保存输入信息
+     * addGroup()
+     */
+    function addGroup() {
+
+        var grouptype = $("input[name='grouptype']:checked").val();
+        var exptType = $.trim($('#expertType option:selected').text());
+        var selVal = $('#expertType option:selected').val();
+
+        //判断输入数据是否完整
+        if (grouptype == null || grouptype == undefined || grouptype == '') {
+            $('#optionWarn').html('请选择类别！');
+            $('#NoticeModal').modal('show');
+        } else if (exptType == null || exptType == undefined || exptType == '') {
+            $('#optionWarn').html('请选择组名！');
+            $('#NoticeModal').modal('show');
+        } else {
+            //获取输入数据
+            var data = {
+                expertGroupName: grouptype + exptType,
+                type: grouptype,
+                sortid: selVal
+            };
+            //发送数据
+            $.post("/expert/saveExpertGroup", data, function (result) {
+                if (result.state === "success") {
+                    parent.window.alertSuccess('保存成功！');
+                    $("#groupTable").bootstrapTable("refresh");
+
+                } else {
+                    parent.window.alertModal(result.msg.toString());
+                }
+            })
+        }
+    }
+
+    /**
+     *删除专家组行
+     * delGroupOption(rowId)
+     */
+    function delGroupOption(val) {
+        var arrs = val.split(",");
+        parent.window.delExpertGroup(arrs);
+    }
+
+    function freshGroupTable(val) {
+        var data = {"id": val};
+        $.post("/expert/delExpertGroup", data, function (flag) {
+            if (flag) {
+                data = {"groupId": val};
+                $.post("/expert/delExpertByGroupId", data, function (flag1) {
+                    if (flag1) {
+                        //删除成功
+                        parent.window.alertSuccess("删除成功！");
+                        //刷新表格
+                        $("#groupTable").bootstrapTable("refresh");
+                        $("#eptTable").bootstrapTable("refresh");
+                    } else {
+                        //删除错误
+                        parent.window.alertModal("删除组内专家失败！");
+                    }
+                })
+            } else {
+                //删除错误
+                parent.window.alertModal("删除组失败！");
+            }
+        })
+    }
+
+    /**
+     * 初始化页面，选中第一行并加载专家数据
+     *
+     */
+    $("#groupTable").on('load-success.bs.table', function (e, row, element) {
+
+        if ($('#groupTable tr:eq(1)').data("index") !== undefined) {
+            $('.selected').removeClass('selected');
+            $('#groupTable tr:eq(1)').addClass('selected');
+
+            var obj = $('#groupTable').bootstrapTable("getData");
+            if (obj !== null) {
+                selGroupId = obj[0].id;
+            }
+
+            $('#eptTable')
+                .bootstrapTable(
+                    'refresh',
+                    {
+                        url: "/expert/queryByGroupId",
+                        query: {
+                            "groupId": selGroupId
+                        },
+                        cache: true
+                    });
+        }
+    });
+
+    /**
+     * 点击左侧表格查询右侧专家信息
+     *
+     */
+    $("#groupTable").on('click-row.bs.table', function (e, row, element) {
+        $('.selected').removeClass('selected');
+        $(element).addClass('selected');
+        selGroupId = row.id;
+        var group_id = row.id;
+        $('#eptTable')
+            .bootstrapTable(
+                'refresh',
+                {
+                    url: "/expert/queryByGroupId",
+                    query: {
+                        "groupId": group_id
+                    },
+                    cache: true
+                });
+    });
+
+    //输入框焦点事件
+    function getInFocus() {
+        $('#expertName').focus();
+    }
+
+
+    /**
+     * 保存输入信息
+     * addExpert()
+     */
+    function addExpert() {
+
+        var selTable = $('#groupTable').find("tr.selected").data("index");
+        var exptName = $.trim($('#expertName').val());
+
+        //判断输入数据是否完整
+        if (selTable == null) {
+            parent.window.alertModal("请选择专家所在的组！");
+        } else if (exptName == null || exptName == undefined || exptName == '') {
+            parent.window.alertModal("请输入专家姓名！");
+        } else {
+            //获取输入数据
+            var data = {
+                "expertName": exptName,
+                "groupId": selGroupId
+            };
+            //发送数据
+            $.post("/expert/saveExpert", data, function (result) {
+                if (result.state === "success") {
+                    $('#expertName').val("");
+                    //输入框焦点事件
+                    parent.window.clearInput();
+                    $("#eptTable").bootstrapTable('refresh', {
+                        url: "/expert/queryByGroupId",
+                        query: {
+                            "groupId": selGroupId
+                        },
+                        cache: false
+                    });
+                } else {
+                    parent.window.expertRepeat(result.msg.toString());
+
+                }
+            })
+        }
+    }
+
+
+    /**
+     *删除专家行
+     * delGroupOption(rowId)
+     */
+    function delExpertOption(val) {
+        var arrs = val.split(",");
+        parent.window.delExpert(arrs);
+    }
+
+    function freshExpertTable(val) {
+        var data = {"id": val};
+
+        $.post("/expert/delExpert", data, function (flag) {
+            if (flag) {
+                //删除成功
+                parent.window.alertSuccess("删除成功！");
+                //刷新表格
+                $("#eptTable").bootstrapTable('refresh', {
+                    url: "/expert/queryByGroupId",
+                    query: {
+                        "groupId": selGroupId
+                    },
+                    cache: false
+                });
+            } else {
+                //删除错误
+                parent.window.alertModal('删除失败！');
+            }
+        })
+    }
+
+    var timeoutId = '000'
+
+    $(window).resize(function () {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(function () {
+            $("#groupTable").bootstrapTable('resetView')
+            $("#eptTable").bootstrapTable('resetView')
+        }, 20);
+    });
+    //邵文强修改开始========
+
+
+    //上传样式修改后的 把文件名显示的方法
+    $(".a-upload").on("change", "input[type='file']", function () {
+        var filePath = $(this).val();
+        if (filePath.indexOf(".xls") != -1 || filePath.indexOf(".xlsx") != -1) {
+            var arr = filePath.split('\\');
+            var fileName = arr[arr.length - 1];
+            $("#showFileInfo").val(fileName);
+            $("#showFileInfo1").val(fileName);
+        } else if (filePath.length == 0) {
+            $(".showFileInfo").val("您未上传文件");
+            $(".showFileInfo1").val("您未上传文件");
+            return false;
+        } else {
+            $("#showFileInfo").val("您上传文件类型有误！");
+            $("#showFileInfo1").val("您上传文件类型有误！");
+            return false;
+        }
+    });
+
+    function saveReport() {
+        if ($("#exampleInputFile1").val() === "") {
+            parent.window.alertModal("请选择上传文件！")
+            return false
+        }
+        $("#filesForm").ajaxSubmit({
+            beforeSubmit: function () {
+                parent.loadingOn("导入中")
+            },
+            error: function () {
+                parent.loadingOff()
+            },
+            success: function (result) {
+                if (result.state === 'success') {
+                    parent.loadingOff()
+                    parent.window.alertSuccess("导入成功！")
+                    window.location.reload()
+                } else if (result.state === 'error') {
+
+                    parent.loadingOff()
+                    if (result.msg !== "") {
+                        parent.window.alertModal(result.msg)
+                    } else {
+                        parent.window.alertModal("导入失败！")
+                    }
+                }
+            }
+        });
+        return false
+    }
+
+    /**
+     * 删除全部专家组和专家
+     */
+    function delAllExpert(){
+        parent.delAllExpertModal()
+    }
+    function expertReload() {
+        location.reload();
+    }
+
+    /**
+     * 查询是否可以再次导入
+     */
+    viewIsImport()
+
+    function viewIsImport() {
+        $("#importExcelBtn").removeAttr("disabled")
+
+        $.post("/basicInfo/viewIsImport",function (result) {
+            if(result.state==="success"){
+                $("#importExcelBtn").removeAttr("disabled")
+            }else {
+                $("#importExcelBtn").attr("disabled","disabled")
+            }
+        })
+    }
+    //邵文强修改结束========
+
+</script>
+
+</body>
+</html>

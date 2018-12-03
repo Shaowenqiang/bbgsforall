@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.hqep.templet.dao.tblBbgsPackageSupplierDao">
+    <!--查询供应商  FLAG_BIT 废标 -->
+    <select id="packageSupplierScore" parameterType="cn.com.hqep.templet.model.tblBbgsPackageSupplierModel"
+            resultType="cn.com.hqep.templet.model.tblBbgsPackageSupplierModel">
+        SELECT supplier ,technology_score technologyScore,
+        price_score priceScore,business_score businessScore,total_score totalScore,offer,sort,IS_WIN isWin
+        FROM TBL_BBGS_PACKAGE_SUPPLIER
+        <where>
+            FLAG_BIT != '0' AND OFFER != "无" AND sort != '' AND sort IS NOT NULL
+            <if test="(bidAbbreviaion != null) and (bidAbbreviaion != '')">
+                AND bid_abbreviaion = #{bidAbbreviaion}
+            </if>
+            <if test="(supplier != null) and (supplier != '')">
+                and supplier LIKE '%${supplier}%'
+            </if>
+        </where>
+
+        ORDER BY
+        left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+'', cast(sort as unsigned int) ASC
+
+    </select>
+
+    <!--查询标段简称  FLAG_INVALID 流标-->
+    <select id="getzbnolist" resultType="cn.com.hqep.templet.model.tblBbgsPackageSupplierModel">
+        SELECT DISTINCT BID_ABBREVIAION bidAbbreviaion
+        FROM TBL_BBGS_PACKAGE_SUPPLIER
+        <trim prefix="where" prefixOverrides="and">
+            <if test="(bidAbbreviaion != null) and (bidAbbreviaion != '')">
+                AND bid_abbreviaion LIKE '%${bidAbbreviaion}%'
+            </if>
+            <if test="(supplier != null) and (supplier != '')">
+                and supplier LIKE '%${supplier}%'
+            </if>
+            AND FLAG_INVALID != '0'
+                AND FLAG_BID_INVALID !='0'
+                    AND OFFER is not NULL AND OFFER != '无'
+        </trim>
+        ORDER BY
+        left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+''
+    </select>
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="cn.com.hqep.bidder.dao.expertDao">
+
+    <sql id="DefaultTableName">TBL_BBGS_EXPERT</sql>
+
+    <sql id="DefaultSelects"> ID,EXPERT_NAME,GROUP_ID </sql>
+
+    <resultMap id="expertResultMap" type="cn.com.hqep.bidder.model.tblBbgsExpertModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="EXPERT_NAME" jdbcType="VARCHAR" property="expertName"/>
+        <result column="GROUP_ID" jdbcType="VARCHAR" property="groupId"/>
+    </resultMap>
+
+    <insert id="saveExpert" parameterType="cn.com.hqep.bidder.model.tblBbgsExpertModel">
+        INSERT INTO
+        <include refid="DefaultTableName"/>
+        (
+        <include refid="DefaultSelects"/>
+        )
+        VALUES (
+        #{id,jdbcType=VARCHAR},
+        #{expertName,jdbcType=VARCHAR},
+        #{groupId,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="queryExpertList" parameterType="cn.com.hqep.bidder.model.tblBbgsExpertModel" resultMap="expertResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        <include refid="DefaultTableName"/>
+        ORDER BY EXPERT_NAME
+
+    </select>
+
+    <select id="queryByGroupId" parameterType="cn.com.hqep.bidder.model.tblBbgsExpertModel" resultMap="expertResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        <include refid="DefaultTableName"/>
+        WHERE GROUP_ID = #{groupId,jdbcType=VARCHAR}
+        ORDER BY CONVERT(EXPERT_NAME using gbk) ASC
+
+    </select>
+
+    <update id="updateById" parameterType="cn.com.hqep.bidder.model.tblBbgsExpertModel" >
+        UPDATE
+        <include refid="DefaultTableName"/>
+        SET EXPERT_NAME = #{expertName,jdbcType=VARCHAR},
+        GROUP_ID = #{groupId,jdbcType=VARCHAR}
+        WHERE ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="delExpert" parameterType="cn.com.hqep.bidder.model.tblBbgsExpertModel">
+        DELETE FROM
+        <include refid="DefaultTableName"/>
+        WHERE ID = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="delExpertByGroupId" parameterType="cn.com.hqep.bidder.model.tblBbgsExpertModel">
+        DELETE FROM
+        <include refid="DefaultTableName"/>
+        WHERE GROUP_ID = #{groupId,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="queryCount" parameterType="cn.com.hqep.bidder.model.tblBbgsExpertModel" resultMap="expertResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        <include refid="DefaultTableName"/>
+        WHERE
+        EXPERT_NAME = #{expertName,jdbcType=VARCHAR}
+    </select>
+</mapper>

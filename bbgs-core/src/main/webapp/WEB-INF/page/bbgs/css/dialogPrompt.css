@@ -1,0 +1,272 @@
+/**
+	提示框CSS
+*/
+.textright {
+    text-align: right;
+}
+
+.textleft {
+    text-align: left;
+}
+
+.textcenter {
+    text-align: center;
+}
+
+/*padding-left*/
+.pl2 {
+    padding-left: 2px;
+}
+.pl3{
+    padding-left: 3px;
+}
+.pl4{
+    padding-left: 4px;
+}
+.pl5 {
+    padding-left: 5px;
+}
+
+.pl10 {
+    padding-left: 10px;
+}
+
+.pl15 {
+    padding-left: 15px;
+}
+
+.pl16 {
+    padding-left: 16px;
+}
+
+.pl20 {
+    padding-left: 20px;
+}
+
+.pl30 {
+    padding-left: 30px;
+}
+.pl25 {
+    padding-left: 25px;
+}
+
+/*padding-right*/
+.pr2 {
+    padding-right: 2px;
+}
+.pr4 {
+    padding-right: 4px;
+}
+.pr5 {
+    padding-right: 5px;
+}
+
+.pr10 {
+    padding-right: 10px;
+}
+
+/* margin-top*/
+.mt15 {
+    margin-top: 15px;
+}
+.mb5{
+    margin-bottom: 5px;
+}
+
+.mt-6 {
+    margin-top: -6px;
+}
+
+/**margin-right*/
+.mr70 {
+    margin-right: 70px;
+}
+
+.mr76 {
+    margin-right: 76px;
+}
+
+/* table中文本框input*/
+.dialog-table-input {
+    width: 160px;
+    height: 30px;
+}
+
+.dialog-table-input95 {
+    width: 90px;
+    height: 30px;
+}
+
+.dialog-table-input100 {
+    width: 100px;
+    height: 30px;
+}
+
+.dialog-table-input110 {
+    width: 110px;
+    height: 30px;
+}
+
+.dialog-table-input120 {
+    width: 120px;
+    height: 30px;
+}
+
+.dialog-table-input125 {
+    width: 125px;
+    height: 30px;
+}
+
+.dialog-table-input135 {
+    width: 135px;
+    height: 30px;
+}
+.dialog-table-input136{
+    width: 136px;
+    height: 30px;
+}
+
+.dialog-table-input146{
+    width: 148px;
+    height: 30px;
+}
+.dialog-table-input140 {
+    width: 140px;
+    height: 30px;
+}
+
+.dialog-table-input142 {
+    width: 141px;
+    height: 30px;
+}
+.dialog-table-input143{
+    width: 143px;
+    height: 30px;
+}
+.dialog-table-input135 {
+    width: 135px;
+    height: 30px;
+}
+
+.dialog-table-input165 {
+    width: 165px;
+    height: 30px;
+}
+
+.dialog-table-input170 {
+    width: 170px;
+    height: 30px;
+}
+
+.dialog-table-input173 {
+    width: 173px;
+    height: 30px;
+}
+.dialog-table-input131{
+    width: 131px;
+    height: 30px;
+}
+
+.dialog-table-input210 {
+    width: 210px;
+    height: 30px;
+}
+.dialog-table-input226 {
+    width: 226px;
+    height: 30px;
+}
+
+/* table中文本框select*/
+.dialog-table-select {
+    width: 163px;
+    height: 30px;
+}
+
+.dialog-table-select103 {
+    width: 103px;
+    height: 30px;
+}
+
+.dialog-table-select120 {
+    width: 120px;
+    height: 30px;
+}
+
+.dialog-table-select134 {
+    width: 134px;
+    height: 30px;
+}
+.dialog-table-select139 {
+    width: 139px;
+    height: 30px;
+}
+
+.dialog-table-select143 {
+    width: 143px;
+    height: 30px;
+}
+
+.dialog-table-select144 {
+    width: 144px;
+    height: 30px;
+}
+
+.dialog-table-select145 {
+    width: 145px;
+    height: 30px;
+}
+.dialog-table-select146{
+    width: 146px;
+    height: 30px;
+}
+.dialog-table-select176 {
+    width: 176px;
+    height: 30px;
+}
+.dialog-table-select229{
+    width: 229px;
+    height: 30px;
+}
+/**line-height*/
+.lh30 {
+    line-height: 30px;
+}
+
+.lh36 {
+    line-height: 36px;
+}
+
+.lh37 {
+    line-height: 37px;
+}
+
+.lh70 {
+    line-height: 70px;
+}
+
+.lh110 {
+    line-height: 110px;
+}
+
+/**font-weight
+	font-size
+*/
+.bold-size16 {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/**border-bottom
+	color
+*/
+.borderbottom {
+    border-bottom: 1px solid #000;
+    color: #B79050;
+}
+
+/***
+labelwidth
+ */
+.labelwidth {
+    width: 105px;
+}

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.bidder.dao.priceInfoDao">
+    <resultMap id="priceInfoResultMap" type="cn.com.hqep.bidder.model.tblBbgsPriceInformationModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="PRICE" jdbcType="VARCHAR" property="price"/>
+        <result column="SUPPLIER" jdbcType="VARCHAR" property="supplier"/>
+        <result column="A1" jdbcType="VARCHAR" property="a1"/>
+        <result column="N" jdbcType="VARCHAR" property="n"/>
+        <result column="A2" jdbcType="VARCHAR" property="a2"/>
+        <result column="P" jdbcType="VARCHAR" property="p"/>
+        <result column="BASE_PRICE" jdbcType="VARCHAR" property="basePrice"/>
+        <result column="PRICE_SCORE" jdbcType="VARCHAR" property="priceScore"/>
+        <result column="SORT" jdbcType="VARCHAR" property="sort"/>
+        <result column="PACKAGENAME" jdbcType="VARCHAR" property="packagename"/>
+        <result column="A3" jdbcType="VARCHAR" property="a3"/>
+        <result column="A4" jdbcType="VARCHAR" property="a4"/>
+        <result column="BID" jdbcType="VARCHAR" property="bid"/>
+        <result column="M" jdbcType="VARCHAR" property="m"/>
+        <result column="BUSINESS_WEIGHT" jdbcType="VARCHAR" property="businessWeight"/>
+        <result column="TECHNOLOGY_WEIGHT" jdbcType="VARCHAR" property="technologyWeight"/>
+        <result column="PRICE_WEIGHT" jdbcType="VARCHAR" property="priceWeight"/>
+        <result column="BID_SETION" jdbcType="VARCHAR" property="bidSetion"/>
+        <result column="BID_ABBREVIAION" jdbcType="VARCHAR" property="bidAbbreviaion"/>
+    </resultMap>
+    <sql id="base_column_list">
+            ID
+            ,PRICE
+            ,SUPPLIER
+            ,A1
+            ,N
+            ,A2
+            ,P
+            ,BASE_PRICE
+            ,PRICE_SCORE
+            ,SORT
+            ,PACKAGENAME
+            ,A3
+            ,A4
+            ,BID
+            ,M
+            ,BUSINESS_WEIGHT
+            ,TECHNOLOGY_WEIGHT
+            ,PRICE_WEIGHT
+            ,BID_SETION
+            ,BID_ABBREVIAION
+    </sql>
+    <sql id="base_column_list_left">
+        T1.ID
+        ,T1.PRICE
+        ,T1.SUPPLIER
+        ,T1.A1
+        ,T1.N
+        ,T1.A2
+        ,T1.P
+        ,T1.BASE_PRICE
+        ,T1.PRICE_SCORE
+        ,T1.SORT
+        ,T1.PACKAGENAME
+        ,T1.A3
+        ,T1.A4
+        ,T1.BID
+        ,T1.M
+        ,T1.BUSINESS_WEIGHT
+        ,T1.TECHNOLOGY_WEIGHT
+        ,T1.PRICE_WEIGHT
+        ,T1.BID_SETION
+        ,T1.BID_ABBREVIAION
+    </sql>
+    <select id="queryListByName" resultMap="priceInfoResultMap" parameterType="cn.com.hqep.bidder.model.tblBbgsPriceInformationModel">
+        SELECT
+        <include refid="base_column_list_left"></include>
+        FROM BBGS.TBL_BBGS_PRICE_INFORMATION t1
+        LEFT JOIN BBGS.TBL_BBGS_PACKAGE_SUPPLIER t2 ON t1.BID_ABBREVIAION = t2.BID_ABBREVIAION AND t1.SUPPLIER = t2.SUPPLIER
+        WHERE t1.BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+        AND t2.FLAG_INVALID !='0' AND t2.FLAG_BIT !='0' AND t2.FLAG_BID_INVALID !='0' AND t2.OFFER != '无'
+        ORDER BY cast(t1.sort as unsigned int) ASC
+    </select>
+    <select id="queryListByNameAndSupplier" resultMap="priceInfoResultMap" parameterType="cn.com.hqep.bidder.model.tblBbgsPriceInformationModel">
+        SELECT
+        <include refid="base_column_list"></include>
+        FROM BBGS.TBL_BBGS_PRICE_INFORMATION
+        <trim prefix="where" prefixOverrides="and">
+            <if test="bidAbbreviaion != null">
+                BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+            </if>
+            <if test="supplier != null">
+                and SUPPLIER = #{supplier,jdbcType=VARCHAR}
+            </if>
+        </trim>
+        ORDER BY  cast(sort as unsigned int) ASC
+    </select>
+</mapper>

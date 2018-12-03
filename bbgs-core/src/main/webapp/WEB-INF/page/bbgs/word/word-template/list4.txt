@@ -1,0 +1,134 @@
+<p class=MsoNormal style='mso-layout-grid-align:none'><span lang=EN-US
+style='font-size:12.0pt;font-family:仿宋_GB2312'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='mso-outline-level:1;mso-layout-grid-align:none'><a
+name=未进入详评原因表></a><span lang=EN-US style='font-size:12.0pt;font-family:仿宋_GB2312'>$大序号$</span><span
+style='font-size:12.0pt;font-family:仿宋_GB2312'>．</span><span lang=EN-US
+style='font-size:12.0pt;font-family:仿宋_GB2312;mso-hansi-font-family:Arial;
+mso-bidi-font-family:Arial;mso-font-kerning:
+0pt'>$分标号$</span><span style='font-size:12.0pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+Arial;mso-bidi-font-family:Arial;
+mso-font-kerning:0pt'>$分标名称$</span><span style='font-size:12.0pt;font-family:
+仿宋_GB2312'>未进入详评原因</span><b style='mso-bidi-font-weight:normal'><span
+lang=EN-US style='mso-bidi-font-size:16.0pt;font-family:仿宋_GB2312'><o:p></o:p></span></b></p>
+
+<div align=center>
+
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse;border:none;mso-border-top-alt:
+ double windowtext 1.5pt;mso-border-bottom-alt:double windowtext 1.5pt;
+ mso-yfti-tbllook:1184;mso-padding-alt:0cm 0cm 0cm 0cm;mso-border-insideh:1.0pt solid windowtext;
+ mso-border-insidev:1.0pt solid windowtext'>
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;height:20.2pt'>
+  <td width="10%" style='width:10.24%;border-top:double windowtext 1.5pt;
+  border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 0cm 0cm 0cm;height:20.2pt'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b style='mso-bidi-font-weight:normal'><span
+  style='mso-bidi-font-size:10.5pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  宋体'>序号</span></b><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+  style='mso-bidi-font-size:10.5pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  华文仿宋'><o:p></o:p></span></b></p>
+  </td>
+  <td width="27%" style='width:27.32%;border-top:double windowtext 1.5pt;
+  border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-left-alt:solid windowtext 1.0pt;padding:0cm 0cm 0cm 0cm;
+  height:20.2pt'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b style='mso-bidi-font-weight:normal'><span
+  style='mso-bidi-font-size:10.5pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  宋体'>未进入详评原因</span></b><b style='mso-bidi-font-weight:normal'><span
+  lang=EN-US style='mso-bidi-font-size:10.5pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  华文仿宋'><o:p></o:p></span></b></p>
+  </td>
+  <td width="30%" style='width:30.7%;border-top:double windowtext 1.5pt;
+  border-left:none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-left-alt:solid windowtext 1.0pt;padding:0cm 0cm 0cm 0cm;
+  height:20.2pt'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b style='mso-bidi-font-weight:normal'><span
+  style='mso-bidi-font-size:10.5pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  宋体'>未实质响应的投标人数量</span></b><b style='mso-bidi-font-weight:normal'><span
+  lang=EN-US style='mso-bidi-font-size:10.5pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  华文仿宋'><o:p></o:p></span></b></p>
+  </td>
+  <td width="31%" style='width:31.74%;border-top:double windowtext 1.5pt;
+  border-left:none;border-bottom:solid windowtext 1.0pt;border-right:none;
+  mso-border-left-alt:solid windowtext 1.0pt;padding:0cm 0cm 0cm 0cm;
+  height:20.2pt'>
+  <p class=MsoNormal align=center style='text-align:center'><b
+  style='mso-bidi-font-weight:normal'><span style='mso-bidi-font-size:10.5pt;
+  font-family:仿宋_GB2312;mso-hansi-font-family:宋体'>未实质响应的投标文件份数</span></b><b
+  style='mso-bidi-font-weight:normal'><span lang=EN-US style='mso-bidi-font-size:
+  10.5pt;font-family:仿宋_GB2312;mso-hansi-font-family:华文仿宋'><o:p></o:p></span></b></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:1;height:20.2pt'>
+  <td width="10%" style='width:10.24%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext 1.0pt;padding:0cm 0cm 0cm 0cm;height:
+  20.2pt'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><span lang=EN-US style='mso-bidi-font-size:10.5pt;
+  font-family:仿宋_GB2312;mso-hansi-font-family:宋体'>1<o:p></o:p></span></p>
+  </td>
+  <td width="27%" style='width:27.32%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext 1.0pt;
+  padding:0cm 0cm 0cm 0cm;height:20.2pt'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><span style='mso-bidi-font-size:10.5pt;font-family:
+  仿宋_GB2312;mso-hansi-font-family:宋体'><span lang=EN-US><o:p></o:p></span></span></p>
+  </td>
+  <td width="30%" style='width:30.7%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext 1.0pt;
+  padding:0cm 0cm 0cm 0cm;height:20.2pt'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><span lang=EN-US style='mso-bidi-font-size:10.5pt;
+  font-family:仿宋_GB2312;mso-hansi-font-family:宋体'><o:p></o:p></span></p>
+  </td>
+  <td width="31%" style='width:31.74%;border:none;border-bottom:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext 1.0pt;
+  padding:0cm 0cm 0cm 0cm;height:20.2pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+  style='mso-bidi-font-size:10.5pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  宋体'><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:2;mso-yfti-lastrow:yes;height:20.2pt'>
+  <td width="10%" style='width:10.24%;border-top:none;border-left:none;
+  border-bottom:double windowtext 1.5pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext 1.0pt;padding:0cm 0cm 0cm 0cm;height:
+  20.2pt'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><span lang=EN-US style='mso-bidi-font-size:10.5pt;
+  font-family:仿宋_GB2312;mso-hansi-font-family:宋体'>2<o:p></o:p></span></p>
+  </td>
+  <td width="27%" style='width:27.32%;border-top:none;border-left:none;
+  border-bottom:double windowtext 1.5pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext 1.0pt;
+  padding:0cm 0cm 0cm 0cm;height:20.2pt'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><span style='mso-bidi-font-size:10.5pt;font-family:
+  仿宋_GB2312;mso-hansi-font-family:宋体'><span lang=EN-US><o:p></o:p></span></span></p>
+  </td>
+  <td width="30%" style='width:30.7%;border-top:none;border-left:none;
+  border-bottom:double windowtext 1.5pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext 1.0pt;
+  padding:0cm 0cm 0cm 0cm;height:20.2pt'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><span lang=EN-US style='mso-bidi-font-size:10.5pt;
+  font-family:仿宋_GB2312;mso-hansi-font-family:宋体'><o:p></o:p></span></p>
+  </td>
+  <td width="31%" style='width:31.74%;border:none;border-bottom:double windowtext 1.5pt;
+  mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext 1.0pt;
+  padding:0cm 0cm 0cm 0cm;height:20.2pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+  style='mso-bidi-font-size:10.5pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  宋体'><o:p></o:p></span></p>
+  </td>
+ </tr>
+</table>
+
+</div>

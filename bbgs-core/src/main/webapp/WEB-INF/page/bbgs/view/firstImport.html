@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>基础信息导入</title>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.3.7/css/bootstrap.css">
+    <link rel="stylesheet" href="../plugins/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" href="../css/firstImport.css">
+    <link rel="stylesheet" href="../css/button.css">
+    <style>
+        body{
+            height: 100%;
+        }
+        #exampleInputFile1:hover {
+            background-color: #000000;
+        }
+        .gw-l-button:disabled{
+            background-color: darkgray;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+<form class="containerMine" id="filesForm" onsubmit="return saveReport()" action="/basicInfo/saveData" method="post"
+      enctype="multipart/form-data">
+    <div  id="uploadType_1" style="border: 1px solid #cccccc;border-radius: 5px;width: 300px;float: left;line-height: 30px;height: 32px;background-color: white"
+         class="b-upload">
+        <div style="float: left">
+            <input id="showFileInfo1" title=""
+                   style="background: white;padding-left: 10px;height: 30px;border: 0 solid white;width: 100%"
+                   placeholder="请上传文件" disabled>
+        </div>
+        <a href="javascript:" class="a-upload" title="" style="float: right;">
+            <!--<input type="file" id="exampleInputFile" name="file">-->
+            <input type="file" id="exampleInputFile1" name="file" title="选中">
+            文件上传
+        </a>
+    </div>
+    <div id="uploadType_2" style="display: none;">
+        <input id="file" type='file' name="fileList" webkitdirectory style="display:none">
+        <div class="input-append">
+            <input id="uploadurl" style="line-height: 28px;width:220px;background:#fff;border: 1px
+#ddd solid;margin-right: -5px;" type="text" webkitdirectory disabled>
+            <button class="gw-l-button" type="button" style="line-height: 28px;" onclick="$('input[id=file]').click();">
+                选择上传文件夹
+            </button>
+        </div>
+    </div>
+    <div class="InfoType">
+        <span class="radio__input  is-checked" style="margin-right:  4px;">
+            <span class="radio__inner"></span>
+            <input type="radio" onclick="changeUploadType('Y')" class="radio__original" name="category" title="" checked value="Y"/>
+        </span>&nbsp;物资
+        <!--<span class="radio__input" style="margin-right:  4px;margin-left:  4px;">-->
+            <!--<span class="radio__inner"></span>-->
+            <!--<input type="radio" class="radio__original" name="category" title=""  value="N"/>-->
+        <!--</span>&nbsp;服务-->
+        <span class="radio__input" style="margin-right:  4px;margin-left:  4px;">
+            <span class="radio__inner"></span>
+            <input type="radio" onclick="changeUploadType('E')" class="radio__original" name="category" title=""  value="E"/>
+        </span>&nbsp;电商类采购
+    </div>
+    <div class="returnMsg">
+        <span id="errorMsg" style="color:red"></span>
+        <span id="successMsg"></span>
+    </div>
+    <div>
+        <button class="gw-l-button" id="importExcelBtn" type="submit">导入</button>
+    </div>
+</form>
+<div class="greenLine"></div>
+<div class="containerMine flex1">
+    <iframe id="chaa" src="chaa.html" height="100%" width="100%" style="border:none;"></iframe>
+</div>
+<script src="../plugins/jquery-1.9.1.min.js"></script>
+<script src="../plugins/jquery.form.js"></script>
+<script src="../plugins/bootstrap-3.3.7/js/bootstrap.js"></script>
+<script src="../plugins/bootstrap-table/bootstrap-table.js"></script>
+<script src="../plugins/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+<script src="../js/firstImport.js"></script>
+<script>
+
+</script>
+</body>
+</html>

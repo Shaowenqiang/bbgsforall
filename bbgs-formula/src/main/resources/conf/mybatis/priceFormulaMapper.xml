@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="cn.com.hqep.formula.dao.priceFormulaDao">
+
+    <sql id="DefaultTableName">TBL_BBGS_PRICE_INFORMATION</sql>
+
+    <sql id="DefaultSelects">
+        id,
+        PRICE,
+        MOD_OFFER,
+        FINAL_RATE,
+        SUPPLIER,
+        A1,
+        N,
+        A2,
+        P,
+        BASE_PRICE,
+        PRICE_SCORE,
+        SORT,
+        PACKAGENAME,
+        BID,
+        BID_ABBREVIAION,
+        BID_SETION,
+        M,
+        BUSINESS_WEIGHT,
+        TECHNOLOGY_WEIGHT,
+        PRICE_WEIGHT,
+        EXPORT_TYPE
+    </sql>
+
+
+    <insert id="savePriceInfo" parameterType="cn.com.hqep.formula.model.priceFormulaModel">
+        INSERT INTO
+        <include refid="DefaultTableName"/>
+        (
+        id,
+        PRICE,
+        MOD_OFFER,
+        FINAL_RATE,
+        SUPPLIER,
+        A1,
+        N,
+        A2,
+        P,
+        BASE_PRICE,
+        PRICE_SCORE,
+        SORT,
+        PACKAGENAME,
+        BID,
+        BID_ABBREVIAION,
+        BID_SETION,
+        M,
+        BUSINESS_WEIGHT,
+        TECHNOLOGY_WEIGHT,
+        PRICE_WEIGHT,
+        PRICE_FORMULA,
+        EXPORT_TYPE
+
+        )
+        VALUES (
+        #{id},
+        #{price},
+        #{mod_offer},
+        #{final_rate},
+        #{supplier},
+        #{a1},
+        #{n},
+        #{a2},
+        #{p},
+        #{base_price},
+        #{price_score},
+        #{sort},
+        #{packagename},
+        #{bid},
+        #{bid_abbreviaion},
+        #{bid_setion},
+        #{m},
+        #{business_weight},
+        #{technology_weight},
+        #{price_weight},
+        #{price_formula},
+        #{export_type}
+        )
+    </insert>
+    <insert id="savePriceInfoList" useGeneratedKeys="false"
+            parameterType="java.util.List">
+        INSERT
+
+        INTO
+        <include refid="DefaultTableName"/>
+        (
+        id,
+        PRICE,
+        MOD_OFFER,
+        FINAL_RATE,
+        SUPPLIER,
+        A1,
+        N,
+        A2,
+        P,
+        BASE_PRICE,
+        PRICE_SCORE,
+        SORT,
+        PACKAGENAME,
+        BID,
+        BID_ABBREVIAION,
+        BID_SETION,
+        M,
+        BUSINESS_WEIGHT,
+        TECHNOLOGY_WEIGHT,
+        PRICE_WEIGHT,
+        PRICE_FORMULA,
+        EXPORT_TYPE
+
+        )
+
+        <foreach collection="list" item="item" index="index"
+                 separator="union">
+            (
+            select
+            #{item.id},
+            #{item.price},
+            #{item.mod_offer},
+            #{item.final_rate},
+            #{item.supplier},
+            #{item.a1},
+            #{item.n},
+            #{item.a2},
+            #{item.p},
+            #{item.base_price},
+            #{item.price_score},
+            #{item.sort},
+            #{item.packagename},
+            #{item.bid},
+            #{item.bid_abbreviaion},
+            #{item.bid_setion},
+            #{item.m},
+            #{item.business_weight},
+            #{item.technology_weight},
+            #{item.price_weight},
+            #{item.price_formula},
+            #{item.export_type}
+            from dual
+            )
+        </foreach>
+
+    </insert>
+    <select id="queryInfoToCalculate" parameterType="java.util.Map"
+            resultType="cn.com.hqep.formula.model.priceFormulaModel">
+        SELECT
+        s.offer as PRICE,
+        s.SUPPLIER,
+        s.PACKAGENAME,
+        s.bid,
+        s.bid_setion,
+        s.bid_abbreviaion,
+        s.final_rate,
+        s.mod_offer,
+        if(b.m='','1',b.m) AS m,
+        if(b.BUSINESS_WEIGHT='' or b.BUSINESS_WEIGHT is null,'1',b.BUSINESS_WEIGHT) AS BUSINESS_WEIGHT,
+        if(b.TECHNOLOGY_WEIGHT='' or b.TECHNOLOGY_WEIGHT is null,'1',b.TECHNOLOGY_WEIGHT) AS TECHNOLOGY_WEIGHT,
+        if(b.PRICE_WEIGHT='' or b.PRICE_WEIGHT is null,'1',b.PRICE_WEIGHT) AS PRICE_WEIGHT,
+        b.PRICE_FORMULA,
+        0 as A1,
+        0 as N,
+        0 as A2,
+        0 as P,
+        0 as BASE_PRICE,
+        0 as PRICE_SCORE,
+        0 as SORT
+
+        FROM
+        TBL_BBGS_PACKAGE_SUPPLIER s
+        left join tbl_bbgs_bid_information b
+        on s.bid_abbreviaion=b.bid_abbreviaion
+        <where>
+            1=1 and (s.offer is not null and s.offer REGEXP '^-?([0-9]+\\.?[0-9]*)$')
+            and (ifnull(s.FLAG_BIT,'1') !='0' and ifnull(s.FLAG_INVALID,'1') !='0' and ifnull(s.FLAG_BID_INVALID,'1')
+            !='0')
+            <if test="bid_abbreviaion!=null and bid_abbreviaion!=''">
+                and s.bid_abbreviaion=#{bid_abbreviaion}
+            </if>
+            <if test="packagename!=null and packagename!=''">
+                and s.packagename=#{packagename}
+            </if>
+            <if test="supplier!=null and supplier!=''">
+                and s.supplier in (#{supplier})
+            </if>
+        </where>
+    </select>
+
+    <delete id="deletePriceInfo" parameterType="cn.com.hqep.formula.model.priceFormulaModel">
+        DELETE
+        FROM
+        <include refid="DefaultTableName"/>
+
+    </delete>
+    <select id="queryBIDInfomation" parameterType="java.util.HashMap"
+            resultType="java.util.HashMap">
+        SELECT * from tbl_bbgs_bid_information
+        <where>
+            1=1
+            <if test="bid_abbreviaion!=null and bid_abbreviaion!=''">
+                and bid_abbreviaion=#{bid_abbreviaion}
+            </if>
+        </where>
+    </select>
+    <select id="queryInfoToExport" parameterType="java.util.Map"
+            resultType="cn.com.hqep.formula.model.priceFormulaModel">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        <include refid="DefaultTableName"/>
+
+        <where>
+            1=1
+            <if test="bid_abbreviaion!=null and bid_abbreviaion!=''">
+                and bid_abbreviaion=#{bid_abbreviaion}
+            </if>
+            <if test="packagename!=null and packagename!=''">
+                and packagename=#{packagename}
+            </if>
+            <if test="supplier!=null and supplier!=''">
+                and supplier in (#{supplier})
+            </if>
+        </where>
+
+    </select>
+    <select id="queryFormulaExecuteFun" parameterType="cn.com.hqep.formula.model.formulaExecuteFunModel"
+            resultType="cn.com.hqep.formula.model.formulaExecuteFunModel">
+        select t.* from tbl_bbgs_formula_maintenance t
+        where 1=1
+        <if test="type!=null and type!=''">
+            and type=#{type}
+        </if>
+        <if test="executefun!=null and executefun!=''">
+            and executefun=#{type}
+        </if>
+    </select>
+    <select id="queryFormulaConditions" parameterType="cn.com.hqep.formula.model.formulaConditionsModel"
+            resultType="cn.com.hqep.formula.model.formulaConditionsModel">
+        select t.* from TBL_BBGS_FORMULA_CONDITIONS t
+        <where>
+            1=1
+            <if test="id!=null and id!=''">
+                and id=#{id}
+            </if>
+            <if test="startvalue!=null and startvalue!=''">
+                and startvalue=#{startvalue}
+            </if>
+            <if test="endvalue!=null and endvalue!=''">
+                and endvalue=#{endvalue}
+            </if>
+            <if test="submaxpricecount!=null and submaxpricecount!=''">
+                and submaxpricecount=#{submaxpricecount}
+            </if>
+            <if test="subminpricecount!=null and submaxpricecount!=''">
+                and subminpricecount=#{subminpricecount}
+            </if>
+            <if test="conditionid!=null and conditionid!=''">
+                and conditionid=#{conditionid}
+            </if>
+            <if test="conditionname!=null and conditionid!=''">
+                and conditionname=#{conditionname}
+            </if>
+            <if test="executefunid!=null and executefunid!=''">
+                and executefunid=#{executefunid}
+            </if>
+            <if test="executefun!=null and executefun!=''">
+                and executefun=#{executefun}
+            </if>
+        </where>
+        order by executefun,startvalue
+    </select>
+    <insert id="addFormulaConditions" parameterType="cn.com.hqep.formula.model.formulaConditionsModel">
+        INSERT INTO
+        TBL_BBGS_FORMULA_CONDITIONS
+        (
+        id,
+        conditionname,
+        conditionid,
+        executefun,
+        executefunid,
+        executefunname,
+        remark,
+        startvalue,
+        endvalue,
+        submaxpricecount,
+        subminpricecount,
+        createtime,
+        updatetime
+        )
+        VALUES (
+        #{id},
+        #{conditionname},
+        #{conditionid},
+        #{executefun},
+        #{executefunid},
+        #{executefunname},
+        #{remark},
+        #{startvalue},
+        #{endvalue},
+        #{submaxpricecount},
+        #{subminpricecount},
+        #{createtime},
+        #{updatetime}
+        )
+    </insert>
+    <delete id="deleteFormulaConditions" parameterType="cn.com.hqep.formula.model.priceFormulaModel">
+        DELETE
+        FROM
+        TBL_BBGS_FORMULA_CONDITIONS
+        <where>
+            1=1
+            <if test="id!=null and id!=''">
+                and id=#{id}
+            </if>
+            <if test="startvalue!=null and startvalue!=''">
+                and startvalue=#{startvalue}
+            </if>
+            <if test="endvalue!=null and endvalue!=''">
+                and endvalue=#{endvalue}
+            </if>
+            <if test="submaxpricecount!=null and submaxpricecount!=''">
+                and submaxpricecount=#{submaxpricecount}
+            </if>
+            <if test="subminpricecount!=null and submaxpricecount!=''">
+                and subminpricecount=#{subminpricecount}
+            </if>
+            <if test="conditionid!=null and conditionid!=''">
+                and conditionid=#{conditionid}
+            </if>
+            <if test="conditionname!=null and conditionid!=''">
+                and conditionname=#{conditionname}
+            </if>
+            <if test="executefunid!=null and executefunid!=''">
+                and executefunid=#{executefunid}
+            </if>
+            <if test="executefun!=null and executefun!=''">
+                and executefun=#{executefun}
+            </if>
+        </where>
+    </delete>
+    <update id="updateFormulaConditions" parameterType="cn.com.hqep.formula.model.priceFormulaModel">
+        UPDATE TBL_BBGS_FORMULA_CONDITIONS
+        SET
+        conditionname=#{conditionname},
+        conditionid=#{conditionid},
+        executefun=#{executefun},
+        executefunid=#{executefunid},
+        executefunname=#{executefunname},
+        remark=#{remark},
+        startvalue=#{startvalue},
+        endvalue=#{endvalue},
+        submaxpricecount=#{submaxpricecount},
+        subminpricecount=#{subminpricecount},
+        createtime=#{createtime},
+        updatetime=#{updatetime}
+        <where>
+            1=1
+            <if test="id!=null and id!=''">
+                and id=#{id}
+            </if>
+        </where>
+    </update>
+    <select id="querySupplierInfoToCalculateIfWin" parameterType="java.util.HashMap"
+            resultType="cn.com.hqep.formula.model.supplierModel">
+        SELECT * from tbl_bbgs_package_supplier s
+        <where>
+            1=1 and (s.offer is not null and s.offer REGEXP '^-?([0-9]+\\.?[0-9]*)$')
+            and (ifnull(s.FLAG_BIT,'1') !='0' and ifnull(s.FLAG_INVALID,'1') !='0' and ifnull(s.FLAG_BID_INVALID,'1')
+            !='0')
+            <if test="bid!=null and bid!=''">
+                and s.bid in (${bid})
+            </if>
+            <if test="bid_abbreviaion!=null and bid_abbreviaion!=''">
+                and s.bid_abbreviaion=#{bid_abbreviaion}
+            </if>
+            <if test="packagename!=null and packagename!=''">
+                and s.packagename=#{packagename}
+            </if>
+            <if test="supplier!=null and supplier!=''">
+                and s.supplier in (#{supplier})
+            </if>
+        </where>
+        order by
+        bid,
+        cast( (IF(ISNULL(sort),1,sort)) as signed int),
+        supplier,
+        cast( (IF(ISNULL(offer),1,offer)) as decimal(10,10)) DESC,
+        cast( (IF(ISNULL(total_score),1,total_score)) as decimal(10,10)) DESC,
+        cast( (IF(ISNULL(technology_score),1,technology_score)) as decimal(10,10)) DESC,
+        cast( (IF(ISNULL(price_score),1,price_score)) as decimal(10,10)) DESC
+    </select>
+    <select id="querySupplierInfoToCalculateIfWinByPrice" parameterType="java.util.HashMap"
+            resultType="cn.com.hqep.formula.model.supplierModel">
+        SELECT * from tbl_bbgs_package_supplier s
+        <where>
+            1=1 and (s.offer is not null and s.offer REGEXP '^-?([0-9]+\\.?[0-9]*)$')
+            and (ifnull(s.FLAG_BIT,'1') !='0' and ifnull(s.FLAG_INVALID,'1') !='0' and ifnull(s.FLAG_BID_INVALID,'1')
+            !='0')
+            <if test="bid!=null and bid!=''">
+                and s.bid in (${bid})
+            </if>
+            <if test="bid_abbreviaion!=null and bid_abbreviaion!=''">
+                and s.bid_abbreviaion=#{bid_abbreviaion}
+            </if>
+            <if test="packagename!=null and packagename!=''">
+                and s.packagename=#{packagename}
+            </if>
+            <if test="supplier!=null and supplier!=''">
+                and s.supplier in (#{supplier})
+            </if>
+        </where>
+        order by
+        bid,
+        cast( (IF(ISNULL(offer),1,offer)) as decimal(10,10)) DESC,
+        supplier,
+        cast( (IF(ISNULL(sort),1,sort)) as signed int),
+        cast( (IF(ISNULL(total_score),1,total_score)) as decimal(10,10)) DESC,
+        cast( (IF(ISNULL(technology_score),1,technology_score)) as decimal(10,10)) DESC,
+        cast( (IF(ISNULL(price_score),1,price_score)) as decimal(10,10)) DESC
+    </select>
+
+    <select id="querySupplierInfo" parameterType="java.util.HashMap"
+            resultType="cn.com.hqep.formula.model.supplierModel">
+        SELECT * from tbl_bbgs_package_supplier s
+        <where>
+            1=1 and (s.offer is not null and s.offer REGEXP '^-?([0-9]+\\.?[0-9]*)$')
+            and (ifnull(s.FLAG_BIT,'1') !='0' and ifnull(s.FLAG_INVALID,'1') !='0' and ifnull(s.FLAG_BID_INVALID,'1')
+            !='0')
+            <if test="bid!=null and bid!=''">
+                and s.bid in (${bid})
+            </if>
+            <if test="bid_abbreviaion!=null and bid_abbreviaion!=''">
+                and s.bid_abbreviaion=#{bid_abbreviaion}
+            </if>
+            <if test="packagename!=null and packagename!=''">
+                and s.packagename=#{packagename}
+            </if>
+            <if test="supplier!=null and supplier!=''">
+                and s.supplier in (#{supplier})
+            </if>
+            <if test="is_win!=null and is_win!=''">
+                and is_win in (#{is_win})
+            </if>
+        </where>
+        <if test="orderby!=null and orderby!=''">
+            order by ${orderby}
+        </if>
+
+    </select>
+    <update id="updateSupplierInfoList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE tbl_bbgs_package_supplier
+            SET
+            packagename=#{item.packagename,jdbcType=VARCHAR},
+            supplier=#{item.supplier,jdbcType=VARCHAR},
+            flag_bit=#{item.flag_bit,jdbcType=VARCHAR},
+            offer=#{item.offer,jdbcType=VARCHAR},
+            technology_score=#{item.technology_score,jdbcType=VARCHAR},
+            price_score=#{item.price_score,jdbcType=VARCHAR},
+            business_score=#{item.business_score,jdbcType=VARCHAR},
+            total_score=#{item.total_score,jdbcType=VARCHAR},
+            sort=#{item.sort,jdbcType=VARCHAR},
+            is_win=#{item.is_win,jdbcType=VARCHAR},
+            bid_setion=#{item.bid_setion,jdbcType=VARCHAR},
+            bid_abbreviaion=#{item.bid_abbreviaion,jdbcType=VARCHAR},
+            bid=#{item.bid,jdbcType=VARCHAR},
+            flag_invalid=#{item.flag_invalid,jdbcType=VARCHAR},
+            flag_bid_invalid=#{item.flag_bid_invalid,jdbcType=VARCHAR}
+            where id=#{item.id,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+    <update id="updateSupplierInfo" parameterType="cn.com.hqep.formula.model.supplierModel">
+            UPDATE tbl_bbgs_package_supplier
+            SET
+            packagename=#{packagename},
+            supplier=#{supplier},
+            flag_bit=#{flag_bit},
+            offer=#{offer},
+            technology_score=#{technology_score},
+            price_score=#{price_score},
+            business_score=#{business_score},
+            total_score=#{total_score},
+            sort=#{sort},
+            is_win=#{is_win},
+            bid_setion=#{bid_setion},
+            bid_abbreviaion=#{bid_abbreviaion},
+            bid=#{bid},
+            flag_invalid=#{flag_invalid},
+			flag_bid_invalid=#{flag_bid_invalid}
+            where id=#{id}
+    </update>
+    <update id="resetSupplierWin">
+            update tbl_bbgs_package_supplier set is_win = ''
+    </update>
+    <select id="queryBatchName" resultType="java.lang.String">
+        select BATCH_NAME from tbl_bbgs_batch limit 1
+    </select>
+
+
+<!--sssJL START-->
+    <select id="queryMinIdByState" resultType="cn.com.hqep.formula.model.tblBbgsFlowStateModel">
+        SELECT MIN(id) id,alert_message alertMessage from tbl_bbgs_flow_state where flow_state = '0'
+    </select>
+    <update id="updateStateById">
+        UPDATE TBL_BBGS_FLOW_STATE SET flow_state = #{state}
+        <if test="id != null">
+            WHERE id = #{id}
+        </if>
+    </update>
+    <!--sssJL END-->
+    <!--邵文强 start-->
+    <select id="querySupplierRowPrice" resultType="cn.com.hqep.formula.model.supplierRowPriceModel">
+        select
+            T1.id ,
+            T1.bid_abbreviaion ,
+            T1.supplier ,
+            T1.row_type ,
+            IFNULL(T1.row_price,0) row_price,
+            IFNULL(T1.row_price_weight,'1.00000') row_price_weight ,
+            T1.row_price_avg ,
+            T1.A1 ,
+            T1.A2 ,
+            T1.M ,
+            T1.N ,
+            T1.base_price ,
+            T1.score
+        from
+        tbl_bbgs_supplier_row_price T1,tbl_bbgs_package_supplier T2
+        where
+			T2.FLAG_BID_INVALID != 0
+            and T2.FLAG_BIT != 0
+            and T2.FLAG_INVALID != 0
+            and T1.bid_abbreviaion = T2.BID_ABBREVIAION
+            and T1.supplier = T2.SUPPLIER
+            and T1.bid_abbreviaion = #{bidAbbr}
+    </select>
+    <update id="updateSupplierRowPriceModel" parameterType="cn.com.hqep.formula.model.supplierRowPriceModel">
+        UPDATE
+        tbl_bbgs_supplier_row_price
+        SET
+        A1 = #{A1},
+        A2 =  #{A2},
+        m =  #{M},
+        n =  #{N},
+        base_price =  #{base_price},
+        score =  #{score}
+        <if test="id != null">
+            WHERE id = #{id}
+        </if>
+    </update>
+    <select id="querySupplierRowPriceTotal" parameterType="String" resultType="Double">
+        SELECT IFNULL(SUM(score)/COUNT(1),0)
+        from tbl_bbgs_supplier_row_price T1,tbl_bbgs_package_supplier T2
+        where
+			T2.FLAG_BID_INVALID != 0
+            and T2.FLAG_BIT != 0
+            and T2.FLAG_INVALID != 0
+            and T1.bid_abbreviaion = T2.BID_ABBREVIAION
+            and T1.supplier = T2.SUPPLIER
+            and T1.bid_abbreviaion = #{bidAbbr}
+            and T1.SUPPLIER = #{supplier}
+    </select>
+    <!--邵文强 start-->
+</mapper>

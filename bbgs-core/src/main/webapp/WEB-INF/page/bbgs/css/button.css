@@ -1,0 +1,60 @@
+/*buttonCss 悬浮变色*/
+/*button:hover{*/
+    /*background-color: #d75000;*/
+    /*!*color:#333;*!*/
+/*}*/
+.glyphicon:hover{
+    color: #d75000;
+}
+.gw-l-button{
+    height: 32px;
+}
+.form-control{
+    height: 32px;
+}
+.gw-l-button:hover{
+    background-color: #d75000;
+}
+button:disabled{
+    background-color: darkgray;
+    color: #FFFFFF;
+}
+button:disabled:hover{
+    background-color: darkgray;
+    color: #FFFFFF;
+}
+
+/**input[type=file] 样式修改 start*/
+/*a  upload */
+.a-upload {
+    padding: 0px 10px;
+    height: 30px;
+    line-height: 30px;
+    position: relative;
+    cursor: pointer;
+    color: #ffffff;
+    background: #1bab8f;
+    border: 0px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+
+.a-upload input {
+    position: absolute;
+    font-size: 16px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+
+.a-upload:hover {
+    color: #ffffff;
+    background: #d75000;
+    border-color: #ccc;
+    text-decoration: none;
+}

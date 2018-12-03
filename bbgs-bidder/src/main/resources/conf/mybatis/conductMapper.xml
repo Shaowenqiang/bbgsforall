@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.bidder.dao.conductDao">
+    <resultMap id="conductResultMap" type="cn.com.hqep.bidder.model.tblBbgsBidInformationModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="BID_ABBREVIAION" jdbcType="VARCHAR" property="bidAbbreviaion"/>
+        <result column="TECHNOLOGY_TEMPLATE" jdbcType="VARCHAR" property="technologyTemplate"/>
+        <result column="BUSINESS_TEMPLATE" jdbcType="VARCHAR" property="businessTemplate"/>
+        <result column="TECHNOLOGY_BID_RECORD" jdbcType="VARCHAR" property="technologyBidRecord"/>
+        <result column="BUSINESS_BID_RECORD" jdbcType="VARCHAR" property="businessBidRecord"/>
+        <result column="BIDDER_LIST" jdbcType="VARCHAR" property="bidderList"/>
+        <result column="PRICE_SCORE_TEMPLATE" jdbcType="VARCHAR" property="priceScoreTemplate"/>
+        <result column="BUSINESS_EXPERT_GROUP" jdbcType="VARCHAR" property="businessExpertGroup"/>
+        <result column="TECHNOLOGY_EXPERT_GROUP" jdbcType="VARCHAR" property="technologyExpertGroup"/>
+        <result column="BUSINESS_WEIGHT" jdbcType="VARCHAR" property="businessWeight"/>
+        <result column="TECHNOLOGY_WEIGHT" jdbcType="VARCHAR" property="technologyWeight"/>
+        <result column="PRICE_WEIGHT" jdbcType="VARCHAR" property="priceWeight"/>
+        <result column="INVALID" jdbcType="VARCHAR" property="invalid"/>
+        <result column="FLAG" jdbcType="VARCHAR" property="flag"/>
+        <result column="PRICE_FORMULA" jdbcType="VARCHAR" property="priceFormula"/>
+        <result column="M" jdbcType="VARCHAR" property="m"/>
+    </resultMap>
+    <sql id="base_column_list"> ID , BID_ABBREVIAION , TECHNOLOGY_TEMPLATE , BUSINESS_TEMPLATE , TECHNOLOGY_BID_RECORD , BUSINESS_BID_RECORD , BIDDER_LIST , PRICE_SCORE_TEMPLATE , BUSINESS_EXPERT_GROUP , TECHNOLOGY_EXPERT_GROUP , BUSINESS_WEIGHT , TECHNOLOGY_WEIGHT , PRICE_WEIGHT , INVALID , FLAG , PRICE_FORMULA , M </sql>
+    <sql id="base_table_name">TBL_BBGS_BID_INFORMATION</sql>
+
+    <select id="queryList" resultMap="conductResultMap">
+        SELECT
+        <include refid="base_column_list"/>
+        FROM
+        <include refid="base_table_name"/>
+        ORDER BY
+        left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+''
+    </select>
+    <select id="queryByName" resultMap="conductResultMap"  parameterType="cn.com.hqep.bidder.model.tblBbgsBidInformationModel">
+        SELECT
+        <include refid="base_column_list"/>
+        FROM
+        <include refid="base_table_name"/>
+        <trim prefix="where" prefixOverrides="and">
+            <if test="bidAbbreviaion != null">
+                BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </select>
+    <!--通过 标段简称 来更新-->
+    <update id="updateBidInfo" parameterType="cn.com.hqep.bidder.model.tblBbgsBidInformationModel">
+        UPDATE
+        <include refid="base_table_name"/>
+            SET  INVALID =#{invalid,jdbcType=VARCHAR}
+        WHERE BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+    </update>
+    <!--通过 主键 ID 更新-->
+    <update id="updateById" parameterType="cn.com.hqep.bidder.model.tblBbgsBidInformationModel">
+        UPDATE
+        <include refid="base_table_name"/>
+        SET   INVALID =#{invalid,jdbcType=VARCHAR}
+        WHERE ID = #{id}
+    </update>
+    <!--通过 标段简称 来更新-->
+    <update id="updateLikeBidName" parameterType="cn.com.hqep.bidder.model.tblBbgsBidInformationModel">
+        UPDATE
+        <include refid="base_table_name"/>
+        SET  INVALID =#{invalid,jdbcType=VARCHAR}
+        WHERE BID_ABBREVIAION LIKE concat('%',#{bidAbbreviaion,jdbcType=VARCHAR},'%')
+
+    </update>
+</mapper>

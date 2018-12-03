@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>唱标</title>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.3.7/css/bootstrap.css">
+    <link rel="stylesheet" href="../plugins/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" href="../css/bidCSS.css">
+    <script src="../plugins/jquery-1.9.1.min.js"></script>
+    <script src="../plugins/bootstrap-3.3.7/js/bootstrap.js"></script>
+    <script src="../plugins/bootstrap-table/bootstrap-table.js"></script>
+    <script src="../plugins/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+    <script src="../plugins/jquery.form.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        .form-control{
+            height: 32px;
+        }
+    </style>
+    <link rel="stylesheet" href="../css/button.css">
+
+</head>
+<body>
+<div style="height:100%;margin-top:8px">
+    <!-- Nav tabs -->
+    <div class="bidderNav-tabs">
+        <ul class="nav nav-tabs" role="tablist" style="width: 100%;">
+            <li role="presentation" class="active" style="width: 25%;"><a href="#home" aria-controls="home" role="tab"
+                                                                          data-toggle="tab" style="text-align: center">1、唱标报价数据输入</a>
+            </li>
+            <li role="presentation" style="width: 25%;"><a href="#read" aria-controls="read" role="tab"
+                                                           data-toggle="tab" style="text-align: center" onclick="reloadBindInfoFrame()">2、导出专家组阅标记录
+            </a>
+            </li>
+            <li role="presentation" style="width: 25%;"><a href="#profile" aria-controls="profile" role="tab"
+                                                           data-toggle="tab" style="text-align: center"
+                                                           onclick="refreshAction()">3、流标、废标</a></li>
+            <li role="presentation" style="width: 25%;"><a href="#messages" aria-controls="messages" role="tab"
+                                                           data-toggle="tab" style="text-align: center"
+                                                           onclick="refreshPriceAction()">4、评标价格计算得分表</a></li>
+        </ul>
+    </div>
+    <div class="addGreenLine"></div>
+    <!-- Tab panes -->
+    <div class="tab-content" style="height:100%;">
+        <div role="tabpanel" class="tab-pane active" id="home">
+            <div style="margin: auto">
+                <table
+                        style="border-collapse: separate; border-spacing: 0px 8px;" id="toolbar">
+                    <tr>
+                        <td class="textright pl10"><label style="white-space:nowrap">标段简称:</label></td>
+                        <td class="textleft pl10"><input class="form-control search_bind" id="search_bidAbbreviaion"
+                                                         onchange="searchAction()" placeholder="请输入标段简称"></td>
+                        <td class="textright pl28"><label style="white-space:nowrap">供应商名称:</label></td>
+                        <td class="textleft pl10"><input class="form-control search_bind" id="search_supplier"
+                                                         onchange="searchAction()" placeholder="请输入供应商名称"></td>
+                        <form style="height: 48px" id="filesForm" onsubmit="return saveReport()"
+                              action="/basicInfo/saveBaseOffer" method="post"
+                              enctype="multipart/form-data">
+                            <button type="submit" class="gw-l-button" style="float:right;margin:8px;">
+                                导入唱标报价数据
+                            </button>
+                            <div style="float: right;margin:8px;">
+                                <div style="border: 1px solid #cccccc;border-radius: 5px;width: 300px;float: left;line-height: 32px;height: 32px;">
+                                    <div style="float: left">
+                                        <input id="showFileInfo" class="form-control"
+                                               style="background: white;padding-left: 10px;height: 30px;border: 0px solid white;width: 212px"
+                                               placeholder="请上传文件" disabled>
+                                    </div>
+                                    <a href="javascript:;" class="a-upload" style="float: right">
+                                        <input type="file" class="form-control" id="exampleInputFile" name="file"
+                                               style="width: 298px">
+                                        文件上传
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </tr>
+                </table>
+                <div class="addGreenLine"></div>
+                <div class="bootstrapTableCssDesign mr10 ml10 mt10">
+                    <table id="tb_bid"></table>
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" style="height: 100%" id="read">
+            <iframe id="bindInfoFrame" src="bindInfo.html" style="border: none" width="100%" height="100%"></iframe>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="profile">
+            <input type="text" style="display: none" id="query_bid">
+            <input type="text" style="display: none" id="query_packagename">
+            <div class="bootstrapTableCssDesign tb_bidName" style="padding: 10px 5px;width: 22%;float: left">
+                <div class="mb10" style="text-align: right;white-space:nowrap">
+                    <button type="button" class="gw-l-button mr10" onclick="ArrayInvalidAction('pass')">标段流标</button>
+                    <button type="button" class="gw-l-button" onclick="ArrayInvalidAction('regain')">标段招标</button>
+                </div>
+                <table id="tb_bidName"></table>
+            </div>
+            <div class="bootstrapTableCssDesign tb_auction" style="padding: 10px 5px;width: 21%;float: left">
+                <div class="mb10" style="text-align: right">
+                    <button type="button" class="gw-l-button mr10" onclick="ArrayPackageInvalidAction('pass')">包流标
+                    </button>
+                    <button type="button" class="gw-l-button" onclick="ArrayPackageInvalidAction('regain')">包招标</button>
+                </div>
+                <table id="tb_auction"></table>
+            </div>
+            <div class="bootstrapTableCssDesign tb_invalid" style="padding: 10px 5px;width: 57%;float: left">
+                <div class="mb10" style="float: right">
+                   <!-- <button type="button" class="gw-l-button mr10" onclick="AbatchBitAction('pass')">废除本批次所有该供应商</button>
+                    <button type="button" class="gw-l-button mr10" onclick="AbatchBitAction('regain')">复标本批次所有该供应商</button>-->
+                    <button type="button" class="gw-l-button mr10" onclick="ArrayBitAction('pass')">供应商废标</button>
+                    <button type="button" class="gw-l-button" onclick="ArrayBitAction('regain')">供应商复标</button>
+                </div>
+                <div style="float: right;margin-right: 10px">
+                    <input class="form-control querySupplierParam" id="querySupplierParam" style="width:280px"
+                           onchange="searchInvalidSupplierAction()" placeholder="请输入供应商名称">
+                </div>
+                <table id="tb_invalid"></table>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="messages">
+            <div style="padding: 10px">
+                <div class="col-sm-6 col-md-6 col-lg-6 pl50">
+                    <button type="button" class="gw-l-button" onclick="computePriceAction()">计算评标价格得分</button>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 textright pr50">
+                    <button type="button" class="gw-l-button" onclick="exportExcelLNAction()">导出评标价格计算得分表</button>
+                </div>
+            </div>
+            <div>
+                <div class="col-lg-3 col-md-3 col-sm-3 bootstrapTableCssDesign tb_scoreGrade" style="padding: 10px">
+                    <table id="tb_scoreGrade"></table>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-9 bootstrapTableCssDesign tb_scoreGradeDetails"
+                     style=" margin:2px 0px; padding: 0px;height: 520px">
+                    <div style="margin:8px 0px; padding: 0px 10px;display: block;">
+                        <table id="tb_scoreGradeDetails"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 操作成功 start -->
+<div class="modal fade bootstrapModalDesign" id="promptSuccessModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/创建成功.png" style="margin-top: -6px;"></img><label
+                        class="bold-size16">&nbsp;&nbsp;操作成功！</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" data-dismiss="modal">知道了</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 操作成功  end -->
+
+<!-- 操作失败 start -->
+<div class="modal fade bootstrapModalDesign" id="promptFailModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/操作失败.png" style="margin-top: -6px;"></img><label
+                        class="bold-size16">&nbsp;&nbsp;操作失败！</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" data-dismiss="modal">知道了</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 操作失败  end -->
+
+<!-- 至少选择一条 start -->
+<div class="modal fade bootstrapModalDesign" id="promptLessOneModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/至少选择.png" style="margin-top: -6px;"></img><label
+                        class="bold-size16">&nbsp;&nbsp;至少选择一条记录！</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" data-dismiss="modal">知道了</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 至少选择一条  end -->
+
+<!-- 是否确认删除 start -->
+<div class="modal fade bootstrapModalDesign" id="promptChoiseModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/垃圾桶.png" style="margin-top: -6px;"></img><label
+                        class="bold-size16">&nbsp;&nbsp;是否确认删除？</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" id="btn_promptChoise">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 是否确认删除  end -->
+
+<!-- 不能为空 start -->
+<div class="modal fade bootstrapModalDesign" id="NoticeModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">警告提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/操作失败.png" style="margin-top: -6px;"></img>
+                    <label id="NoticeShow" class="bold-size16">&nbsp;&nbsp;</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 不能为空  end -->
+
+<!-- 上传失败提示错误信息 start -->
+<div class="modal fade bootstrapModalDesign" id="importFileModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="margin: 30px auto 10px auto; text-align: center;">
+                    <img src="../images/操作失败.png" style="margin-top: -6px;"></img>
+                    <label class="bold-size16">&nbsp;&nbsp;操作失败</label>
+                </div>
+                <div style="margin:10px auto 20px auto;text-align: center;">
+                    <label id="importFileMsg" class="bold-size16">&nbsp;&nbsp;上传失败</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 上传失败提示错误信息  end -->
+
+<!-- 是否确认流标 start -->
+<div class="modal fade bootstrapModalDesign" id="promptBidModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/垃圾桶.png" style="margin-top: -6px;"></img><label
+                        class="bold-size16" id="optionBid">&nbsp;&nbsp;</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" id="btn_promptBid">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 是否确认流标  end -->
+
+<script>
+    /**
+     * 页面加载执行
+     * 初始化 方法
+     */
+    $(document).ready(function () {
+        //标段简称 和 供应商名称 绑定 模糊查询事件
+        searchAction();
+
+    });
+
+    //form表单提交文件，禁止页面跳转 和 结果返回函数
+    function saveReport() {
+        if ($("#exampleInputFile")[0].files[0] === ""
+            || $("#exampleInputFile")[0].files[0] === null
+            || $("#exampleInputFile")[0].files[0] === undefined) {
+            parent.window.alertModal("上传文件不能为空");
+            return false;
+        }
+        parent.loadingOn('正在上传,请稍后…');
+        $("#filesForm").ajaxSubmit(function (data) {
+            if (data.state === "success") {
+                //弹出操作成功提示框
+                parent.window.alertSuccess("操作成功！");
+                //刷新表格
+                $('#tb_bid').bootstrapTable("refresh", {url: '/bidder/queryList'});
+                //清空文件input
+                $("#showFileInfo").val("");
+                $("#exampleInputFile").val("");
+            } else {
+                //弹出操作失败  原因 提示框
+                parent.window.alertModal(data.msg);
+//                document.getElementById('importFileMsg').innerHTML = data.msg;
+//                $("#importFileModal").modal("show");
+            }
+            parent.loadingOff();
+        });
+        return false
+    }
+
+    //修改原始的input[type=file] 的样式
+    //实现新样式的js代码
+    $(".a-upload").on("click", "input[type='file']", function () {
+        $("#showFileInfo").val("");
+        $("#exampleInputFile").val("");
+    });
+    $(".a-upload").on("change", "input[type='file']", function () {
+        var filePath = $(this).val();
+        if (filePath.indexOf("xlsx") != -1 || filePath.indexOf("xls") != -1) {
+            var arr = filePath.split('\\');
+            var fileName = arr[arr.length - 1];
+            $("#showFileInfo").val(fileName);
+        } else if (filePath.length == 0) {
+            $(".showFileInfo").val("您未上传文件");
+            return false;
+        } else {
+            $("#showFileInfo").val("您上传文件类型有误！");
+            return false;
+        }
+    });
+
+    //提示文本框不能为空的方法
+    function notNull(str) {
+        $('#NoticeModal').on('shown.bs.modal', function (e) {
+            document.getElementById('NoticeShow').innerHTML = str;
+        });
+        $("#NoticeModal").modal("show");
+    }
+
+    //是否确认流标
+    function alertBidModal(str) {
+        $("#optionBid").text(str)
+        $("#promptBidModal").modal()
+    }
+
+    //刷新宽度，解决表头与列表宽度不一致问题
+    var timeoutId = '000';
+    $(window).resize(function () {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(function () {
+            $('#tb_bid').bootstrapTable('resetView', {height: $(window).height() - 125});
+            $('#tb_bidName').bootstrapTable('resetView', {height: $(window).height() - 117});
+            $('#tb_auction').bootstrapTable('resetView', {height: $(window).height() - 117});
+            $('#tb_invalid').bootstrapTable('resetView', {height: $(window).height() - 117});
+            $('#tb_scoreGrade').bootstrapTable('resetView', {height: $(window).height() - 117});
+            $('#tb_scoreGradeDetails').bootstrapTable('resetView', {height: $(window).height() - 117});
+        }, 100);
+    });
+
+    //初始化 唱标报价表格
+    //展示唱标报价表
+    $('#tb_bid').bootstrapTable({
+        url: '/bidder/queryList',          //请求后台的URL（*）
+        method: 'get',                        //请求方式（*）
+//        toolbar: '#toolbar',                  //工具按钮用哪个容器
+        striped: true,                        //是否显示行间隔色
+        cache: false,                         //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        sortable: false,                     //是否启用排序
+        strictSearch: true,                	//设置为 true启用 全匹配搜索，否则为模糊搜索
+        clickToSelect: true,                //是否启用点击选中行
+        height: $(window).height() - 123,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        columns: [{
+            field: 'id',
+            title: 'id',
+            visible: false,
+            valign: 'middle',
+            align: "center"
+        }, {
+            formatter: function (value, row, index) {
+                return ++index;
+            },
+            title: '序号',
+            align: "center",
+            width: "70"
+        }, {
+            formatter: function (value, row, index) {
+                return '<div style="text-align: left">' + value + '</div>';
+            },
+            field: 'bidAbbreviaion',
+            title: '标段简称',
+            width: "200",
+            valign: 'middle',
+            align: "center"
+        }, {
+            formatter: function (value, row, index) {
+                return '<div style="text-align: left">' + value + '</div>';
+            },
+            field: 'supplier',
+            title: '供应商名称',
+            valign: 'middle',
+            align: "center",
+            width: "300"
+        }, {
+            formatter: function (value, row, index) {
+                if (value === null) {
+                    return value
+                }
+                return '<div style="text-align: right">' + value + '</div>';
+            },
+            field: 'offer',
+            title: '投标报价(万元)',
+            valign: 'middle',
+            align: "center",
+            width: "80"
+        }]
+    });
+
+    //初始化 标段信息表格（操作标段流标使用）
+    //展示所有标段名 和 流标或者正常状态信息
+    $('#tb_bidName').bootstrapTable({
+        url: '/bidder/queryDistinctBidList',          //请求后台的URL（*）
+        method: 'get',                        //请求方式（*）
+//        toolbar: '#toolbar',                  //工具按钮用哪个容器
+        striped: true,                        //是否显示行间隔色
+        cache: false,                         //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        sortable: false,                     //是否启用排序
+        strictSearch: true,                	//设置为 true启用 全匹配搜索，否则为模糊搜索
+        clickToSelect: true,                //是否启用点击选中行
+        height: $(window).height() - 117,    //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        columns: [{
+            checkbox: true
+        }, {
+            formatter: function (value, row, index) {
+                return ++index;
+            },
+            title: '序号',
+            valign: 'middle',
+            align: "center",
+            width: "70"
+        }, {
+            field: 'bid',
+            formatter: function (value, row, index) {
+                return '<div style="text-align: left">' + value + '</div>';
+            },
+            title: '标段',
+            width: "100",
+            valign: 'middle',
+            align: "center"
+        }, {
+            field: 'flagBidInvalid',
+            formatter: function (value, row, index) {
+                if (value === "0") {
+                    return "<div class='state_contain'><span class='state_a'></span><a onclick='auctionByBidAction(event,\"0\",\"" + value + "," + row.bid + "," + index + "\")'>招标</a></div>";
+                } else {
+                    return "<div class='state_contain'><span class='state_b'></span><a onclick='auctionByBidAction(event,\"1\",\"" + value + "," + row.bid + "," + index + "\")'>流标</a></div>";
+                }
+            },
+            title: '操作',
+            valign: 'middle',
+            align: "center",
+            width: "100"
+        }]
+    });
+
+    //初始化 包信息表格（操作包流标使用）
+    //展示标段下所有包 和 流标或者正常状态信息
+    $('#tb_auction').bootstrapTable({
+        // url: '/bidder/queryDistinctPackageList',                                //请求后台的URL（*）
+        method: 'get',                          //请求方式（*）
+//        toolbar: '#toolbar',                  //工具按钮用哪个容器
+        striped: true,                         //是否显示行间隔色
+        cache: false,                          //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        sortable: false,                       //是否启用排序
+        strictSearch: true,                    //设置为 true启用 全匹配搜索，否则为模糊搜索
+        clickToSelect: true,                   //是否启用点击选中行
+        height: $(window).height() - 117,       //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        columns: [{
+            checkbox: true
+        }, {
+                 field: 'bidAbbreviaion',
+                visible: false,
+                title: '序号',
+                valign: 'middle',
+                align: "center",
+                width: "70"
+            },{
+            formatter: function (value, row, index) {
+                return ++index;
+            },
+            visible: false,
+            title: '序号',
+            valign: 'middle',
+            align: "center",
+            width: "70"
+        }, {
+            field: 'bid',
+            formatter: function (value, row, index) {
+                return '<div style="text-align: left">' + value + '</div>';
+            },
+            title: '标段',
+            width: "100",
+            valign: 'middle',
+            align: "center"
+        }, {
+            field: 'packagename',
+            formatter: function (value, row, index) {
+                return '<div style="text-align: left">' + value + '</div>';
+            },
+            title: '包名',
+            width: "100",
+            valign: 'middle',
+            align: "center"
+        }, {
+            field: 'flagInvalid',
+            formatter: function (value, row, index) {
+                if (row.flagBidInvalid === '0') {
+                    return "<div class='state_contain'><span class='state_c'></span><span>已流标</span></div>";
+                } else {
+                    if (value === "0") {
+                        return "<div class='state_contain'><span class='state_a'></span><a onclick='auctionAction(event,\"0\",\"" + value + "," + row.bid + "," + index + "," + row.packagename + "," + row.bidAbbreviaion + "\")'>招标</a></div>";
+                    } else {
+                        return "<div class='state_contain'><span class='state_b'></span><a onclick='auctionAction(event,\"1\",\"" + value + "," + row.bid + "," + index + "," + row.packagename + "," + row.bidAbbreviaion + "\")'>流标</a></div>";
+                    }
+                }
+
+            },
+            title: '操作',
+            valign: 'middle',
+            align: "center",
+            width: "100"
+        }]
+    });
+
+    //初始化 供应商关系表（操作包废标使用）
+    //展示标段-》包下 所有供应商 和 废标或者正常状态信息
+    $('#tb_invalid').bootstrapTable({
+        // url: '/bidder/queryListByName',          //请求后台的URL（*）
+        method: 'get',                        //请求方式（*）
+//        toolbar: '#toolbar',                  //工具按钮用哪个容器
+        striped: true,                        //是否显示行间隔色
+        cache: false,                         //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        sortable: false,                     //是否启用排序
+        strictSearch: true,                	//设置为 true启用 全匹配搜索，否则为模糊搜索
+        clickToSelect: true,                //是否启用点击选中行
+        height: $(window).height() - 117,    //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        rowStyle: function(row,index) {
+            var style = "";
+            style='danger';
+            if (row.showColor === '1') {
+                return { classes: style }
+            } else {
+                return '';
+            }
+        },
+        columns: [{
+            checkbox: true
+        }, {
+            field: 'id',
+            title: 'ID',
+            visible: false,
+            valign: 'middle',
+            align: "center"
+        }, {
+            formatter: function (value, row, index) {
+                return ++index;
+            },
+            title: '序号',
+            valign: 'middle',
+            align: "center",
+            width: "70"
+        }, {
+            field: 'supplier',
+            formatter: function (value, row, index) {
+                return '<div style="text-align: left">' + value + '</div>';
+            },
+            title: '供应商名称',
+            valign: 'middle',
+            align: "center",
+            width: "400"
+        },
+    /*     {
+            field: 'offer',
+            formatter: function (value, row, index) {
+                if (value == null) {
+                    return '<div style="text-align: right">' + "-" + '</div>';
+                }
+                return '<div style="text-align: right">' + value + '</div>';
+            },
+            title: '投标报价(万元)',
+            valign: 'middle',
+            align: "center",
+            width: "100"
+        }, */
+        {
+            field: 'flagBit',
+            formatter: function (value, row, index) {
+                if (row.flagBidInvalid === "0") {
+                    return "<div class='state_contain'><span class='state_c'></span><span>已流标</span></div>";
+                } else {
+                    if (row.flagInvalid === "0") {
+                        return "<div class='state_contain'><span class='state_c'></span><span>已流标</span></div>";
+                    } else {
+                        if (row.offer === "无") {
+                            return "<div class='state_contain'><span class='state_c'></span><span>已废标(无报价)</span></div>";
+                        } else {
+                            if (value === "0") {
+
+                                // return "<div class='state_contain'><span class='state_a'></span><a onclick='ArrayBitAction('pass')'>复标</a></div>";
+                                return "<div class='state_contain'><span class='state_a'></span><a onclick='invalidAction(event,\"0\",\"" + value + "," + row.id + "," + row.bidAbbreviaion + "," + row.supplier + "," + index + "," + row.offer + "\")'>复标</a></div>";
+                                ArrayBitAction('regain')
+                            } else {
+                                return "<div class='state_contain'><span class='state_b'></span><a onclick='invalidAction(event,\"1\",\"" + value + "," + row.id + "," + row.bidAbbreviaion + "," + row.supplier + "," + index + "," + row.offer + "\")'>废标</a></div>";
+                            }
+                        }
+                    }
+                }
+            },
+            title: '操作',
+            valign: 'middle',
+            align: "center",
+            width: "100"
+        }
+        ]
+    });
+
+    //初始化 标段信息表格（计算得分使用）
+    //展示标段信息
+    $('#tb_scoreGrade').bootstrapTable({
+        url: '/bidder/queryDistinctBidAbbreviaionList',          //请求后台的URL（*）
+        method: 'get',                        //请求方式（*）
+//        toolbar: '#toolbar',                  //工具按钮用哪个容器
+        striped: true,                        //是否显示行间隔色
+        cache: false,                         //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        sortable: false,                     //是否启用排序
+        strictSearch: true,                	//设置为 true启用 全匹配搜索，否则为模糊搜索
+        clickToSelect: true,                //是否启用点击选中行
+        height: $(window).height() - 117,    //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        columns: [{
+            field: 'id',
+            title: 'ID',
+            visible: false,
+            valign: 'middle',
+            align: "center"
+        }, {
+            formatter: function (value, row, index) {
+                return ++index;
+            },
+            title: '序号',
+            valign: 'middle',
+            align: "center",
+            width: "80"
+        }, {
+            field: 'bidAbbreviaion',
+            formatter: function (value, row, index) {
+                return '<div style="text-align: left">' + value + '</div>';
+            },
+            title: '标段简称',
+            width: "320",
+            valign: 'middle',
+            align: "center"
+        }]
+    });
+
+    //初始化 得分详情（计算得分使用）
+    //展示 标段下的供应商的 详细得分信息
+    $('#tb_scoreGradeDetails').bootstrapTable({
+        url: '/priceInfo/queryListByName',          //请求后台的URL（*）
+        method: 'get',                        //请求方式（*）
+//        toolbar: '#toolbar',                  //工具按钮用哪个容器
+        striped: true,                        //是否显示行间隔色
+        cache: false,                         //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        sortable: false,                     //是否启用排序
+        strictSearch: true,                	//设置为 true启用 全匹配搜索，否则为模糊搜索
+        clickToSelect: true,                //是否启用点击选中行
+        height: $(window).height() - 117,    //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        columns: [{
+            field: 'id',
+            title: 'ID',
+            visible: false,
+            valign: 'middle',
+            align: "center"
+        }, {
+            field: 'sort',
+            title: '排序',
+            valign: 'middle',
+            align: "center",
+            width: "40"
+        }, {
+            field: 'supplier',
+            formatter: function (value, row, index) {
+                return '<div style="text-align: left">' + value + '</div>';
+            },
+            title: '供应商名称',
+            valign: 'middle',
+            align: "center",
+            width: "300"
+        }, {
+            field: 'price',
+            formatter: function (value, row, index) {
+                return '<div style="text-align: right">' + value + '</div>';
+            },
+            title: '投标价格（万元）',
+            valign: 'middle',
+            align: "center",
+            width: "40"
+        }, {
+            field: 'priceScore',
+            formatter: function (value, row, index) {
+                return '<div style="text-align: right">' + value + '</div>';
+            },
+            title: '评标价格得分',
+            valign: 'middle',
+            align: "center",
+            width: "40"
+        }, {
+            field: 'a1',
+            title: 'A1',
+            valign: 'middle',
+            align: "center",
+            width: "80"
+        }, {
+            field: 'n',
+            title: 'N',
+            valign: 'middle',
+            align: "center",
+            width: "80"
+        }, {
+            field: 'a2',
+            title: 'A2',
+            valign: 'middle',
+            align: "center",
+            width: "80"
+        }, {
+            field: 'p',
+            title: 'P',
+            valign: 'middle',
+            align: "center",
+            width: "80"
+        }, {
+            field: 'basePrice',
+            formatter: function (value, row, index) {
+                return '<div style="text-align: right">' + value + '</div>';
+            },
+            title: '评标基准价',
+            valign: 'middle',
+            align: "center",
+            width: "80"
+        }]
+    });
+
+    // 唱标报价表选中样式添加方法
+    $("#tb_bid").on('click-row.bs.table', function (e, row, element) {
+        $('.selected').removeClass('selected');// 去除之前选中的行的，选中样式
+        $(element).addClass('selected');// 添加当前选中的 success样式用于区别
+    });
+
+
+    // 标段流标管理 --表格选中样式添加方法
+    //选中行联动 包流标管理表事件
+    $("#tb_bidName").on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function (e, row, element) {
+        var obj = $("#tb_bidName").bootstrapTable('getAllSelections');
+        var bids = [];
+        for(var i=0;i<obj.length;i++) {
+            bids.push(obj[i].bid)
+        }
+        var query_bid = "('"+bids.join("','")+"')";
+        $("#query_bid").val(query_bid);
+        $('#tb_auction')
+            .bootstrapTable(
+                'refresh',
+                {
+                    url: "/bidder/queryDistinctPackageListIn",
+                    query: {
+                        bid: query_bid
+                    },
+                    cache: false
+                });
+        $("#tb_invalid").bootstrapTable('removeAll');
+    });
+
+
+    // 包流标管理 表格选中样式添加方法
+    //点击行联动 供应商废标管理表事件
+    $("#tb_auction").on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function (e, row, element) {
+        var obj = $("#tb_auction").bootstrapTable('getAllSelections');
+        var bids = [];
+        var packagenames = [];
+        for(var i=0;i<obj.length;i++) {
+            bids.push(obj[i].bid)
+            packagenames.push(obj[i].packagename)
+        }
+        var query_bid = "('"+bids.join("','")+"')";
+        var query_packagename = "('"+packagenames.join("','")+"')";
+        $("#query_bid").val(query_bid);
+        $("#query_packagename").val(query_packagename);
+        $('#tb_invalid')
+            .bootstrapTable(
+                'refresh',
+                {
+                    url: "/bidder/queryListByNameIn",
+                    query: {
+                        packagename: query_packagename,
+                        bid: query_bid,
+                        querySupplierParam: $("#querySupplierParam").val()
+                    },
+                    cache: false
+                });
+    });
+
+
+    // 供应商废标管理 表格选中样式添加方法
+    $("#tb_invalid").on('click-row.bs.table', function (e, row, element) {
+        $('.tb_invalid .selected').removeClass('selected');// 去除之前选中的行的，选中样式
+        $(element).addClass('selected');// 添加当前选中的 success样式用于区别
+    });
+
+
+
+
+
+
+    //提出 重构 刷新供应商表方法
+    function refreshSupplier() {
+        var obj = $("#tb_auction").bootstrapTable('getAllSelections');
+        var bids = [];
+        var packagenames = [];
+        for(var i=0;i<obj.length;i++) {
+            bids.push(obj[i].bid)
+            packagenames.push(obj[i].packagename)
+        }
+        var query_bid = "('"+bids.join("','")+"')";
+        var query_packagename = "('"+packagenames.join("','")+"')";
+        $("#query_bid").val(query_bid);
+        $("#query_packagename").val(query_packagename);
+        $('#tb_invalid')
+            .bootstrapTable(
+                'refresh',
+                {
+                    url: "/bidder/queryListByNameIn",
+                    query: {
+                        packagename: query_packagename,
+                        bid: query_bid
+                    },
+                    cache: false
+                });
+    }
+
+
+    //提出 重构 刷新包表方法
+    function refreshPackage() {
+        var obj = $("#tb_bidName").bootstrapTable('getAllSelections');
+        var bids = [];
+        for(var i=0;i<obj.length;i++) {
+            bids.push(obj[i].bid)
+        }
+        var query_bid = "('"+bids.join("','")+"')";
+        $("#query_bid").val(query_bid);
+        $('#tb_auction')
+            .bootstrapTable(
+                'refresh',
+                {
+                    url: "/bidder/queryDistinctPackageListIn",
+                    query: {
+                        bid: query_bid
+                    },
+                    cache: false
+                });
+        $("#tb_invalid").bootstrapTable('removeAll');
+    }
+
+    // 计算得分的 标段信息表格选中样式添加方法
+    //联动详情表 方法 的添加位置
+    $("#tb_scoreGrade").on('click-row.bs.table', function (e, row, element) {
+        $('.tb_scoreGrade .selected').removeClass('selected');// 去除之前选中的行的，选中样式
+        $(element).addClass('selected');// 添加当前选中的 success样式用于区别
+        var query_bidAbbreviaion = row.bidAbbreviaion;
+        //刷新联动表格
+        $('#tb_scoreGradeDetails')
+            .bootstrapTable(
+                'refresh',
+                {
+                    url: "/priceInfo/queryListByName",
+                    query: {
+                        bidAbbreviaion: query_bidAbbreviaion
+                    },
+                    cache: false
+                });
+    });
+
+    // 评分价格评分表格详情的选中样式添加方法
+    $("#tb_scoreGradeDetails").on('click-row.bs.table', function (e, row, element) {
+        $('.tb_scoreGradeDetails .selected').removeClass('selected');// 去除之前选中的行的，选中样式
+        $(element).addClass('selected');// 添加当前选中的 success样式用于区别
+    });
+
+    /**
+     * 流标废标阶段 供应商名称 的 模糊查询事件
+     * 绑定 input propertychange 事件
+     */
+    function searchInvalidSupplierAction() {
+            var obj = $("#tb_auction").bootstrapTable('getAllSelections');
+            var bids = [];
+            var packagenames = [];
+            for(var i=0;i<obj.length;i++) {
+                bids.push(obj[i].bid)
+                packagenames.push(obj[i].packagename)
+            }
+            var query_bid = "('"+bids.join("','")+"')";
+            var query_packagename = "('"+packagenames.join("','")+"')";
+            $("#query_bid").val(query_bid);
+            $("#query_packagename").val(query_packagename);
+            $('#tb_invalid')
+                .bootstrapTable(
+                    'refresh',
+                    {
+                        url: "/bidder/queryListByNameIn",
+                        query: {
+                            packagename: query_packagename,
+                            bid: query_bid,
+                            querySupplierParam: $("#querySupplierParam").val()
+                        },
+                        cache: false
+                    });
+    }
+
+    /**
+     * 标段简称 和 供应商名称 的 模糊查询事件
+     * 绑定 input propertychange 事件
+     */
+    function searchAction() {
+        $('.search_bind').bind('input propertychange', function () {
+            $('#tb_bid').bootstrapTable("refresh",
+                {
+                    url: '/bidder/queryList', cache: false,
+                    query: {
+                        supplier: $("#search_supplier").val(),
+                        bidAbbreviaion: $("#search_bidAbbreviaion").val()
+                    }
+                });
+        });
+    }
+
+    $(function () {
+        //进入3、废标、流标 选择左第一条记录显示
+
+        //进入4、评分价格评分表 选择左第一条记录显示
+        $("#tb_scoreGrade").on('load-success.bs.table', function (e, row, element) {
+            if ($('#tb_scoreGrade tr:eq(1)').data("index") !== undefined) {
+                $('.selected').removeClass('selected');
+                var index = 2;
+                $('#tb_scoreGrade tr:eq('+index+')').addClass('selected');
+                var obj = $("#tb_scoreGrade").bootstrapTable('getData');
+                if (obj != null) {
+                    //刷新联动表格
+                    var query_bidAbbreviaion = obj[0].bidAbbreviaion;
+                    $('#tb_scoreGradeDetails')
+                        .bootstrapTable(
+                            'refresh',
+                            {
+                                url: "/priceInfo/queryListByName",
+                                query: {
+                                    bidAbbreviaion: query_bidAbbreviaion
+                                },
+                                cache: false
+                            });
+                } else {
+                    /*在左侧表 标段简称一行数据都没有时  清空右表数据*/
+                    //刷新联动表格
+                    $('#tb_scoreGradeDetails').bootstrapTable("removeAll");
+                }
+            } else {
+                /*在左侧表 标段简称一行数据都没有时  清空右表数据*/
+                //刷新联动表格
+                $('#tb_scoreGradeDetails').bootstrapTable("removeAll");
+
+            }
+        });
+    });
+
+    /**
+     * 点击3、废标、流标 时触发，刷新表格
+     */
+    function refreshAction() {
+        $('#tb_bidName').bootstrapTable("refresh", {url: '/bidder/queryDistinctBidList', cache: false});
+    }
+
+    /**
+     * 点击4、评分价格评分表导出，触发，刷新表格
+     */
+    function refreshPriceAction() {
+        $('#tb_scoreGrade').bootstrapTable("refresh", {url: '/bidder/queryDistinctBidAbbreviaionList', cache: false});
+    }
+
+    //标段列表 流标点击事件，通过参数确定是流标还是取消流标
+    function auctionByBidAction(e, str, val) {
+        e.stopPropagation();
+        if (str === '0') {
+            parent.window.alertBidModal("是否确认招标？");
+        }
+        if (str === '1') {
+            parent.window.alertBidModal("是否确认流标？");
+        }
+        //绑定确定按钮的点击事件
+        parent.window.$("#btn_promptBid").bind('click', function () {
+            parent.window.hideBidModal();
+            var url = "/bidder/updateBidInvalidActionOne";
+            var arrs = val.split(",");
+            var data = {"bid": arrs[1]};
+            if (arrs[0] === "0") {
+                data["flagBidInvalid"] = "1";
+                arrs[0] = "1";
+            } else {
+                data["flagBidInvalid"] = "0";
+                arrs[0] = "0";
+            }
+            var bids = arrs[1].split(",");
+            //ajax提交表单
+            $.post(url, data, function (flag) {
+                if (flag) {
+                    //弹出操作成功提示框
+                    parent.window.alertSuccess("操作成功！");
+                    //删除当前行（效果刷新当前行，不刷新整个表格）
+                    $('#tb_bidName').bootstrapTable('remove', {field: 'bid', values: bids});
+                    //添加当前行（效果刷新当前行，不刷新整个表格）
+                    $('#tb_bidName').bootstrapTable("insertRow",
+                        {"index": arrs[2], "row": {0: true,flagBidInvalid: arrs[0], bid: arrs[1]}});
+                    //刷新联动表格
+                    refreshPackage();
+                } else {
+                    //弹出操作错误提示框
+                    parent.window.alertModal("操作失败！");
+                }
+            });
+            //解除绑定事件
+            parent.window.$("#btn_promptBid").unbind('click');
+        });
+    }
+
+    //包名列表 流标点击事件，通过参数确定是流标还是取消流标
+    function auctionAction(e, str, val) {
+        e.stopPropagation();
+        if (str === '0') {
+            parent.window.alertBidModal("是否确认招标？");
+        }
+        if (str === '1') {
+            parent.window.alertBidModal("是否确认流标？");
+        }
+        //绑定确定按钮的点击事件
+        parent.window.$("#btn_promptBid").bind('click', function () {
+            parent.window.hideBidModal();
+            //解除绑定事件
+            var url = "/bidder/updateInvalidActionOne";
+            var arrs = val.split(",");
+            var data = {"bid": arrs[1], "packagename": arrs[3]};
+            if (arrs[0] === "0") {
+                data["flagInvalid"] = "1";
+                arrs[0] = "1";
+            } else {
+                data["flagInvalid"] = "0";
+                arrs[0] = "0";
+            }
+            var packagenames = arrs[3].split(",");
+            var bidAbbreviaions =  arrs[4].split(",");
+            //ajax提交表单
+            $.post(url, data, function (flag) {
+                if (flag) {
+                    //弹出操作成功提示框
+                    parent.window.alertSuccess("操作成功！");
+                    //删除当前行（效果刷新当前行，不刷新整个表格）
+                    $('#tb_auction').bootstrapTable('remove', {field: 'bidAbbreviaion', values: bidAbbreviaions});
+                    //添加当前行（效果刷新当前行，不刷新整个表格）
+                    $('#tb_auction').bootstrapTable("insertRow",
+                        {"index": arrs[2], "row": {0:true,'bidAbbreviaion':arrs[4],"bid": arrs[1], "packagename": arrs[3], flagInvalid: arrs[0]}});
+                    //刷新联动表格
+                    refreshSupplier();
+                } else {
+                    //弹出操作错误提示框
+                    parent.window.alertModal("操作失败！");
+                }
+            });
+            //解除绑定事件
+            parent.window.$("#btn_promptBid").unbind('click');
+        });
+    }
+
+    //供应商列表 废标的点击事件，通过参数确定是废标还是取消废标
+    function invalidAction(e, str, val) {
+        e.stopPropagation();
+        if (str === '0') {
+            parent.window.alertBidModal("是否确认复标？");
+        }
+        if (str === '1') {
+            parent.window.alertBidModal("是否确认废标？");
+        }
+        parent.window.alertBidModal("是否确认废标？");
+        //绑定确定按钮的点击事件
+        parent.window.$("#btn_promptBid").bind('click', function () {
+            parent.window.hideBidModal();
+            // var url = "/bidder/updateById";
+            var arrs = val.split(",");
+            var data = {"id": arrs[1]};
+            var flagBit = '';
+            if (arrs[0] === "0") {
+                data["flagBit"] = "1";
+                arrs[0] = "1";
+                flagBit = 1;
+            } else {
+                data["flagBit"] = "0";
+                arrs[0] = "0";
+                flagBit = 0;
+            }
+
+            var obj = $("#tb_auction").bootstrapTable('getAllSelections');
+            var bids = [];
+            var packagenames = [];
+            for(var i=0;i<obj.length;i++) {
+                bids.push(obj[i].bid)
+                packagenames.push(obj[i].packagename)
+            }
+            var query_bid = "('"+bids.join("','")+"')";
+            var query_packagename = "('"+packagenames.join("','")+"')";
+            $("#query_bid").val(query_bid);
+            $("#query_packagename").val(query_packagename);
+
+            var rows = $("#tb_invalid").bootstrapTable('getSelections');
+
+            var suppliers = [];
+            for(var i=0;i<rows.length;i++) {
+                suppliers.push(rows[i].supplier)
+            }
+            var query_supplier = "('"+arrs[3]+"')";
+
+            $.post("/bidder/updateByInParams", {"supplier": query_supplier,
+                bid:query_bid,packagename:query_packagename
+                ,"flagBit": flagBit}, function (data) {
+                if (data) {
+                    parent.window.alertSuccess("操作成功！");
+                    var query_bid = $("#query_bid").val();
+                    var query_packagename = $("#query_packagename").val();
+                    refreshSupplier();
+                } else {
+                    parent.window.alertModal("操作失败！");
+                }
+                parent.loadingOff();
+            });
+
+
+            //解除绑定事件
+            parent.window.$("#btn_promptBid").unbind('click');
+        });
+    }
+    /**
+     * 标段 批量 流标
+     * @param dealType （pass：流标）（regain：复标）
+     * @returns {boolean} 终止方法
+     * @constructor
+     */
+    function ArrayInvalidAction(dealType) {
+        var nullTest = $("#tb_bidName").bootstrapTable('getSelections');
+        if (nullTest.length == 0) {
+            parent.window.alertLessOneModal();
+            return false;
+        }
+        if (dealType === "pass") {
+            parent.window.alertBidModal("确认是否批量流标？");
+        } else {
+            parent.window.alertBidModal("确认是否批量招标标？");
+        }
+        //绑定确定按钮的点击事件
+        parent.window.$("#btn_promptBid").bind('click', function () {
+            parent.window.hideBidModal();
+            var rows = $("#tb_bidName").bootstrapTable('getSelections');
+            var data = JSON.stringify(rows);
+            parent.loadingOn('正在处理,请稍后…');
+            $.post("/bidder/updateBidInvalidActionList", {"str": data, "dealType": dealType}, function (data) {
+                if (data) {
+                    parent.window.alertSuccess("操作成功！");
+                    $('#tb_bidName').bootstrapTable("refresh", {url: '/bidder/queryDistinctBidList', cache: false});
+                    $("#tb_auction").bootstrapTable('removeAll');
+                    $("#tb_invalid").bootstrapTable('removeAll');
+                } else {
+                    parent.window.alertModal("操作失败！");
+                }
+                parent.loadingOff();
+            });
+            //解除绑定事件
+            parent.window.$("#btn_promptBid").unbind('click');
+        });
+    }
+
+    /**
+     * 批量 包 流标
+     * @param dealType （pass：流标）（regain：复标）
+     * @returns {boolean} 终止方法
+     * @constructor
+     */
+    function ArrayPackageInvalidAction(dealType) {
+        var nullTest = $("#tb_auction").bootstrapTable('getSelections');
+        if (nullTest.length == 0) {
+            parent.window.alertLessOneModal();
+            return false;
+        } else {
+            if (nullTest[0].flagBidInvalid === '0') {
+                parent.window.alertModal("禁止执行，该标段已经流标！");
+                return false;
+            }
+        }
+        if (dealType === "pass") {
+            parent.window.alertBidModal("确认是否批量流标？");
+        } else {
+            parent.window.alertBidModal("确认是否批量招标标？");
+        }
+        //绑定确定按钮的点击事件
+        parent.window.$("#btn_promptBid").bind('click', function () {
+            parent.window.hideBidModal();
+            var rows = $("#tb_auction").bootstrapTable('getSelections');
+
+            var data = JSON.stringify(rows);
+            parent.loadingOn('正在处理,请稍后…');
+            $.post("/bidder/updateInvalidActionList", {"str": data, "dealType": dealType}, function (data) {
+                if (data) {
+                    parent.window.alertSuccess("操作成功！");
+                    refreshPackage();
+                } else {
+                    parent.window.alertModal("操作失败！");
+                }
+                parent.loadingOff();
+            });
+            //解除绑定事件
+            parent.window.$("#btn_promptBid").unbind('click');
+        });
+    }
+
+    /**
+     * 批量 供应商 废标
+     * @param dealType （pass：流标）（regain：复标）
+     * @returns {boolean} 终止方法
+     * @constructor
+     */
+    /*****************************************************/
+    function ArrayBitAction(dealType) {
+        var nullTest = $("#tb_invalid").bootstrapTable('getSelections');
+        if (nullTest.length == 0) {
+            parent.window.alertLessOneModal();
+            return false;
+        } else {
+            if (nullTest[0].flagBidInvalid === '0') {
+                parent.window.alertModal("禁止执行，该标段已经流标！");
+                return false;
+            }
+            if (nullTest[0].flagInvalid === '0') {
+                parent.window.alertModal("禁止执行，该包已经流标！");
+                return false;
+            }
+        }
+        var flagBit = ''
+        if (dealType === "pass") {
+            parent.window.alertBidModal("确认是否批量废标？");
+            flagBit = "0";
+        } else {
+            parent.window.alertBidModal("确认是否批量复标？");
+            flagBit = "1";
+        }
+        //绑定确定按钮的点击事件
+        parent.window.$("#btn_promptBid").bind('click', function () {
+            parent.window.hideBidModal();
+            var rows = $("#tb_invalid").bootstrapTable('getSelections');
+            var data = JSON.stringify(rows);
+            parent.loadingOn('正在处理,请稍后…');
+
+            var obj = $("#tb_auction").bootstrapTable('getAllSelections');
+            var bids = [];
+            var packagenames = [];
+            for(var i=0;i<obj.length;i++) {
+                bids.push(obj[i].bid)
+                packagenames.push(obj[i].packagename)
+            }
+            var query_bid = "('"+bids.join("','")+"')";
+            var query_packagename = "('"+packagenames.join("','")+"')";
+            $("#query_bid").val(query_bid);
+            $("#query_packagename").val(query_packagename);
+
+            var rows = $("#tb_invalid").bootstrapTable('getSelections');
+
+            var suppliers = [];
+            for(var i=0;i<rows.length;i++) {
+                suppliers.push(rows[i].supplier)
+            }
+            var query_supplier = "('"+suppliers.join("','")+"')";
+
+            $.post("/bidder/updateByInParams", {"supplier": query_supplier,
+                bid:query_bid,packagename:query_packagename
+                ,"flagBit": flagBit}, function (data) {
+                if (data) {
+                    parent.window.alertSuccess("操作成功！");
+                    var query_bid = $("#query_bid").val();
+                    var query_packagename = $("#query_packagename").val();
+                   refreshSupplier();
+                } else {
+                    parent.window.alertModal("操作失败！");
+                }
+                parent.loadingOff();
+            });
+            //解除绑定事件
+            parent.window.$("#btn_promptBid").unbind('click');
+        });
+    }
+
+
+    /**
+     * 废除本批次所有该供应商
+     * @param dealType （pass：流标）（regain：复标）
+     * @returns {boolean} 终止方法
+     * @constructor
+     */
+    function AbatchBitAction(dealType) {
+        var nullTest = $("#tb_invalid").bootstrapTable('getSelections');
+        if (nullTest.length == 0) {
+            parent.window.alertLessOneModal();
+            return false;
+        } else {
+            if (dealType === "pass") {
+                parent.window.alertBidModal("废除本批次所有该供应商？");
+            } else {
+                parent.window.alertBidModal("复标本批次所有该供应商？");
+            }
+            //绑定确定按钮的点击事件
+            parent.window.$("#btn_promptBid").bind('click', function () {
+                parent.window.hideBidModal();
+                var rows = $("#tb_invalid").bootstrapTable('getSelections');
+                var data = JSON.stringify(rows);
+                parent.loadingOn('正在处理,请稍后…');
+                $.post("/bidder/updateByNameList", {"str": data, "dealType": dealType}, function (data) {
+                    if (data) {
+                        parent.window.alertSuccess("操作成功！");
+                        var query_bid = $("#query_bid").val();
+                        var query_packagename = $("#query_packagename").val();
+                        $('#tb_invalid')
+                            .bootstrapTable(
+                                'refresh',
+                                {
+                                    url: "/bidder/queryListByName",
+                                    query: {
+                                        packagename: query_packagename,
+                                        bid: query_bid
+                                    },
+                                    cache: false
+                                });
+                    } else {
+                        parent.window.alertModal("操作失败！");
+                    }
+                    parent.loadingOff();
+                });
+                //解除绑定事件
+                parent.window.$("#btn_promptBid").unbind('click');
+            });
+        }
+    }
+    //*********************** LN start ***********************
+    /***
+     * 计算价格得分
+     */
+    function computePriceAction() {
+        parent.loadingOn("计算中...")
+        var formData = {
+            bid_abbreviaion: '',
+            packName: "",
+            suppliers: "",
+            priceFun: "formulaService@materials_priceFormula_1"
+        };
+        $.ajax({
+            url: "/priceformula/calculateAndSavePriceScore",
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function (responseStr) {
+                parent.loadingOff();
+                var result = responseStr;
+                if (result.success) {
+                    //弹出操作成功提示框
+                    parent.window.alertSuccess("操作成功！");
+                    refreshPriceAction();
+                } else {
+                    //弹出操作错误提示框
+                    parent.window.alertModal(result.msg);
+                }
+            },
+            error: function (responseStr) {
+                console.log("error");
+            }
+        });
+
+    }
+
+    /**
+     * 导出评标价格计算得分表
+     */
+    function exportExcelLNAction() {
+        parent.loadingOn('正在导出,请稍后…');
+        var formData = {
+            bid_abbreviaion: '',
+            packName: "",
+            suppliers: "",
+            priceFun: "formulaService@materials_priceFormula_1"
+        };
+        $.ajax({
+            url: "/priceformula/exportToExcel",
+            type: 'POST',
+            data: formData,
+            success: function (responseStr) {
+//                var obj = eval('(' + responseStr + ')');
+                console.log(responseStr);
+               if (responseStr.success) {
+                    window.location.target = '_blank';
+                   console.log("/page/bbgs/excel/" + responseStr.currentTimeMillis+"/评标价格计算得分表.zip");
+                    window.location.href = "/page/bbgs/excel/" + responseStr.currentTimeMillis+"/评标价格计算得分表.zip";
+//                    $('#downloadFileLink').attr('href','/priceformula/download?fileName='+responseStr);
+//                    //$('#downloadFileLink span').click();
+//                    //document.getElementById("downloadFileLink").click();
+//                    window.open('/priceformula/download?fileName='+responseStr)
+                } else {
+                    parent.window.alertModal(responseStr.msg);
+                }
+                parent.loadingOff();
+            },
+            error: function (responseStr) {
+                console.log("error");
+                parent.loadingOff();
+            }
+        });
+
+    }
+
+    //*********************** LN end ***********************
+
+    /**
+     * 重载BindInfoFrame
+     */
+    function reloadBindInfoFrame() {
+        document.getElementById('bindInfoFrame').contentWindow.location.reload(true);
+    }
+
+</script>
+</body>
+</html>

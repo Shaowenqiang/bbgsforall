@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.bidder.dao.wordExportDao">
+    <sql id="DefaultSelects"> ID , BID_ABBREVIAION , TECHNOLOGY_TEMPLATE , BUSINESS_TEMPLATE , TECHNOLOGY_BID_RECORD , BUSINESS_BID_RECORD , BIDDER_LIST , PRICE_SCORE_TEMPLATE , BUSINESS_EXPERT_GROUP , TECHNOLOGY_EXPERT_GROUP , BUSINESS_WEIGHT , TECHNOLOGY_WEIGHT , PRICE_WEIGHT , INVALID , FLAG , PRICE_FORMULA , M </sql>
+    <resultMap id="DefaultResultMap" type="cn.com.hqep.bidder.model.tblBbgsBidInformationModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="BID_ABBREVIAION" jdbcType="VARCHAR" property="bidAbbreviaion"/>
+        <result column="TECHNOLOGY_TEMPLATE" jdbcType="VARCHAR" property="technologyTemplate"/>
+        <result column="BUSINESS_TEMPLATE" jdbcType="VARCHAR" property="businessTemplate"/>
+        <result column="TECHNOLOGY_BID_RECORD" jdbcType="VARCHAR" property="technologyBidRecord"/>
+        <result column="BUSINESS_BID_RECORD" jdbcType="VARCHAR" property="businessBidRecord"/>
+        <result column="BIDDER_LIST" jdbcType="VARCHAR" property="bidderList"/>
+        <result column="PRICE_SCORE_TEMPLATE" jdbcType="VARCHAR" property="priceScoreTemplate"/>
+        <result column="BUSINESS_EXPERT_GROUP" jdbcType="VARCHAR" property="businessExpertGroup"/>
+        <result column="TECHNOLOGY_EXPERT_GROUP" jdbcType="VARCHAR" property="technologyExpertGroup"/>
+        <result column="BUSINESS_WEIGHT" jdbcType="VARCHAR" property="businessWeight"/>
+        <result column="TECHNOLOGY_WEIGHT" jdbcType="VARCHAR" property="technologyWeight"/>
+        <result column="PRICE_WEIGHT" jdbcType="VARCHAR" property="priceWeight"/>
+        <result column="INVALID" jdbcType="VARCHAR" property="invalid"/>
+        <result column="FLAG" jdbcType="VARCHAR" property="flag"/>
+        <result column="PRICE_FORMULA" jdbcType="VARCHAR" property="priceFormula"/>
+        <result column="M" jdbcType="VARCHAR" property="m"/>
+    </resultMap>
+    <select id="queryAllPackagename" resultType="java.lang.String">
+        SELECT DISTINCT BID_ABBREVIAION FROM TBL_BBGS_TENDERER ORDER BID_ABBREVIAION
+    </select>
+    <select id="queryBatchName" resultType="String">
+        SELECT BATCH_NAME FROM tbl_bbgs_batch LIMIT 1
+    </select>
+    <select id="querySuccessPackageNum" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM TBL_BBGS_BID_INFORMATION INVALID = '1'
+    </select>
+    <select id="queryFailPackageNum" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM TBL_BBGS_BID_INFORMATION INVALID = '0'
+    </select>
+
+    <select id="queryAllBidInfo" resultMap="DefaultResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        BBGS.TBL_BBGS_BID_INFORMATION
+        ORDER BY
+        left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+''
+    </select>
+    <select id="queryNums" resultType="java.util.Map">
+      select DISTINCT
+        BID bid,
+				(SELECT BID_ABBREVIAION from tbl_bbgs_package_supplier WHERE BID = T1.bid limit 1) bidName,
+        (SELECT COUNT(1) from tbl_bbgs_package_supplier T2
+         WHERE T2.FLAG_BIT != '0'
+        and T2.FLAG_INVALID != '0'
+        and T2.FLAG_BID_INVALID != '0'
+        and T2.BID = T1.BID) successNum,
+        (SELECT count(1) from tbl_bbgs_tenderer
+        where BID_ABBREVIAION LIKE CONCAT(T1.bid,'%')) total,
+        (SELECT count(DISTINCT SUPPLIER) from tbl_bbgs_tenderer
+        where BID_ABBREVIAION LIKE CONCAT(T1.bid,'%')) bidderNum
+        from tbl_bbgs_package_supplier T1
+        ORDER BY
+        left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+'';
+    </select>
+    <!--查询合计金额-->
+    <select id="queryP_hjje" resultType="java.lang.Float">
+        SELECT sum(AVG) FROM (SELECT AVG(OFFER) AVG
+        from tbl_bbgs_package_supplier T2
+            WHERE
+            T2.FLAG_BIT != '0'
+            and T2.FLAG_INVALID != '0'
+            and T2.FLAG_BID_INVALID != '0'
+        GROUP BY BID)  T3
+    </select>
+    <select id="queryBidOffer" resultType="java.util.Map">
+        SELECT DISTINCT T1.BID bid,
+        (SELECT BID_ABBREVIAION from tbl_bbgs_package_supplier where BID=T1.BID LIMIT 1) bidName,
+        (SELECT count(DISTINCT SUPPLIER) from tbl_bbgs_tenderer where BID_ABBREVIAION LIKE CONCAT(T1.BID,'%') )bidderNum,
+        (SELECT count(DISTINCT BID_ABBREVIAION) from tbl_bbgs_package_supplier where BID=T1.BID) packageNum,
+        (SELECT sum(OFFER)from tbl_bbgs_package_supplier
+        WHERE FLAG_BID_INVALID!='0'
+        AND FLAG_BIT != '0'
+        AND FLAG_INVALID != '0'
+        AND IS_WIN = '1'
+        AND BID = T1.BID)  winPrice,
+        (SELECT COUNT(OFFER)from tbl_bbgs_package_supplier
+        WHERE FLAG_BID_INVALID!='0'
+        AND FLAG_BIT != '0'
+        AND FLAG_INVALID != '0'
+        AND IS_WIN = '1'
+        AND BID = T1.BID)  winNum,
+        (SELECT sum(OFFER) from tbl_bbgs_package_supplier
+        WHERE FLAG_BID_INVALID!='0'
+        AND FLAG_BIT != '0'
+        AND FLAG_INVALID != '0'
+        AND SORT='1'
+        AND BID = T1.BID) firstPrice,
+        (SELECT COUNT(OFFER) from tbl_bbgs_package_supplier
+        WHERE FLAG_BID_INVALID!='0'
+        AND FLAG_BIT != '0'
+        AND FLAG_INVALID != '0'
+        AND SORT='1'
+        AND BID = T1.BID) firstNum
+        from tbl_bbgs_package_supplier T1
+        ORDER BY T1.BID;
+
+
+    </select>
+    <select id="querySort" resultType="java.lang.String">
+        SELECT SORT from tbl_bbgs_package_supplier where NOT ISNULL(OFFER)
+        AND FLAG_BIT  != '0'
+        AND FLAG_INVALID != '0'
+        AND FLAG_BID_INVALID != '0'
+        LIMIT 1
+    </select>
+</mapper>

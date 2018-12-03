@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>导出阅标记录 绑定模板信息</title>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.3.7/css/bootstrap.css">
+    <link rel="stylesheet" href="../plugins/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" href="../css/firstImport.css">
+    <link rel="stylesheet" href="../css/button.css">
+    <style>
+        .gw-l-button:disabled {
+            background-color: darkgray;
+            color: #FFFFFF;
+        }
+
+        html, body {
+            height: 100%;
+        }
+        .flexRow{
+            display: flex;
+            flex-direction: row;
+        }
+        .flexRow>label{
+            height: 32px;
+            line-height: 32px;
+            font-weight: normal;
+        }
+        .flexRow>input{
+            height: 32px;
+            margin-bottom: 8px;
+        }
+        .multiselect-all label{
+            margin-left: 5px;
+        }
+        .btn{
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<div class="containerMine">
+    <button class="gw-l-button" id="exportAll" onclick="exportSencondExcle()" type="button">
+        导出专家组阅标记录
+    </button>
+    <div class="exportCss">
+        <button class="gw-l-button mr3" onclick="saveBidInfo()">保存</button>
+        <button class="gw-l-button" onclick="viewTemplateDetail()">标段模板信息查询</button>
+    </div>
+</div>
+<div class="containerMine" style="margin-top: 0;">
+    <!--<div class="flex1 flexColumn">-->
+        <!--&lt;!&ndash;<div class="areaDesc">未选数据：</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="greenLine" style="margin-top: 0;"></div>&ndash;&gt;-->
+        <!--<div class="flexRow">-->
+            <!--<label>标段搜索：</label>-->
+            <!--<div class="flex1 mb8">-->
+                <!--<input id="searchText" placeholder="标段搜索" class="form-control"-->
+                       <!--style="" type="text" oninput="filterForLeft()"/>-->
+            <!--</div>-->
+
+        <!--</div>-->
+        <!--<div class="bootstrapTableCssDesign">-->
+            <!--<table id="table_left"></table>-->
+        <!--</div>-->
+
+    <!--</div>-->
+    <div class="flex1 bootstrapTableCssDesign" style="width: 25%;">
+        <!--<div class="areaDesc" style="min-width: 206px">待选数据：</div>-->
+        <!--<div class="greenLine" style="margin-top: 0;"></div>-->
+        <div class="flexRow">
+            <!--<label>包号搜索：</label>-->
+            <div style="margin-bottom: 8px;">
+                <!--<button class="gw-l-button mr3" id="example-select-button">搜索</button>-->
+                <select id="example-post" name="multiselect[]" multiple="multiple" style="text-align: left">
+                </select>
+            </div>
+                <!--<div class="flex1 mb8">-->
+                <!--<input id="searchText_p" placeholder="包号搜索" class="form-control"-->
+                       <!--type="text" oninput="filterForRight()"/>-->
+            <!--</div>-->
+
+        </div>
+
+        <table id="table_right"></table>
+    </div>
+
+    <div class="selectGroups">
+        <div style="width: 550px">
+            <div class="areaDesc">模板选择：</div>
+            <div class="greenLine" style="margin-top: 8px;margin-bottom: 8px;"></div>
+            <form class="form-inline form-mine" style="" role="form"
+                  id="formTemplate">
+                <div class="form-group">
+                    <label class="form-label">技术专家评分表：</label>
+                    <select class=" " id="technologyTemplate"  title="">
+                        <option value="">=== 请选择 ===</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">商务专家评分表：</label>
+                    <select class="" id="businessTemplate"  title="">
+                        <option value="">=== 请选择 ===</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">评标价格计算得分表：</label>
+                    <select class="" id="priceScoreTemplate"  title="">
+                        <option value="">=== 请选择 ===</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">技术专家组阅标记录：</label>
+                    <select class=" " id="technologyBidRecord"  title="">
+                        <option value="">=== 请选择 ===</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">商务专家组阅标记录：</label>
+                    <select class="" id="businessBidRecord"  title="">
+                        <option value="">=== 请选择 ===</option>
+                    </select>
+                </div>
+                <div class="form-group" style="display:none">
+                    <label class="form-label">投标人清单：</label>
+                    <select class=" " id="bidderList"  title="">
+                        <option value="">=== 请选择 ===</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">技术专家组：</label>
+                    <select class=" " id="technologyExpertGroup" title="">
+                        <option value="">=== 请选择 ===</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">商务专家组：</label>
+                    <select class=" " id="businessExpertGroup" title="">
+                        <option value="">=== 请选择 ===</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">权重：</label>
+                    <select class=" " id="priceWeight" title="">
+                        <option value="">=== 请选择 ===</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">价格公式：</label>
+                    <select class=" " id="priceFormula" title="">
+                        <option value="">=== 请选择 ===</option>
+                    </select>
+                </div>
+                <div class="form-group" id="m_div" style="margin-bottom: 10px;">
+                    <label class="form-label">公式参数（m）：</label>
+                    <select class=" " id="m" title="">
+                        <option value="1">=== 请选择 ===</option>
+                        <option value="0.1">0.1</option>
+                        <option value="0.3">0.3</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="../plugins/jquery-1.9.1.min.js"></script>
+<script src="../plugins/jquery.form.js"></script>
+<script src="../plugins/bootstrap-3.3.7/js/bootstrap.js"></script>
+<script src="../plugins/bootstrap-table/bootstrap-table.js"></script>
+<script src="../plugins/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+<script src="../js/bindInfo.js"></script>
+<link rel="stylesheet" href="../dist/css/bootstrap-multiselect.css" type="text/css">
+<script type="text/javascript" src="../dist/js/bootstrap-multiselect.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $.ajaxSettings.async = false;
+        $.post("/basicInfo/getBidNameList", function (result) {
+            console.log(result)
+            if(result.length>0){
+                for(var i=0;i<result.length;i++){
+                    console.log(result[i])
+                    $('#example-post').append('<option value="'+result[i]+'">'+result[i]+'</option>')
+                }
+            }
+        })
+        $('#example-post').multiselect({
+            enableFiltering: false,//搜索
+            includeSelectAllOption: true,//全选
+            nonSelectedText: '默认查询全部标段',//没有值的时候button显示值
+            nSelectedText: '个标段被选中',//有n个值的时候显示n个被选中
+            allSelectedText: '选择全部标段',//所有被选中的时候 全选（n）
+            buttonWidth: '164px',//button宽度
+            numberDisplayed: 4,//当超过1000个标签的时候显示n个被选中
+            selectAllText: '全选',
+            selectAll: true,
+            onChange: function(option, checked, select) {
+                loadRightData()
+            },
+            onSelectAll: function() {
+                loadRightData()
+            },
+            onDeselectAll: function() {
+                loadRightData()
+            }
+        });
+        $.ajaxSettings.async = true;
+    });
+
+</script>
+</body>
+</html>

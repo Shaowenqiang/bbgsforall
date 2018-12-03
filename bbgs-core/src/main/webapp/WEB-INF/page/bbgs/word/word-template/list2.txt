@@ -1,0 +1,29 @@
+<tr style='mso-yfti-irow:1'>
+  <td width="14%" style='width:14.58%;border-top:none;border-left:none;
+  border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .25pt;mso-border-top-alt:solid windowtext .25pt;
+  mso-border-right-alt:solid windowtext .25pt;
+  padding:0cm 5.4pt 0cm 5.4pt;border-bottom:$p_style$'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+  style='font-size:12.0pt;font-family:仿宋_GB2312;mso-hansi-font-family:Calibri;
+  mso-bidi-font-family:宋体;color:black'>$分标编号$<o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width="46%" style='width:46.56%;border-top:none;border-left:none;
+  border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .25pt;mso-border-left-alt:solid windowtext .25pt;
+  padding:0cm 5.4pt 0cm 5.4pt;border-bottom:$p_style$'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+  style='font-size:12.0pt;font-family:仿宋_GB2312;mso-hansi-font-family:宋体;
+  mso-bidi-font-family:宋体;mso-font-kerning:0pt'>$分标号$</span><span
+  style='font-size:12.0pt;font-family:仿宋_GB2312;mso-hansi-font-family:宋体;
+  mso-bidi-font-family:宋体;mso-font-kerning:0pt'>$分标名称$<o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width="38%" style='width:38.86%;border:none;
+  mso-border-top-alt:solid windowtext .25pt;mso-border-left-alt:solid windowtext .25pt;
+  mso-border-top-alt:solid windowtext .25pt;mso-border-left-alt:solid windowtext .25pt;
+  padding:0cm 5.4pt 0cm 5.4pt;border-bottom:$p_style$'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+  style='font-size:12.0pt;font-family:仿宋_GB2312;mso-hansi-font-family:宋体;
+  mso-bidi-font-family:宋体;color:black'>$比例$<o:p>&nbsp;</o:p></span></p>
+  </td>
+ </tr>

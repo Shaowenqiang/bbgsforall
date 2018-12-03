@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.bidder.dao.comprehensiveSortDao">
+    <resultMap id="bidderResultMap" type="cn.com.hqep.bidder.model.tblBbgsPackageSupplierModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="PACKAGENAME" jdbcType="VARCHAR" property="packagename"/>
+        <result column="SUPPLIER" jdbcType="VARCHAR" property="supplier"/>
+        <result column="FLAG_BIT" jdbcType="VARCHAR" property="flagBit"/>
+        <result column="FLAG_INVALID" jdbcType="VARCHAR" property="flagInvalid"/>
+        <result column="OFFER" jdbcType="VARCHAR" property="offer"/>
+        <result column="TECHNOLOGY_SCORE" jdbcType="VARCHAR" property="technologyScore"/>
+        <result column="PRICE_SCORE" jdbcType="VARCHAR" property="priceScore"/>
+        <result column="BUSINESS_SCORE" jdbcType="VARCHAR" property="businessScore"/>
+        <result column="TOTAL_SCORE" jdbcType="VARCHAR" property="totalScore"/>
+        <result column="SORT" jdbcType="VARCHAR" property="sort"/>
+        <result column="IS_WIN" jdbcType="VARCHAR" property="isWin"/>
+        <result column="BID_SETION" jdbcType="VARCHAR" property="bidSetion"/>
+        <result column="BID_ABBREVIAION" jdbcType="VARCHAR" property="bidAbbreviaion"/>
+        <result column="BID" jdbcType="VARCHAR" property="bid"/>
+        <result column="FLAG_BID_INVALID" jdbcType="VARCHAR" property="flagBidInvalid"/>
+        <result column="BASE_PRICE" jdbcType="VARCHAR" property="basePrice"/>
+    </resultMap>
+    <sql id="base_column_list">
+        ID,
+        PACKAGENAME,
+        SUPPLIER,
+        FLAG_BIT,
+        FLAG_INVALID,
+        OFFER,
+        TECHNOLOGY_SCORE,
+        PRICE_SCORE,
+        BUSINESS_SCORE,
+        TOTAL_SCORE,
+        SORT,
+        IS_WIN,
+        BID_SETION,
+        BID_ABBREVIAION,
+        BID,
+        FLAG_BID_INVALID
+    </sql>
+    <sql id="base_column_listLeftJoin">
+        T1.ID,
+        T1.PACKAGENAME,
+        T1.SUPPLIER,
+        T1.FLAG_BIT,
+        T1.FLAG_INVALID,
+        T1.OFFER,
+        T1.TECHNOLOGY_SCORE,
+        T1.PRICE_SCORE,
+        T1.BUSINESS_SCORE,
+        T1.TOTAL_SCORE,
+        T1.SORT,
+        T1.IS_WIN,
+        T1.BID_SETION,
+        T1.BID_ABBREVIAION,
+        T1.BID,
+        T1.FLAG_BID_INVALID,
+        T2.BASE_PRICE
+    </sql>
+    <sql id="base_column_insert">
+        ID,
+        PACKAGENAME,
+        SUPPLIER,
+        FLAG_BIT,
+        FLAG_INVALID,
+        OFFER,
+        BID_ABBREVIAION,
+        BID
+    </sql>
+
+    <update id="updateSortDataById" parameterType="cn.com.hqep.bidder.model.tblBbgsPackageSupplierModel" >
+        UPDATE BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="technologyScore != null">
+                TECHNOLOGY_SCORE = #{technologyScore,jdbcType=VARCHAR}
+            </if>
+            <if test="priceScore !=null ">
+                ,PRICE_SCORE = #{priceScore,jdbcType=VARCHAR}
+            </if>
+            <if test="businessScore != null ">
+                ,BUSINESS_SCORE = #{businessScore,jdbcType=VARCHAR}
+            </if>
+            <if test="totalScore != null ">
+                ,TOTAL_SCORE = #{totalScore,jdbcType=VARCHAR}
+            </if>
+            <if test="sort != null ">
+                , SORT = #{sort,jdbcType=VARCHAR}
+            </if>
+        </trim>
+        WHERE ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateOneToTwo" parameterType="cn.com.hqep.bidder.model.tblBbgsPackageSupplierModel" >
+        UPDATE BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+        SET SORT = '2'
+        WHERE SORT = '1'
+        AND BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByNameAndSupplier" parameterType="cn.com.hqep.bidder.model.tblBbgsPackageSupplierModel" >
+        UPDATE BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+        SET SORT = '1'
+        WHERE
+        BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+        AND SUPPLIER = #{supplier,jdbcType=VARCHAR}
+    </update>
+
+    <select id="queryList" resultMap="bidderResultMap" parameterType="cn.com.hqep.bidder.model.tblBbgsPackageSupplierModel">
+        SELECT
+        <include refid="base_column_list"></include>
+        FROM BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+        WHERE FLAG_INVALID !='0' AND FLAG_BIT !='0' AND FLAG_BID_INVALID != '0' AND OFFER is not NULL AND OFFER != '无'
+    </select>
+
+    <select id="queryListToName" resultMap="bidderResultMap" parameterType="cn.com.hqep.bidder.model.tblBbgsPackageSupplierModel">
+        SELECT DISTINCT BID_ABBREVIAION FROM BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+         WHERE   FLAG_INVALID !='0' AND FLAG_BIT !='0' AND FLAG_BID_INVALID != '0'
+    </select>
+
+    <select id="querySortList" resultMap="bidderResultMap" parameterType="cn.com.hqep.bidder.model.tblBbgsPackageSupplierModel">
+        SELECT
+        <include refid="base_column_listLeftJoin"></include>
+        FROM BBGS.TBL_BBGS_PACKAGE_SUPPLIER T1
+        LEFT JOIN BBGS.tbl_bbgs_price_information T2
+        ON T1.BID_ABBREVIAION = T2.BID_ABBREVIAION AND T1.SUPPLIER = T2.SUPPLIER
+        <trim prefix="WHERE" prefixOverrides="and">
+            <if test="bidAbbreviaion != null and bidAbbreviaion != '' ">
+                T1.BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+            </if>
+            <if test="flagBit != null and flagBit != '' ">
+                AND T1.FLAG_BIT != #{flagBit,jdbcType=VARCHAR}
+            </if>
+            <if test="flagInvalid != null and flagInvalid != '' ">
+                AND T1.FLAG_INVALID != #{flagInvalid,jdbcType=VARCHAR}
+            </if>
+            <if test="flagBidInvalid != null and flagBidInvalid != '' ">
+                AND T1.FLAG_BID_INVALID != #{flagBidInvalid,jdbcType=VARCHAR}
+            </if>
+            <if test="offer != null and offer != '' ">
+                AND T1.OFFER != #{offer,jdbcType=VARCHAR}
+            </if>
+            <if test="sort != null">
+                AND T1.sort is NOT NULL AND T1.SORT !=''
+            </if>
+        </trim>
+        ORDER BY  left(T1.BID_ABBREVIAION,3),substring_index(T1.BID_ABBREVIAION,'包',-1)+'', cast(T1.sort as unsigned int) ASC
+    </select>
+</mapper>

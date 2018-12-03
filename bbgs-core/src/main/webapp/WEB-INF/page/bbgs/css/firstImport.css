@@ -1,0 +1,344 @@
+html, body {
+    display: flex;
+    flex-flow: column;
+    min-height: 100vh;
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    overflow: hidden;
+    font-size: 16px;
+}
+
+/**input[type=file] 样式修改 start*/
+/*a  upload */
+.a-upload {
+    padding: 0 10px;
+    height: 30px;
+    line-height: 30px;
+    position: relative;
+    cursor: pointer;
+    color: #ffffff;
+    background: #1bab8f;
+    border: 0px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+
+.a-upload input {
+    position: absolute;
+    font-size: 16px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+
+.a-upload:hover {
+    color: #ffffff;
+    background: #d75000;
+    border-color: #ccc;
+    text-decoration: none;
+}
+
+/**input[type=file] 样式修改 end*/
+/**表头颜色样式*/
+.tableThCss .fixed-table-container thead th .th-inner {
+    background-color: #1bab8f;
+    color: #FFFFFF;
+}
+
+/*设置label 宽度*/
+.form-group {
+    /*width: 100%;*/
+    margin: 10px 10px 0 10px;
+}
+
+.form-group > label {
+    width: 160px;
+    text-align: right;
+}
+
+.form-group > input {
+    width: auto;
+}
+
+.areaDesc {
+    min-width: 206px;
+    font-size: 16px;
+}
+
+.mt50 {
+    margin-top: 80px;
+}
+
+.form-mine {
+    text-align: center;
+    border: 1px #dddddd solid;
+}
+
+/*
+    一套bootable-table的表格样式
+    参照科东项目设计样式
+**/
+/*更改bootstrap的table表头**/
+.bootstrapTableCssDesign {
+
+}
+
+.bs-checkbox > .th-iner {
+    padding: 0 6px 0 6px;
+!important;
+}
+
+.bootstrapTableCssDesign .fixed-table-container thead th .th-inner {
+
+    height: 36px;
+    background-color: #18ab8e;
+    color: white;
+}
+
+.bootstrapTableCssDesign .bootstrap-table .table:not(.table-condensed) > tbody > tr > td {
+    padding: 0 6px 0 6px;
+    line-height: 31px;
+    height: 32px;
+}
+
+/*奇偶变色-奇*/
+.bootstrapTableCssDesign .table-striped > tbody > tr:nth-of-type(odd) {
+    /*background-color: #eeeced;*/
+    background-color: #ffffff;
+}
+
+/*奇偶变色-偶*/
+.bootstrapTableCssDesign .table-striped > tbody > tr:nth-of-type(even) {
+    /*background-color: #f5f5f5;*/
+    background-color: #f5f5f5;
+}
+
+/**表格悬浮样式*/
+.bootstrapTableCssDesign .table-hover > tbody > tr:hover > td {
+    background-color: #c6f3ee;
+}
+
+/*表格选中样式 */
+.bootstrapTableCssDesign .fixed-table-container tbody .selected td {
+    background-color: #c6f3ee;
+}
+
+/**表格隐藏页容量（不能改变页容量pageSize）*/
+.bootstrapTableCssDesign .fixed-table-pagination .page-list {
+    display: none;
+}
+
+/*
+    一套bootable-table的表格样式
+    参照科东项目设计样式
+**/
+/*更改bootstrap的 子表 table表头**/
+.bootstrapTableSonCssDesign {
+
+}
+
+.bootstrapTableSonCssDesign .fixed-table-container thead th .th-inner {
+    height: 36px;
+    background-color: #e2e2e2;
+    color: #333333;
+}
+
+.bootstrapTableSonCssDesign .bootstrap-table .table:not(.table-condensed) > tbody > tr > td {
+    padding: 0 6px 0 6px;
+    line-height: 31px;
+    height: 32px;
+}
+
+/*奇偶变色-奇*/
+.bootstrapTableSonCssDesign .table-striped > tbody > tr:nth-of-type(odd) {
+    /*background-color: #eeeced;*/
+    background-color: #ffffff;
+}
+
+/*奇偶变色-偶*/
+.bootstrapTableSonCssDesign .table-striped > tbody > tr:nth-of-type(even) {
+    /*background-color: #f5f5f5;*/
+    background-color: #eeeeee;
+}
+
+/**表格悬浮样式*/
+.bootstrapTableSonCssDesign .table-hover > tbody > tr:hover > td {
+    background-color: #eeeeee;
+}
+
+/*表格选中样式 */
+.bootstrapTableSonCssDesign .fixed-table-container tbody .selected td {
+    background-color: #eeeeee;
+}
+
+/**表格隐藏页容量（不能改变页容量pageSize）*/
+.bootstrapTableSonCssDesign .fixed-table-pagination .page-list {
+    display: none;
+}
+
+/*隐藏表头*/
+.hideTh .fixed-table-container thead th .th-inner {
+    display: none;
+}
+
+/* 显示表头*/
+.showTh .fixed-table-container thead th .th-inner {
+    display: block;
+}
+
+/**
+ *
+ */
+.gw-button, .gw-l-button {
+    line-height: 32px;
+}
+
+/**
+导入按钮灰色Css
+ */
+#importExcelBtn:disabled {
+    background-color: darkgray;
+    color: #FFFFFF;
+}
+
+/**
+物资 非物资 样式
+ */
+.InfoType {
+    font-size: 16px;
+    height: 32px;
+    line-height: 32px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.InfoType > input {
+    margin: 8px;
+}
+
+/**
+返回信息Css
+ */
+.returnMsg {
+    flex: 1;
+    font-size: 16px;
+    height: 32px;
+    line-height: 32px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+/** 每一个层的容器         */
+.containerMine {
+    display: flex;
+    margin: 8px;
+}
+
+.containerMine > .exportCss {
+    flex: 1;
+    text-align: right;
+}
+
+.containerMine > button {
+    margin-right: 8px;
+}
+
+.flex1 {
+    flex: 1;
+}
+.mt8{
+    margin-top: 8px;
+}
+.mb8{
+    margin-bottom: 8px;
+}
+.flex0{
+    flex:0;
+}
+
+/*投单人清单明细按钮Css*/
+#bidderInfoDetailBtn {
+    width: 148px;
+}
+
+/*模板选择色 select */
+.selectGroups {
+    flex: 1;
+    width: 550px;
+    margin-left: 24px;
+}
+
+.selectGroups .form-control {
+    width: 200px;
+}
+
+/*国网绿横线*/
+.greenLine {
+    width: 100%;
+    background-color: #18ab8e;
+    height: 2px;
+    /*margin-top: 8px;*/
+    /*margin-bottom: 8px;*/
+}
+
+.selectGroups label {
+    font-weight: normal;
+}
+
+select {
+    width: 350px;
+    padding: 3px 10px 5px 10px;
+    border-color: rgb(204, 204, 204);
+    height: 32px;
+    line-height: 28px;
+    vertical-align: middle;
+    border-radius: 4px;
+    /*text-align: center;*/
+}
+
+.flexColumn {
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+}
+
+.glyphicon-arrow-right {
+    cursor: pointer;
+    font-size: 40px;
+    color: #00a854;
+!important;
+}
+
+.glyphicon-arrow-left {
+    cursor: pointer;
+    font-size: 40px;
+    color: #f56a00;
+!important;
+}
+
+.glyphicon-arrow-right:hover {
+    color: #108ee9;
+}
+
+.glyphicon-arrow-left:hover {
+    color: #108ee9;
+}
+
+.mr5 {
+    margin-right: 5px;
+}
+
+.mr3 {
+    margin-right: 3px;
+}
+
+table {
+    cursor: pointer;
+}

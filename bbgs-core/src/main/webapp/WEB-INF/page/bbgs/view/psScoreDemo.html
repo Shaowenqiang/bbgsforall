@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查看投标单位得分</title>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" href="../css/subFileCss.css">
+    <link rel="stylesheet" href="../css/psScoreDemo.css">
+
+    <script src="../plugins/jquery-1.9.1.min.js"></script>
+    <script src="../plugins/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="../plugins/bootstrap-table/bootstrap-table.js"></script>
+    <script src="../plugins/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+
+    <script src="../plugins/underscore-min.js"></script>
+
+    <style>
+        /*body 背景设置为白色*/
+        body{
+            /*padding-top: 10px;*/
+            background-color: #ffffff
+        }
+
+
+    </style>
+</head>
+<body >
+<!--设置 表单 输入框 和 按钮-->
+<div>
+    <table
+    style="border-collapse: separate; border-spacing: 0px 8px;">
+    <tr>
+    <td class="textright pl10">
+    <button type="button" class="gw-l-button" onclick="exportAveragePriveExcel()">计算综合排序</button>
+    </td>
+    </tr>
+    </table>
+    <!--创建一个 18ab8e 的分割线-->
+    <div style="width: 100%;height: 2px;
+    background-color: #18ab8e;"  class="col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>
+    <form>
+        <table
+                style="border-collapse: separate; border-spacing: 0px 8px;">
+            <tr>
+                <!--<td class="textright pl10">-->
+                    <!--<button type="button" class="gw-l-button" onclick="comprehensiveSortAction()">计算综合排序</button>-->
+                <!--</td>-->
+                <td class="textright pl28"><label>标段简称:</label></td>
+                <td class="textleft pl10"> <input oninput="query()" type="text" class="form-control" id="bdname"  placeholder="标段简称" style="width: 200px;height: 30px">
+                </td>
+                <td class="textright pl28"><label>供应商名称:</label></td>
+                <td class="textleft pl10"><input oninput="query()" type="text" class="form-control" id="tbdw" placeholder="投标单位" style="width: 200px;height: 30px">
+                </td>
+                <td class="textright pl28">
+                    <!--创建 重置按钮 并有点击事件-->
+                    <!--style="margin-top: 44px;height: 32px"-->
+                    <button type="reset" class="gw-l-button" id="resetbutton" onclick="scorereset()">重置</button>
+                </td>
+                <td class="textright pl28">
+                    <!--创建 导出按钮-->
+                    <!--style="height:40px;width: 80px;margin-top: 36px"-->
+                    <button type="button" class="btn-lg gw-l-button" id="btn2" onclick="exportSortExcelAction()">导出</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!--创建一个 18ab8e 的分割线-->
+<div style="width: 100%;height: 2px;
+        background-color: #18ab8e;" id="div1" class="col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>
+
+<!--建立招标编号表格-->
+<div class="bootstrapTableCssDesign col-lg-3 col-md-3 col-sm-3 col-xs-3 pl10 pt10">
+    <table class="table table-hover table-striped table-responsive "
+           id="packageSuppliercol"
+           data-toggle="table"
+           data-url="/packageSupplier/packageSupplierzbno">
+        <!--表头-->
+        <thead>
+        <tr>
+            <th data-field="id" data-width="56" data-align="center" data-formatter="indexformatter" style="width: 5px">序号</th>
+            <th data-field="bidAbbreviaion" data-align="center" >标段简称</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<!--创建成绩信息表格-->
+<div class="bootstrapTableCssDesign col-lg-9 col-md-9 col-sm-9 col-xs-9 pr10 pt10">
+    <table class="table table-hover table-striped table-responsive"
+           id="packageSupplierScoretable"
+           data-toggle="table"
+           data-url="/packageSupplier/packageSupplierScore">
+        <!--表头-->
+        <thead>
+        <tr>
+            <th data-field="supplier" data-align="left">投标单位</th>
+            <th data-field="technology_score" data-align="right">技术得分</th>
+            <th data-field="price_score" data-align="right">报价得分</th>
+            <th data-field="business_score" data-align="right">商务得分</th>
+            <th data-field="total_score" data-align="right">总计</th>
+            <th data-field="offer" data-align="right">投标报价(万元)</th>
+            <th data-field="sort" data-align="center">名次</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<!--       ==============sssJL start==============================  -->
+<!--       ==============操作结果反馈 不使用alert弹框=============  -->
+<!-- 操作成功 start -->
+<div class="modal fade bootstrapModalDesign" id="promptSuccessModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/创建成功.png" style="margin-top: -6px;"></img><label
+                        class="bold-size16">&nbsp;&nbsp;操作成功！</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button"  data-dismiss="modal">知道了</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 操作成功  end -->
+
+<!-- 操作失败 start -->
+<div class="modal fade bootstrapModalDesign" id="promptFailModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/操作失败.png" style="margin-top: -6px;"></img><label
+                        class="bold-size16">&nbsp;&nbsp;操作失败！</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button"  data-dismiss="modal">知道了</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 操作失败  end -->
+<!--       ==============sssJL end==============  -->
+
+<script>
+    /*定义表*/
+    var $tablecol = $('#packageSuppliercol');
+    var $tablescore = $('#packageSupplierScoretable');
+    /*格式    居左*/
+        function leftformatter(value,row,index) {
+        return "<div style='text-align: left'>" + value + "</div>";
+    }
+    /*格式    居右*/
+    function rightformatter(value, row, index) {
+        return "<div style='text-align: right'>" + value + "</div>";
+    }
+    /*自增*/
+     function indexformatter(value,row,index) {
+     return index+1;
+     }
+     /*表大小*/
+    $(function () {
+        $("#packageSuppliercol").bootstrapTable('resetView', {height: $(window).height()-110});
+        $("#packageSupplierScoretable").bootstrapTable('resetView', {height: $(window).height()-110});
+    })
+        /*将表的css样式重置 */
+       $(window).resize(function () {
+        $tablecol.bootstrapTable('resetView')
+    })
+    //点击 产生颜色变化
+    $("#packageSuppliercol").on('click-row.bs.table', function(e, row, element) {
+        $('.selected').removeClass('selected');// 去除之前选中的行的，选中样式
+        $(element).addClass('selected');// 添加当前选中的 success样式用于区别
+    });
+    /*重置事件*/
+    function scorereset() {
+        var url = "/packageSupplier/packageSupplierzbno";
+        $tablecol.bootstrapTable('refresh',{url:url,cache:false});
+    }
+
+    /*点击表 触发事件  获取 左表中的标段简称 再获取 输入框中投标单位 传参到packageSupplierScore 查询*/
+    $tablecol.on('click-row.bs.table',function(value,row,index){
+        var ba = row.bidAbbreviaion;
+        var data = {
+            "bdname" : ba,
+            "tbdw" : $("#tbdw").val()
+        };
+        var url = "/packageSupplier/packageSupplierScore";
+        $.post(url,data,function (obj) {
+            $tablescore.bootstrapTable('load',obj);
+        })
+    });
+    //oninput 触发的事件 一边输入 一边查询
+    function query() {
+        var data = {
+            "bidAbbreviaion" : $("#bdname").val(),
+            "supplier" : $("#tbdw").val()
+        };
+        var url = "/packageSupplier/packageSupplierzbno";
+        $tablecol.bootstrapTable('refresh',{url:url,query:data});
+    }
+    /*左表查询完成后 用此方法获取第一个值 进行查询 将结构返回给右表*/
+    $(function () {
+        $("#packageSuppliercol").on('load-success.bs.table', function(e, row, element) {
+            if ($('#packageSuppliercol tr:eq(1)').data("index") !== undefined ){
+                $('.selected').removeClass('selected');
+                $('#packageSuppliercol tr:eq(1)').addClass('selected');
+                var obj = $tablecol.bootstrapTable('getData');
+                if (obj != null){
+                    var bidAbbreviaion = obj[0].bidAbbreviaion;
+                    var data = {
+                        "bdname" : bidAbbreviaion,
+                        "tbdw" : $("#tbdw").val()
+                    };
+                };
+                var url = "/packageSupplier/packageSupplierScore";
+                $tablescore.bootstrapTable('refresh',{url:url,query:data});
+            }else {
+                /*在左侧表 标段简称一行数据都没有时  设定假值data 让右表查空值*/
+                var data = {
+                    "bdname" :'4321qaz',
+                    "tbdw" : '4321qaz'
+                };
+                var url = "/packageSupplier/packageSupplierScore";
+                $tablescore.bootstrapTable('refresh',{url:url,query:data});
+            }
+        });
+    });
+
+    //========================== sssJL 开始 =================
+    /***
+     * 导出Excel：
+     * 导出综合排序评分汇总表
+     */
+    function exportSortExcelAction() {
+        window.location.target = '_blank'
+        window.location.href = "/sort/exportSortExcel";
+    }
+
+    /***
+     * 计算综合排名
+     * comprehensiveSortAction()
+     */
+    function comprehensiveSortAction() {
+        var url = "/sort/computeComprehensiveSort";
+        $.post(url,function (data) {
+            if(data){
+                //弹出操作成功提示框
+                $('#promptSuccessModal').modal('show');
+            }else {
+                //弹出操作失败提示框
+                $('#promptFailModal').modal('show');
+                console.log(data.msg);
+            }
+        })
+    }
+
+    function exportAveragePriveExcel() {
+        var url = "/sort/exportAveragePriveExcel";
+        $.get(url,function (strName) {
+            if(strName === "listPriceNull" || strName ==null || strName == ""){
+                alert("请导入专家打分")
+            }else {
+                window.location.target = '_blank'
+                window.location.href = "/page/bbgs/excel/"+strName;
+            }
+        });
+    }
+    //========================== sssJL 结束 =================
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.bidder.dao.technologyAndBusinessDao">
+    <resultMap id="DefaultResultMap" type="cn.com.hqep.bidder.model.tblBbgsTechnologyBusinessModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="EXPERT_NAME" jdbcType="VARCHAR" property="expertName"/>
+        <result column="BID_ABBREVIAION" jdbcType="VARCHAR" property="bidAbbreviaion"/>
+        <result column="SUPPLIER" jdbcType="VARCHAR" property="supplier"/>
+        <result column="TYPE" jdbcType="VARCHAR" property="type"/>
+        <result column="PRICE" jdbcType="VARCHAR" property="price"/>
+        <result column="TECHNOLOGY_WEIGHT" jdbcType="VARCHAR" property="technologyWeight"/>
+        <result column="BUSINESS_WEIGHT" jdbcType="VARCHAR" property="businessWeight"/>
+        <result column="EXPERT_GROUP_NAME" jdbcType="VARCHAR" property="expertGroupName"/>
+    </resultMap>
+    <sql id="base_table_name">TBL_BBGS_TECHNOLOGY_BUSINESS </sql>
+    <sql id="base_column_list"> ID , EXPERT_NAME , BID_ABBREVIAION , SUPPLIER , TYPE , PRICE </sql>
+    <select id="queryListByNameAndSupplierAndType" parameterType="cn.com.hqep.bidder.model.tblBbgsTechnologyBusinessModel" resultMap="DefaultResultMap">
+        SELECT
+        <include refid="base_column_list"/>
+        FROM
+        <include refid="base_table_name"/>
+        <trim prefix="where" prefixOverrides="and">
+            <if test="bidAbbreviaion != null">
+                BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+            </if>
+            <if test="supplier != null">
+                and SUPPLIER = #{supplier,jdbcType=VARCHAR}
+            </if>
+            <if test="type != null">
+                and TYPE = #{type,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </select>
+    <select id="queryExpertNames" resultType="String" parameterType="cn.com.hqep.bidder.model.tblBbgsTechnologyBusinessModel">
+        SELECT DISTINCT EXPERT_NAME
+        FROM
+        <include refid="base_table_name"/>
+    </select>
+    <select id="queryListToBidAbbreviaionSupplier" resultMap="DefaultResultMap" parameterType="cn.com.hqep.bidder.model.tblBbgsTechnologyBusinessModel">
+        SELECT DISTINCT BID_ABBREVIAION,SUPPLIER
+        FROM
+        <include refid="base_table_name"/>
+    </select>
+    <select id="queryScoreGroupList" resultMap="DefaultResultMap" parameterType="cn.com.hqep.bidder.model.tblBbgsTechnologyBusinessModel">
+        SELECT
+        T1.ID,
+        T1.BID_ABBREVIAION,
+        T1.SUPPLIER,
+        T1.TYPE,
+        T1.EXPERT_NAME,
+        T1.PRICE,
+        T2.TECHNOLOGY_WEIGHT,
+        T2.BUSINESS_WEIGHT,
+        T3.EXPERT_GROUP_NAME,
+        T4.FLAG_INVALID,
+        T4.FLAG_BIT,
+        T4.FLAG_BID_INVALID
+        FROM
+        TBL_BBGS_TECHNOLOGY_BUSINESS T1
+        LEFT JOIN TBL_BBGS_BID_INFORMATION T2 ON  T1.BID_ABBREVIAION = T2.BID_ABBREVIAION
+        LEFT JOIN TBL_BBGS_EXPERT T5 ON T1.EXPERT_NAME = T5.EXPERT_NAME
+        LEFT JOIN TBL_BBGS_EXPERT_GROUP T3 ON  T3.ID = T5.GROUP_ID
+        LEFT JOIN TBL_BBGS_PACKAGE_SUPPLIER T4 ON T4.BID_ABBREVIAION = T1.BID_ABBREVIAION AND T4.SUPPLIER = t1.SUPPLIER
+        WHERE T4.FLAG_INVALID !='0' AND T4.FLAG_BIT !='0' AND T4.FLAG_BID_INVALID !='0' AND T4.OFFER != '无'
+    </select>
+    <select id="queryByParam" resultMap="DefaultResultMap" parameterType="cn.com.hqep.bidder.model.tblBbgsTechnologyBusinessModel">
+        SELECT
+        <include refid="base_column_list"></include>
+        FROM
+        <include refid="base_table_name"/>
+        <trim prefix="WHERE" prefixOverrides="and">
+            <if test="bidAbbreviaion != null and bidAbbreviaion != '' ">
+                BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+            </if>
+            <if test="supplier != null and supplier != '' ">
+                AND SUPPLIER = #{supplier,jdbcType=VARCHAR}
+            </if>
+            <if test="type != null and type != '' ">
+                AND TYPE = #{type,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </select>
+
+    <select id="queryByGroupName" resultMap="DefaultResultMap" parameterType="cn.com.hqep.bidder.model.tblBbgsTechnologyBusinessModel">
+        SELECT
+        DISTINCT
+        T1.BID_ABBREVIAION,
+        T1.SUPPLIER
+        ,T3.EXPERT_GROUP_NAME
+        FROM
+        TBL_BBGS_TECHNOLOGY_BUSINESS T1
+        LEFT JOIN TBL_BBGS_BID_INFORMATION T2 ON  T1.BID_ABBREVIAION = T2.BID_ABBREVIAION
+        LEFT JOIN TBL_BBGS_EXPERT T5 ON T1.EXPERT_NAME = T5.EXPERT_NAME
+        LEFT JOIN TBL_BBGS_EXPERT_GROUP T3 ON  T3.ID = T5.GROUP_ID
+        LEFT JOIN TBL_BBGS_PACKAGE_SUPPLIER T4 ON T4.BID_ABBREVIAION = T1.BID_ABBREVIAION AND T4.SUPPLIER = t1.SUPPLIER
+        WHERE T4.FLAG_INVALID !='0' AND T4.FLAG_BIT !='0' AND T4.FLAG_BID_INVALID !='0' AND T4.OFFER != '无'
+        AND T3.EXPERT_GROUP_NAME  = #{expertGroupName,jdbcType=VARCHAR}
+        AND T1.TYPE  = #{type,jdbcType=VARCHAR}
+        ORDER BY CONVERT(T1.BID_ABBREVIAION using gbk) ASC, CONVERT(T1.SUPPLIER using gbk) ASC
+    </select>
+</mapper>

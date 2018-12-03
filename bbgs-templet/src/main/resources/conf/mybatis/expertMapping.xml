@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.templet.dao.expertAll">
+    <sql id="DefaultTableName">TBL_BBGS_EXPERT_GROUP</sql>
+
+    <sql id="DefaultSelects"> ID,EXPERT_GROUP_NAME,TYPE,SORTID </sql>
+    <resultMap id="expertGroupResultMap" type="cn.com.hqep.templet.model.tblBbgsExpertGroupModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="EXPERT_GROUP_NAME" jdbcType="VARCHAR" property="expertGroupName"/>
+        <result column="TYPE" jdbcType="VARCHAR" property="type"/>
+    </resultMap>
+    <select id="queryExpertGroup" parameterType="cn.com.hqep.templet.model.tblBbgsExpertGroupModel" resultMap="expertGroupResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        <include refid="DefaultTableName"/>
+        WHERE 1=1
+        <if test="expertGroupName!=null and expertGroupName!=''">
+           AND EXPERT_GROUP_NAME=#{expertGroupName}
+        </if>
+        ORDER BY TYPE DESC,SORTID
+
+    </select>
+    <insert id="saveExpertGroup" parameterType="cn.com.hqep.templet.model.tblBbgsExpertGroupModel">
+        INSERT INTO
+        <include refid="DefaultTableName"/>
+        (
+        <include refid="DefaultSelects"/>
+        )
+        VALUES (
+        #{id,jdbcType=VARCHAR},
+        #{expertGroupName,jdbcType=VARCHAR},
+        #{type,jdbcType=TIMESTAMP},
+        #{sortid,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="saveExpert" parameterType="cn.com.hqep.templet.model.tblBbgsExpertModel">
+        INSERT INTO
+        TBL_BBGS_EXPERT
+        (
+         ID,EXPERT_NAME,GROUP_ID
+        )
+        VALUES (
+        #{id,jdbcType=VARCHAR},
+        #{expertName,jdbcType=VARCHAR},
+        #{groupId,jdbcType=VARCHAR}
+        )
+    </insert>
+    <delete id="delAllExpert">
+        DELETE FROM BBGS.TBL_BBGS_EXPERT_GROUP;
+        DELETE FROM BBGS.TBL_BBGS_EXPERT;
+    </delete>
+    <!--查询专家数量-->
+    <select id="queryExpertCount" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM BBGS.TBL_BBGS_EXPERT;
+    </select>
+</mapper>

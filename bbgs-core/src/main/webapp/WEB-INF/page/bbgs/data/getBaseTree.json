@@ -1,0 +1,12 @@
+[
+  {"id":"1","pId":"0","name":"招标智能评分系统","htmlUrl":"index.html","open":true},
+  {"id":"8","pId":"1","name":"① 模板信息维护","htmlUrl":"templateDemo.html"},
+  {"id":"9","pId":"1","name":"② 专家信息维护","htmlUrl":"expertGroup.html"},
+  {"id":"10","pId":"1","name":"③ 权重信息维护","htmlUrl":"Progress.html"},
+  {"id":"11","pId":"1","name":"④ 公式信息维护","htmlUrl":"cutSupplier.html"},
+  {"id":"2","pId":"1","name":"⑤ 招标基础数据输入、输出","htmlUrl":"firstImport.html"},
+  {"id":"3","pId":"1","name":"⑥ 唱标报价数据输入、输出","htmlUrl":"bidDemo.html"},
+  {"id":"4","pId":"1","name":"⑦ 专家评分数据输入","htmlUrl":"techBussScoreExport.html"},
+  {"id":"5","pId":"1","name":"⑧ 综合排序计算","htmlUrl":"psScore.html"},
+  {"id":"6","pId":"1","name":"⑨ 授标","htmlUrl":"supplierWinInfo.html"}
+]

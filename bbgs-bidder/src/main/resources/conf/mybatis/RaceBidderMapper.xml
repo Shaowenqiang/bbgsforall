@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.bidder.dao.RaceBidderDao">
+    <resultMap id="bidderResultMap" type="cn.com.hqep.bidder.model.tblBbgsPackageSupplierRaceModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="PACKAGENAME" jdbcType="VARCHAR" property="packagename"/>
+        <result column="SUPPLIER" jdbcType="VARCHAR" property="supplier"/>
+        <result column="FLAG_BIT" jdbcType="VARCHAR" property="flagBit"/>
+        <result column="FLAG_INVALID" jdbcType="VARCHAR" property="flagInvalid"/>
+        <result column="MOD_OFFER" jdbcType="VARCHAR" property="modOffer"/>
+        <result column="FINAL_RATE" jdbcType="VARCHAR" property="finalRate"/>
+        <result column="TECHNOLOGY_SCORE" jdbcType="VARCHAR" property="technologyScore"/>
+        <result column="PRICE_SCORE" jdbcType="VARCHAR" property="priceScore"/>
+        <result column="BUSINESS_SCORE" jdbcType="VARCHAR" property="businessScore"/>
+        <result column="TOTAL_SCORE" jdbcType="VARCHAR" property="totalScore"/>
+        <result column="SORT" jdbcType="VARCHAR" property="sort"/>
+        <result column="IS_WIN" jdbcType="VARCHAR" property="isWin"/>
+        <result column="BID_SETION" jdbcType="VARCHAR" property="bidSetion"/>
+        <result column="BID_ABBREVIAION" jdbcType="VARCHAR" property="bidAbbreviaion"/>
+        <result column="BID" jdbcType="VARCHAR" property="bid"/>
+        <result column="FLAG_BID_INVALID" jdbcType="VARCHAR" property="flagBidInvalid"/>
+        <result column="BASE_PRICE" jdbcType="VARCHAR" property="basePrice"/>
+    </resultMap>
+    <resultMap id="priceResultMap" type="cn.com.hqep.bidder.model.tblBbgsPriceInformationRaceModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="MOD_OFFER" jdbcType="VARCHAR" property="modOffer"/>
+        <result column="FINAL_RATE" jdbcType="VARCHAR" property="finalRate"/>
+        <result column="SUPPLIER" jdbcType="VARCHAR" property="supplier"/>
+        <result column="A1" jdbcType="VARCHAR" property="a1"/>
+        <result column="N" jdbcType="VARCHAR" property="n"/>
+        <result column="A2" jdbcType="VARCHAR" property="a2"/>
+        <result column="P" jdbcType="VARCHAR" property="p"/>
+        <result column="BASE_PRICE" jdbcType="VARCHAR" property="basePrice"/>
+        <result column="PRICE_SCORE" jdbcType="VARCHAR" property="priceScore"/>
+        <result column="SORT" jdbcType="VARCHAR" property="sort"/>
+        <result column="PACKAGENAME" jdbcType="VARCHAR" property="packagename"/>
+        <result column="A3" jdbcType="VARCHAR" property="a3"/>
+        <result column="A4" jdbcType="VARCHAR" property="a4"/>
+        <result column="BID" jdbcType="VARCHAR" property="bid"/>
+        <result column="M" jdbcType="VARCHAR" property="m"/>
+        <result column="BUSINESS_WEIGHT" jdbcType="VARCHAR" property="businessWeight"/>
+        <result column="TECHNOLOGY_WEIGHT" jdbcType="VARCHAR" property="technologyWeight"/>
+        <result column="PRICE_WEIGHT" jdbcType="VARCHAR" property="priceWeight"/>
+        <result column="BID_SETION" jdbcType="VARCHAR" property="bidSetion"/>
+        <result column="BID_ABBREVIAION" jdbcType="VARCHAR" property="bidAbbreviaion"/>
+    </resultMap>
+    <sql id="base_column_list">
+        ID,
+        PACKAGENAME,
+        SUPPLIER,
+        FLAG_BIT,
+        FLAG_INVALID,
+        MOD_OFFER,
+        FINAL_RATE,
+        TECHNOLOGY_SCORE,
+        PRICE_SCORE,
+        BUSINESS_SCORE,
+        TOTAL_SCORE,
+        SORT,
+        IS_WIN,
+        BID_SETION,
+        BID_ABBREVIAION,
+        BID,
+        FLAG_BID_INVALID
+    </sql>
+
+    <sql id="base_column_insert">
+        ID,
+        PACKAGENAME,
+        SUPPLIER,
+        FLAG_BIT,
+        FLAG_INVALID,
+        MOD_OFFER,
+        FINAL_RATE,
+        BID_ABBREVIAION,
+        BID
+    </sql>
+    <sql id="base_column_leftjoin_list">
+        t1.ID,
+        t1.PACKAGENAME,
+        t1.SUPPLIER,
+        t1.FLAG_BIT,
+        t1.FLAG_INVALID,
+        t1.MOD_OFFER,
+        t1.FINAL_RATE,
+        t1.TECHNOLOGY_SCORE,
+        t1.PRICE_SCORE,
+        t1.BUSINESS_SCORE,
+        t1.TOTAL_SCORE,
+        t1.SORT,
+        t1.IS_WIN,
+        t1.BID_SETION,
+        t1.BID_ABBREVIAION,
+        t1.BID,
+        t1.FLAG_BID_INVALID,
+        t2.BASE_PRICE
+    </sql>
+
+    <insert id="saveBid" parameterType="cn.com.hqep.bidder.model.tblBbgsPackageSupplierRaceModel">
+        INSERT INTO BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+        (
+        <include refid="base_column_insert"></include>
+        )
+        VALUES(
+        #{id,jdbcType=VARCHAR},
+        #{packagename,jdbcType=VARCHAR},
+        #{supplier,jdbcType=VARCHAR},
+        #{flagBit,jdbcType=VARCHAR},
+        #{flagInvalid,jdbcType=VARCHAR},
+        #{modOffer,jdbcType=VARCHAR},
+        #{finalRate,jdbcType=VARCHAR},
+        #{bidAbbreviaion,jdbcType=VARCHAR},
+        #{bid,jdbcType=VARCHAR}
+        )
+    </insert>
+    <delete id="deleteByModel" parameterType="cn.com.hqep.bidder.model.tblBbgsPackageSupplierRaceModel">
+        DELETE FROM BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+        <trim prefix="WHERE" prefixOverrides="and">
+            <if test="bidAbbreviaion != null and bidAbbreviaion !=''">
+                BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+            </if>
+            <if test="supplier != null and supplier !=''">
+                AND SUPPLIER = #{supplier,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </delete>
+    <update id="updateByModel" parameterType="cn.com.hqep.bidder.model.tblBbgsPackageSupplierRaceModel" >
+        UPDATE BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="flagInvalid != null and flagInvalid !=''">
+                FLAG_INVALID = #{flagInvalid,jdbcType=VARCHAR}
+            </if>
+            <if test="flagBidInvalid != null and flagBidInvalid !=''">
+                , FLAG_BID_INVALID = #{flagBidInvalid,jdbcType=VARCHAR}
+            </if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="and">
+            <if test="bidAbbreviaion != null and bidAbbreviaion !=''">
+                BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+            </if>
+            <if test="bid != null and bid !=''">
+                AND BID = #{bid,jdbcType=VARCHAR}
+            </if>
+            <if test="packagename != null and packagename !=''">
+                AND PACKAGENAME = #{packagename,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </update>
+
+    <update id="updateById" parameterType="cn.com.hqep.bidder.model.tblBbgsPackageSupplierRaceModel" >
+        UPDATE BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+        SET FLAG_BIT = #{flagBit,jdbcType=VARCHAR}
+        WHERE ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByBidAbbreviaionAndSupplier" parameterType="cn.com.hqep.bidder.model.tblBbgsPackageSupplierRaceModel" >
+        UPDATE BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+        <trim prefix="set" prefixOverrides=",">
+            <if test="packagename !=null">
+                PACKAGENAME= #{packagename,jdbcType=VARCHAR}
+            </if>
+            <if test="flagBit !=null">
+                ,FLAG_BIT= #{flagBit,jdbcType=VARCHAR}
+            </if>
+            <if test="flagInvalid !=null">
+                ,FLAG_INVALID= #{flagInvalid,jdbcType=VARCHAR}
+            </if>
+            <if test="flagBidInvalid !=null">
+                ,FLAG_BID_INVALID= #{flagBidInvalid,jdbcType=VARCHAR}
+            </if>
+            <if test="1 == 1">
+                ,OFFER= '0'
+            </if>
+            <if test="modOffer !=null">
+                ,MOD_OFFER= #{modOffer,jdbcType=VARCHAR}
+            </if>
+            <if test="finalRate !=null">
+                ,FINAL_RATE= #{finalRate,jdbcType=VARCHAR}
+            </if>
+            <if test="bid !=null">
+                ,BID = #{bid,jdbcType=VARCHAR}
+            </if>
+        </trim>
+        WHERE BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR} AND
+         SUPPLIER = #{supplier,jdbcType=VARCHAR}
+    </update>
+
+    <select id="queryList" resultMap="bidderResultMap" parameterType="cn.com.hqep.bidder.model.tblBbgsPackageSupplierRaceModel">
+        SELECT
+        <include refid="base_column_list"></include>
+        FROM BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+        <trim prefix="where" prefixOverrides="and">
+            <if test="bidAbbreviaion != null">
+                BID_ABBREVIAION LIKE concat('%',#{bidAbbreviaion,jdbcType=VARCHAR},'%')
+
+            </if>
+            <if test="supplier != null">
+                and SUPPLIER LIKE concat('%',#{supplier,jdbcType=VARCHAR},'%')
+            </if>
+        </trim>
+        ORDER BY         left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+''
+    </select>
+
+    <select id="queryListByName" resultMap="bidderResultMap" parameterType="cn.com.hqep.bidder.model.tblBbgsPackageSupplierRaceModel">
+        SELECT
+        <include refid="base_column_list"></include>
+        FROM BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+        <trim prefix="WHERE" prefixOverrides="and">
+            MOD_OFFER is not NULL AND MOD_OFFER != '无'
+            AND FINAL_RATE is not NULL AND FINAL_RATE != '无'
+            <if test="bidAbbreviaion != null and bidAbbreviaion !=''">
+                AND BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+            </if>
+            <if test="bid != null and bid !=''">
+                AND BID = #{bid,jdbcType=VARCHAR}
+            </if>
+            <if test="packagename != null and packagename !=''">
+                AND PACKAGENAME = #{packagename,jdbcType=VARCHAR}
+            </if>
+            <if test="supplier != null and supplier !=''">
+                AND SUPPLIER = #{supplier,jdbcType=VARCHAR}
+            </if>
+        </trim>
+        ORDER BY  CAST(offer as unsigned int) DESC, CONVERT(SUPPLIER using gbk) ASC
+    </select>
+    <!--查询去重的标段名 bid-->
+    <select id="queryDistinctBidList" resultMap="bidderResultMap">
+        SELECT
+        DISTINCT bid ,FLAG_BID_INVALID
+        FROM BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+         WHERE MOD_OFFER is not NULL AND MOD_OFFER != '无'
+            AND FINAL_RATE is not NULL AND FINAL_RATE != '无'
+        ORDER BY CONVERT(bid using gbk) ASC
+    </select>
+
+    <!--查询去重的包名 bid-->
+    <select id="queryDistinctPackageList" resultMap="bidderResultMap">
+        SELECT
+        DISTINCT PACKAGENAME ,BID,FLAG_INVALID,FLAG_BID_INVALID
+        FROM BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+        <trim prefix="WHERE" prefixOverrides="and">
+            <if test="bidAbbreviaion != null and bidAbbreviaion !=''">
+                BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+            </if>
+            <if test="bid != null and bid !=''">
+                AND BID = #{bid,jdbcType=VARCHAR}
+            </if>
+            <if test="packagename != null and packagename !=''">
+                AND PACKAGENAME = #{packagename,jdbcType=VARCHAR}
+            </if>
+        </trim>
+       ORDER BY  left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+''
+    </select>
+
+    <!--查询去重的标段简称 bid-->
+    <select id="queryDistinctBidAbbreviaionList" resultMap="bidderResultMap">
+        SELECT
+        DISTINCT BID_ABBREVIAION
+        FROM BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+        WHERE  FLAG_INVALID !='0' AND FLAG_BIT !='0' AND FLAG_BID_INVALID !='0'
+                AND MOD_OFFER is not NULL AND MOD_OFFER != '无'
+            AND FINAL_RATE is not NULL AND FINAL_RATE != '无'
+        ORDER BY CONVERT(bid using gbk) ASC
+    </select>
+        
+    <select id="queryListForMinutes" resultMap="bidderResultMap">
+        SELECT
+        <include refid="base_column_leftjoin_list"></include>
+        FROM BBGS.TBL_BBGS_PACKAGE_SUPPLIER t1
+        LEFT JOIN tbl_bbgs_price_information t2
+        ON t1.BID_ABBREVIAION = t2.BID_ABBREVIAION
+        AND t1.SUPPLIER = t2.SUPPLIER
+        WHERE t1.FLAG_INVALID !='0'
+        AND t1.FLAG_BIT !='0'
+        AND t1.FLAG_BID_INVALID !='0'
+        AND t1.MOD_OFFER is not NULL AND t1.MOD_OFFER != '无'
+        AND t1.FINAL_RATE is not NULL AND t1.FINAL_RATE != '无'
+        ORDER BY  left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+''
+        ,CAST(t1.sort as unsigned int) ASC
+    </select>
+
+
+    <select id="queryMinIdByState" resultType="cn.com.hqep.bidder.model.tblBbgsFlowStateRaceModel">
+        SELECT MIN(id) id,alert_message alertMessage from tbl_bbgs_flow_state where flow_state = '0'
+    </select>
+    <update id="updateStateById">
+        UPDATE TBL_BBGS_FLOW_STATE SET flow_state = #{state}
+        <if test="id != null">
+            WHERE id = #{id}
+        </if>
+    </update>
+
+    <select id="queryPriceListByName" resultMap="priceResultMap" parameterType="cn.com.hqep.bidder.model.tblBbgsPriceInformationRaceModel">
+        SELECT
+        T1.ID
+        ,T2.MOD_OFFER
+        ,T2.FINAL_RATE
+        ,T1.SUPPLIER
+        ,T1.A1
+        ,T1.N
+        ,T1.A2
+        ,T1.P
+        ,T1.BASE_PRICE
+        ,T1.PRICE_SCORE
+        ,T1.SORT
+        ,T1.PACKAGENAME
+        ,T1.A3
+        ,T1.A4
+        ,T1.BID
+        ,T1.M
+        ,T1.BUSINESS_WEIGHT
+        ,T1.TECHNOLOGY_WEIGHT
+        ,T1.PRICE_WEIGHT
+        ,T1.BID_SETION
+        ,T1.BID_ABBREVIAION
+        FROM BBGS.TBL_BBGS_PRICE_INFORMATION T1
+        LEFT JOIN BBGS.TBL_BBGS_PACKAGE_SUPPLIER T2 ON T1.BID_ABBREVIAION = T2.BID_ABBREVIAION AND T1.SUPPLIER = T2.SUPPLIER
+        WHERE T1.BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+        AND T2.FLAG_INVALID !='0' AND T2.FLAG_BIT !='0' AND T2.FLAG_BID_INVALID !='0'
+        ORDER BY cast(T1.sort as unsigned int) ASC
+    </select>
+
+    <select id="querySortList" resultMap="bidderResultMap" parameterType="cn.com.hqep.bidder.model.tblBbgsPackageSupplierRaceModel">
+        SELECT
+        <include refid="base_column_leftjoin_list"></include>
+        FROM BBGS.TBL_BBGS_PACKAGE_SUPPLIER T1
+        LEFT JOIN BBGS.tbl_bbgs_price_information T2
+        ON T1.BID_ABBREVIAION = T2.BID_ABBREVIAION AND T1.SUPPLIER = T2.SUPPLIER
+        <trim prefix="WHERE" prefixOverrides="and">
+            <if test="bidAbbreviaion != null and bidAbbreviaion != '' ">
+                T1.BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+            </if>
+            <if test="flagBit != null and flagBit != '' ">
+                AND T1.FLAG_BIT != #{flagBit,jdbcType=VARCHAR}
+            </if>
+            <if test="flagInvalid != null and flagInvalid != '' ">
+                AND T1.FLAG_INVALID != #{flagInvalid,jdbcType=VARCHAR}
+            </if>
+            <if test="flagBidInvalid != null and flagBidInvalid != '' ">
+                AND T1.FLAG_BID_INVALID != #{flagBidInvalid,jdbcType=VARCHAR}
+            </if>
+            <if test="modOffer != null and modOffer != '' ">
+                AND T1.MOD_OFFER != #{modOffer,jdbcType=VARCHAR}
+            </if>
+            <if test="finalRate != null and finalRate != '' ">
+                AND T1.FINAL_RATE != #{finalRate,jdbcType=VARCHAR}
+            </if>
+            <if test="sort != null">
+                AND T1.sort is NOT NULL AND T1.SORT !=''
+            </if>
+        </trim>
+        ORDER BY  left(T1.BID_ABBREVIAION,3),substring_index(T1.BID_ABBREVIAION,'包',-1)+'', cast(T1.sort as unsigned int) ASC
+    </select>
+</mapper>

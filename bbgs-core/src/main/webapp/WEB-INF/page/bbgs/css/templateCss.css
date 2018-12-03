@@ -1,0 +1,58 @@
+html,body {
+    background-color: white;
+    height:100%;
+    width:100%;
+    overflow: hidden;
+}
+a{
+    color: #108EE9;
+}
+a:hover{
+    outline-style: none;
+    text-underline: none;
+}
+a:link {
+    text-decoration: none;
+}
+a:visited {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: none;
+}
+a:active {
+    text-decoration: none;
+}
+.containerAll {
+    margin: 8px;
+}
+
+.flexRow {
+    display: inline-flex;
+    height: 27px;
+}
+
+.flexRow > input {
+    border-radius: 0;
+}
+.circle_b{
+    display: inline-flex;
+    margin:8px;
+    background-color: #108EE9;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}
+.circle_contain{
+    width: 100px;
+    margin:0 auto;
+    text-align: left;
+}
+.circle_o{
+    display: inline-flex;
+    margin:8px;
+    background-color: #f56a00;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}

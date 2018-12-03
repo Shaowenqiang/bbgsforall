@@ -1,0 +1,112 @@
+html, body {
+    font-size: 16px;
+    overflow: hidden;
+}
+
+.containerMine {
+    display: flex;
+    margin: 8px;
+}
+
+.greenLine {
+    width: 100%;
+    background-color: #18ab8e;
+    height: 2px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.flexRow {
+    display: inline-flex;
+    flex-direction: row;
+}
+
+.flex1 {
+    flex: 1;
+}
+
+.flex0 {
+    flex: 0;
+}
+
+.flexColumn {
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+}
+
+.rightDiv {
+    margin: 0 8px 0 16px;
+}
+
+.inputFileWrapper label {
+    cursor: pointer;
+    display: block;
+    float: left;
+    position: relative;
+}
+
+.inputFileWrapper input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    clip: rect(0, 0, 0, 0);
+}
+
+.inputFileWrapper .custorm-style {
+    height: 50px;
+}
+
+.inputFileWrapper .custorm-style .left-button {
+    -moz-border-radius-topleft: 4px;
+    width: 120px;
+    line-height: 32px;
+    background: #1bab8f;
+    color: #fff;
+    display: block;
+    text-align: center;
+    float: left;
+}
+.inputFileWrapper .custorm-style .left-button:hover{
+    background: #d75000;
+}
+
+.inputFileWrapper .custorm-style .right-text {
+    width: 200px;
+    height: 32px;
+    line-height: 32px;
+    float: right;
+    border: 1px solid #cccccc;
+    overflow: hidden;
+    text-align: right;
+    padding-right: 8px;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.flexSpace {
+    display: inline-flex;
+    justify-content: space-between;
+}
+
+.mt8 {
+    margin-top: 8px;
+}
+
+#rightText {
+    font-weight: normal;
+}
+
+#msgArea {
+    height: 300px;
+    overflow: auto;
+}
+
+#msgArea > p {
+    font-size: 16px;
+    margin: 10px;
+}
+.mr8{
+    margin-right: 8px;
+}

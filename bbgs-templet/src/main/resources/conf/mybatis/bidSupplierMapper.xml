@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.templet.dao.bidSupplierDao">
+    <resultMap id="DefaultResultMap" type="cn.com.hqep.templet.model.tblBbgsPackageSupplierModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="PACKAGENAME" jdbcType="VARCHAR" property="packagename"/>
+        <result column="SUPPLIER" jdbcType="VARCHAR" property="supplier"/>
+        <result column="FLAG_BIT" jdbcType="VARCHAR" property="flagBit"/>
+        <result column="FLAG_INVALID" jdbcType="VARCHAR" property="flagInvalid"/>
+        <result column="OFFER" jdbcType="VARCHAR" property="offer"/>
+        <result column="TECHNOLOGY_SCORE" jdbcType="VARCHAR" property="technologyScore"/>
+        <result column="PRICE_SCORE" jdbcType="VARCHAR" property="priceScore"/>
+        <result column="BUSINESS_SCORE" jdbcType="VARCHAR" property="businessScore"/>
+        <result column="TOTAL_SCORE" jdbcType="VARCHAR" property="totalScore"/>
+        <result column="SORT" jdbcType="VARCHAR" property="sort"/>
+        <result column="IS_WIN" jdbcType="VARCHAR" property="isWin"/>
+        <result column="BID_SETION" jdbcType="VARCHAR" property="bidSetion"/>
+        <result column="BID_ABBREVIAION" jdbcType="VARCHAR" property="bidAbbreviaion"/>
+        <result column="BID" jdbcType="VARCHAR" property="bid"/>
+        <result column="TECHNOLOGY_EXPERT_GROUP" jdbcType="VARCHAR" property="technologyExpertGroup"/>
+        <result column="TECHNOLOGY_EXPERT_GROUP_NAME" jdbcType="VARCHAR" property="technologyExpertGroupName"/>
+        <result column="BUSINESS_EXPERT_GROUP" jdbcType="VARCHAR" property="businessExpertGroup"/>
+        <result column="BUSINESS_EXPERT_GROUP_NAME" jdbcType="VARCHAR" property="businessExpertGroupName"/>
+        <result column="BIDDER_PATH" jdbcType="VARCHAR" property="bidderPath"/>
+        <result column="TECHNOLOGY_PATH" jdbcType="VARCHAR" property="technologyPath"/>
+        <result column="BUSINESS_PATH" jdbcType="VARCHAR" property="businessPath"/>
+        <result column="FLAG_BID_INVALID" jdbcType="VARCHAR" property="flagBidInvalid"/>
+    </resultMap>
+    <sql id="base_column_list">
+        ID,
+        PACKAGENAME,
+        SUPPLIER,
+        FLAG_BIT,
+        FLAG_INVALID,
+        OFFER,
+        TECHNOLOGY_SCORE,
+        PRICE_SCORE,
+        BUSINESS_SCORE,
+        TOTAL_SCORE,
+        SORT,
+        IS_WIN,
+        BID_SETION,
+        BID_ABBREVIAION,
+        BID
+    </sql>
+
+    <sql id="base_column_insert">
+        ID,
+        PACKAGENAME,
+        SUPPLIER,
+        FLAG_BIT,
+        FLAG_INVALID,
+        OFFER,
+        BID_ABBREVIAION,
+        BID
+    </sql>
+
+    <select id="queryList" resultMap="DefaultResultMap"
+            parameterType="cn.com.hqep.templet.model.tblBbgsPackageSupplierModel">
+        SELECT
+        <include refid="base_column_list"></include>
+        FROM BBGS.TBL_BBGS_PACKAGE_SUPPLIER
+        <where>
+            1 = 1
+            <if test="bid != null">
+                AND BID = #{bid,jdbcType=VARCHAR}
+            </if>
+            <if test="bidAbbreviaion != null">
+                AND BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+            </if>
+            <if test="flagBit != null">
+               AND  FLAG_BIT = '1'
+            </if>
+            <if test="flagInvalid !=null">
+                AND FLAG_INVALID = '1'
+            </if>
+            <if test="flagBidInvalid !=null">
+                AND FLAG_BID_INVALID = '1'
+            </if>
+        </where>
+        ORDER BY
+        left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+''
+    </select>
+    <select id="queryAllListByModel" resultMap="DefaultResultMap"
+            parameterType="cn.com.hqep.templet.model.tblBbgsPackageSupplierModel">
+        SELECT
+        T1.ID,
+        T1.PACKAGENAME,
+        T1.SUPPLIER,
+        T1.FLAG_BIT,
+        T1.FLAG_INVALID,
+        T1.OFFER,
+        T1.TECHNOLOGY_SCORE,
+        T1.PRICE_SCORE,
+        T1.BUSINESS_SCORE,
+        T1.TOTAL_SCORE,
+        T1.SORT,
+        T1.IS_WIN,
+        T1.BID_SETION,
+        T1.BID_ABBREVIAION,
+        T1.BID,
+        T2.TECHNOLOGY_EXPERT_GROUP,
+        T3.EXPERT_GROUP_NAME TECHNOLOGY_EXPERT_GROUP_NAME,
+        T2.BUSINESS_EXPERT_GROUP,
+        T4.EXPERT_GROUP_NAME BUSINESS_EXPERT_GROUP_NAME,
+        T5.FILE_PATH BIDDER_PATH,
+        T6.FILE_PATH TECHNOLOGY_PATH,
+        T7.FILE_PATH BUSINESS_PATH
+        FROM TBL_BBGS_PACKAGE_SUPPLIER T1
+        LEFT JOIN TBL_BBGS_BID_INFORMATION T2 ON T1.BID_ABBREVIAION = T2.BID_ABBREVIAION
+        LEFT JOIN TBL_BBGS_EXPERT_GROUP T3 ON T2.TECHNOLOGY_EXPERT_GROUP = T3.ID
+        LEFT JOIN TBL_BBGS_EXPERT_GROUP T4 ON T2.BUSINESS_EXPERT_GROUP = T4.ID
+        LEFT JOIN TBL_BBGS_TEMPLATE T5 ON T2.BIDDER_LIST = T5.ID
+        LEFT JOIN TBL_BBGS_TEMPLATE T6 ON T2.TECHNOLOGY_BID_RECORD = T6.ID
+        LEFT JOIN TBL_BBGS_TEMPLATE T7 ON T2.BUSINESS_BID_RECORD = T7.ID
+        <where>
+            1 = 1
+            <if test="bid != null">
+                AND T1.BID = #{bid,jdbcType=VARCHAR}
+            </if>
+            <if test="bidAbbreviaion != null">
+                AND T1.BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+            </if>
+            <if test="technologyExpertGroup != null">
+                AND T2.TECHNOLOGY_EXPERT_GROUP = #{technologyExpertGroup,jdbcType=VARCHAR}
+            </if>
+            <if test="businessExpertGroup != null">
+                AND T2.BUSINESS_EXPERT_GROUP = #{businessExpertGroup,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY  left(T1.BID_ABBREVIAION,3),substring_index(T1.BID_ABBREVIAION,'包',-1)+'',T1.BID
+    </select>
+
+    <insert id="saveBid" parameterType="cn.com.hqep.templet.model.tblBbgsPackageSupplierModel">
+        INSERT INTO TBL_BBGS_PACKAGE_SUPPLIER
+        (ID,
+        SUPPLIER,
+        PACKAGENAME,
+        BID,
+        BID_ABBREVIAION,
+        FLAG_BIT,
+        IS_WIN,
+        FLAG_INVALID,
+        FLAG_BID_INVALID,
+        OFFER
+        )
+        VALUES
+        (
+        #{id,jdbcType=VARCHAR},
+        #{supplier,jdbcType=VARCHAR},
+        #{packagename,jdbcType=VARCHAR},
+        #{bid,jdbcType=VARCHAR},
+        #{bidAbbreviaion,jdbcType=VARCHAR},
+        '1',
+        '0',
+        '1',
+        '1',
+        #{offer,jdbcType=VARCHAR}
+        )
+    </insert>
+</mapper>

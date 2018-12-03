@@ -1,0 +1,58 @@
+<tr style='mso-yfti-irow:1;height:18.0pt;'>
+  <td width="27%" style='width:27.3%;border-top:none;border-left:none;
+  border-bottom:$p_style$;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext 1.0pt;padding:0cm 0cm 0cm 0cm;height:
+  18.0pt'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><span lang=EN-US style='mso-bidi-font-size:10.5pt;
+  font-family:仿宋_GB2312'>$分标号$</span><span style='mso-bidi-font-size:10.5pt;
+  font-family:仿宋_GB2312'>$分标名称$<span lang=EN-US><o:p></o:p></span></span></p>
+  </td>
+  <td width="8%" style='width:8.52%;border-top:none;border-left:none;
+  border-bottom:$p_style$border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext 1.0pt;
+  padding:0cm 0cm 0cm 0cm;height:18.0pt'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><span style='mso-bidi-font-size:10.5pt;font-family:
+  仿宋_GB2312;mso-hansi-font-family:华文仿宋'>$单位$<span lang=EN-US><o:p></o:p></span></span></p>
+  </td>
+  <td width="17%" style='width:17.08%;border-top:none;border-left:none;
+  border-bottom:$p_style$border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext 1.0pt;
+  padding:0cm 0cm 0cm 0cm;height:18.0pt'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><span lang=EN-US style='mso-bidi-font-size:10.5pt;
+  font-family:仿宋_GB2312;mso-hansi-font-family:华文仿宋'>$数量$<o:p></o:p></span></p>
+  </td>
+  <td width="10%" style='width:10.24%;border-top:none;border-left:none;
+  border-bottom:$p_style$border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext 1.0pt;
+  mso-border-right-alt:solid windowtext .5pt;
+  padding:0cm 0cm 0cm 0cm;height:18.0pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+  style='mso-bidi-font-size:10.5pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  华文仿宋'>$投标人数量$<o:p></o:p></span></p>
+  </td>
+  <td width="10%" style='width:10.12%;border-top:none;border-left:none;
+  border-bottom:$p_style$border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-top-alt:1.0pt;mso-border-left-alt:.5pt;
+  mso-border-right-alt:.5pt;mso-border-color-alt:windowtext;padding:0cm 0cm 0cm 0cm;height:18.0pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+  style='mso-bidi-font-size:10.5pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  华文仿宋'>$中标人数量$<o:p></o:p></span></p>
+  </td>
+  <td width="17%" style='width:17.18%;border-top:none;border-left:none;
+  border-bottom:$p_style$border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext .5pt;
+  padding:0cm 0cm 0cm 0cm;height:18.0pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+  style='mso-bidi-font-size:10.5pt;font-family:仿宋_GB2312'>$金额$<o:p></o:p></span></p>
+  </td>
+  <td width="9%" style='width:9.54%;border:none;border-bottom:$p_style$
+  mso-border-top-alt:solid windowtext 1.0pt;mso-border-left-alt:solid windowtext 1.0pt;
+  padding:0cm 0cm 0cm 0cm;height:18.0pt'>
+  <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+  style='mso-bidi-font-size:10.5pt;font-family:仿宋_GB2312'>$比例$<o:p></o:p></span></p>
+  </td>
+ </tr>

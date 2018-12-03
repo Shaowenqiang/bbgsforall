@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.bidder.dao.RaceBidderTendererDao">
+    <sql id="DefaultTableName">TBL_BBGS_TENDERER </sql>
+    <sql id="DefaultSelects"> ID , BATCH_TITLE , BID_ABBREVIAION , SUPPLIER , TEL , EMAIL , REMIT , SEND </sql>
+    <resultMap id="DefaultResultMap" type="cn.com.hqep.bidder.model.tblBbgsTendererRaceModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="BATCH_TITLE" jdbcType="VARCHAR" property="batchTitle"/>
+        <result column="BID_ABBREVIAION" jdbcType="VARCHAR" property="bidAbbreviaion"/>
+        <result column="SUPPLIER" jdbcType="VARCHAR" property="supplier"/>
+        <result column="TEL" jdbcType="VARCHAR" property="tel"/>
+        <result column="EMAIL" jdbcType="VARCHAR" property="email"/>
+        <result column="REMIT" jdbcType="VARCHAR" property="remit"/>
+        <result column="SEND" jdbcType="VARCHAR" property="send"/>
+    </resultMap>
+    <select id="queryList" parameterType="cn.com.hqep.bidder.model.tblBbgsTendererRaceModel" resultMap="DefaultResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM TBL_BBGS_TENDERER
+        ORDER BY         left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+''
+    </select>
+</mapper>

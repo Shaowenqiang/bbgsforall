@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.templet.dao.scoreImportDao">
+    <sql id="DefaultSelects"> ID , EXPERT_NAME , GROUP_ID </sql>
+    <resultMap id="DefaultResultMap" type="cn.com.hqep.templet.model.tblBbgsExpertModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="EXPERT_NAME" jdbcType="VARCHAR" property="expertName"/>
+        <result column="GROUP_ID" jdbcType="VARCHAR" property="groupId"/>
+        <result column="EXPERT_GROUP_NAME" jdbcType="VARCHAR" property="expertGroupName"/>
+        <result column="TYPE" jdbcType="VARCHAR" property="type"/>
+        <result column="TOTALNUM" jdbcType="VARCHAR" property="totalnum"/>
+        <result column="scoreNum_t" jdbcType="VARCHAR" property="scoreNum_t"/>
+        <result column="scoreNum_b" jdbcType="VARCHAR" property="scoreNum_b"/>
+        <result column="importNum" jdbcType="VARCHAR" property="importNum"/>
+    </resultMap>
+    <select id="queryExpertNames" parameterType="String" resultMap="DefaultResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM TBL_BBGS_EXPERT
+        <where>
+            1 = 1
+            <if test="groupId != null">
+                AND GROUP_ID = #{groupId,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="getAllExpert" resultMap="DefaultResultMap">
+        SELECT
+        T1.ID ID,
+        T1.GROUP_ID GROUP_ID,
+        T1.EXPERT_NAME EXPERT_NAME,
+        T2.EXPERT_GROUP_NAME EXPERT_GROUP_NAME,
+        (SELECT COUNT(T3.BID_ABBREVIAION) FROM TBL_BBGS_BID_INFORMATION T3 WHERE T3.FLAG='Y' AND T3.INVALID = '1' AND T1.GROUP_ID = T3.TECHNOLOGY_EXPERT_GROUP ) scoreNum_t,
+        (SELECT COUNT(T4.BID_ABBREVIAION) FROM TBL_BBGS_BID_INFORMATION T4 WHERE T4.FLAG='Y' AND T4.INVALID = '1' AND T1.GROUP_ID = T4.BUSINESS_EXPERT_GROUP ) scoreNum_b,
+		(SELECT COUNT(DISTINCT T5.BID_ABBREVIAION) FROM tbl_bbgs_technology_business T5 WHERE T1.EXPERT_NAME = T5.EXPERT_NAME ) importNum
+        FROM TBL_BBGS_EXPERT T1
+        LEFT JOIN TBL_BBGS_EXPERT_GROUP T2 ON T1.GROUP_ID = T2.ID
+        ORDER BY T2.TYPE DESC ,T2.SORTID
+    </select>
+
+    <select id="getCount" resultMap="DefaultResultMap">
+        SELECT EXPERT_GROUP_NAME,COUNT(EXPERT_GROUP_NAME) TOTALNUM FROM (
+        SELECT
+        T1.ID ID,
+        T1.GROUP_ID GROUP_ID,
+        T1.EXPERT_NAME EXPERT_NAME,
+        T2.EXPERT_GROUP_NAME EXPERT_GROUP_NAME,
+        T2.TYPE TYPE
+        FROM TBL_BBGS_EXPERT T1
+        LEFT JOIN TBL_BBGS_EXPERT_GROUP T2 ON T1.GROUP_ID = T2.ID )T4 GROUP BY EXPERT_GROUP_NAME
+    </select>
+
+    <insert id="saveModel" parameterType="cn.com.hqep.templet.model.tblBbgsTechnologyBusinessModel">
+        INSERT INTO TBL_BBGS_TECHNOLOGY_BUSINESS(
+        ID,
+        EXPERT_NAME,
+        BID_ABBREVIAION,
+        SUPPLIER,
+        TYPE,
+        PRICE
+        )VALUES (
+        #{id,jdbcType=VARCHAR},
+        #{expertName,jdbcType=VARCHAR},
+        #{bidAbbreviaion,jdbcType=VARCHAR},
+        #{supplier,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR},
+        #{price,jdbcType=VARCHAR}
+        )
+
+    </insert>
+    <select id="selectCount" resultType="java.lang.Integer"
+            parameterType="cn.com.hqep.templet.model.tblBbgsTechnologyBusinessModel">
+        SELECT COUNT(*) from TBL_BBGS_TECHNOLOGY_BUSINESS
+        WHERE
+        SUPPLIER = #{supplier,jdbcType=VARCHAR}  AND
+        BID_ABBREVIAION =#{bidAbbreviaion,jdbcType=VARCHAR} AND
+        EXPERT_NAME = #{expertName,jdbcType=VARCHAR}
+    </select>
+    <update id="updateModel">
+        UPDATE
+        TBL_BBGS_TECHNOLOGY_BUSINESS
+        <set>
+            <if test="price !=null ">
+                PRICE =#{price,jdbcType=VARCHAR}
+            </if>
+        </set>
+        WHERE
+        SUPPLIER = #{supplier,jdbcType=VARCHAR} AND
+        BID_ABBREVIAION =#{bidAbbreviaion,jdbcType=VARCHAR} AND
+        EXPERT_NAME = #{expertName,jdbcType=VARCHAR} AND
+        TYPE = #{type,jdbcType=VARCHAR}
+    </update>
+
+    <select id="queryScoreInfo">
+
+    </select>
+</mapper>

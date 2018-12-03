@@ -1,0 +1,134 @@
+/*
+*/
+
+/**body样式*/
+body {
+    background: #f0f0f0;
+    overflow: hidden;
+    font-size: 16px;
+}
+
+/**按钮样式*/
+.gw-button,.gw-l-button {
+    line-height: 30px;
+    font-size: 16px;
+    padding: 0px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 1px;
+    transition: .3s all linear;
+    -webkit-transition: .3s all;
+}
+.gw-l-button {
+    color: #FFFFFF;
+    background-color: #1bab8f;
+}
+.gw-button {
+    color: #666666;
+    background-color: #ffffff;
+    border: 1px solid #d7d7d7;
+}
+
+/**表头颜色样式*/
+.tableThCss .fixed-table-container thead th .th-inner{
+    background-color: #1bab8f;
+    color: #FFFFFF;
+}
+
+/**input[type=file] 样式修改 start*/
+/*a  upload */
+.a-upload {
+    padding: 0px 10px;
+    height: 30px;
+    line-height: 30px;
+    position: relative;
+    cursor: pointer;
+    color: #ffffff;
+    background: #1bab8f;
+    border: 0px solid #ddd;
+    border-radius: 4px;
+    /*overflow: hidden;*/
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+
+.a-upload  input {
+    position: absolute;
+    font-size: 16px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+
+.a-upload:hover {
+    color: #444;
+    background: #eee;
+    border-color: #ccc;
+    text-decoration: none;
+}
+/**input[type=file] 样式修改 end*/
+.showExcelTitle{
+    margin-top: 20px;
+}
+
+#importExcelBtn:disabled{
+    background-color: darkgray;
+    color: #FFFFFF;
+}
+
+/*
+    一套bootable-table的表格样式
+    参照科东项目设计样式
+**/
+/*更改bootstrap的table表头**/
+.bootstrapTableCssDesign {
+
+}
+/*表头颜色*/
+.bootstrapTableCssDesign .fixed-table-container thead th .th-inner{
+    height: 36px;
+    background-color: #18ab8e;
+    color: white;
+}
+.bootstrapTableCssDesign .bootstrap-table .table:not(.table-condensed) > tbody > tr > td{
+    padding: 0 0 0 6px;
+    line-height: 31px;
+    height: 32px;
+}
+/*奇偶变色-奇*/
+.bootstrapTableCssDesign .table-striped > tbody > tr:nth-of-type(odd) {
+    /*background-color: #eeeced;*/
+    background-color: #ffffff;
+}
+/*奇偶变色-偶*/
+.bootstrapTableCssDesign .table-striped > tbody > tr:nth-of-type(even) {
+    /*background-color: #f5f5f5;*/
+    background-color: #f5f5f5;
+}
+/**表格悬浮样式*/
+.bootstrapTableCssDesign .table-hover > tbody > tr:hover > td{
+    background-color: #c6f3ee;
+}
+/*表格选中样式 */
+.bootstrapTableCssDesign .fixed-table-container tbody .selected td {
+    background-color: #c6f3ee;
+}
+/*!**表格隐藏页容量（不能改变页容量pageSize）*!
+.bootstrapTableCssDesign  .fixed-table-pagination .page-list {
+    display: none;
+}*/
+
+/*隐藏表头*/
+.bootstrapTableCssDesign .hideTbTh .fixed-table-container thead th .th-inner {
+    display: none;
+}
+/* 显示表头*/
+.bootstrapTableCssDesign .showTbTh  .fixed-table-container thead th .th-inner {
+    display:block;
+}
+.bootstrapTableCssDesign .bootstrap-table .table:not(.table-condensed) > tbody > tr > td{
+    padding: 0 6px 0 6px;
+}

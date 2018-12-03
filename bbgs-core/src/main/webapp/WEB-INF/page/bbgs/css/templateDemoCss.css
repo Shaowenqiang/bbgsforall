@@ -1,0 +1,446 @@
+/**
+	模态框CSS
+*/
+
+.inputCss input {
+    border: 1px solid #cccccc;
+    padding-left: 10px;
+    line-height: 32px;
+    height: 32px;
+    border-radius:3px;
+}
+.inputCss select{
+    border: 1px solid #cccccc;
+    padding-left: 10px;
+    line-height: 28px;
+    height: 32px;
+    border-radius:3px;
+}
+label{
+    font-weight: normal;
+}
+/**按钮样式*/
+.gw-button,.gw-l-button {
+    line-height: 30px;
+    font-size: 16px;
+    padding: 0px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 1px;
+    transition: .3s all linear;
+    -webkit-transition: .3s all;
+}
+.gw-l-button {
+    color: #FFFFFF;
+    background-color: #1bab8f;
+}
+.gw-button {
+    color: #666666;
+    background-color: #ffffff;
+    border: 1px solid #d7d7d7;
+}
+
+/*模态框 X（退出） 的样式*/
+
+.bootstrapModalDesign .modal-header span{
+    color: #ffffff;
+}
+/*模态框header样式*/
+.bootstrapModalDesign .modal-header{
+    padding:5px 10px 5px 15px ;
+    background-color: #273947;
+    color: #ffffff;
+    font-size: 18px;
+}
+/*取消模态框body内边距*/
+.bootstrapModalDesign .modal-body{
+    padding: 0px;
+}
+
+/*模态框footer样式修改*/
+.bootstrapModalDesign .modal-footer {
+    padding: 5px 0px 13px 0px;
+    border-top: 0px solid #e5e5e5;
+}
+
+
+/*text-align: right */
+.textright {
+    text-align: right;
+}
+/*text-align: left */
+.textleft {
+    text-align: left;
+}
+/*text-align: center */
+.textcenter {
+    text-align: center;
+}
+
+/*padding-left*/
+.pl2 {
+    padding-left: 2px;
+}
+.pl3{
+    padding-left: 3px;
+}
+.pl4{
+    padding-left: 4px;
+}
+.pl5 {
+    padding-left: 5px;
+}
+.pl10 {
+    padding-left: 10px;
+}
+.pl15 {
+    padding-left: 15px;
+}
+.pl16 {
+    padding-left: 16px;
+}
+.pl20 {
+    padding-left: 20px;
+}
+.pl28 {
+    padding-left: 28px;
+}
+.pl30 {
+    padding-left: 30px;
+}
+
+/*padding-right*/
+.pr2 {
+    padding-right: 2px;
+}
+.pr4 {
+    padding-right: 4px;
+}
+.pr5 {
+    padding-right: 5px;
+}
+.pr10 {
+    padding-right: 10px;
+}
+
+/* margin-top*/
+.mt15 {
+    margin-top: 15px;
+}
+.mt-6 {
+    margin-top: -6px;
+}
+
+/**margin-right*/
+.mr5{
+    margin-right: 5px;
+}
+.mr10{
+    margin-right: 10px;
+}
+.mr70 {
+    margin-right: 70px;
+}
+.mr76 {
+    margin-right: 76px;
+}
+
+/**margin-left*/
+.ml10{
+    margin-left: 10px;
+}
+.ml20{
+    margin-left: 20px;
+}
+.ml30{
+    margin-left: 30px;
+}
+
+/* table中文本框input*/
+.width205{
+    width: 205px;
+}
+.width181{
+    width: 181px;
+}
+.width300{
+    width: 300px;
+}
+.width438{
+	 width: 438px;
+}
+.width440{
+    width: 440px;
+}
+.input {
+    width: 160px;
+
+}
+.input95 {
+    width: 90px;
+}
+.input100 {
+    width: 100px;
+}
+.input110 {
+    width: 110px;
+}
+.input120 {
+    width: 120px;
+}
+.input125 {
+    width: 125px;
+
+}
+
+.input135 {
+    width: 135px;
+
+}
+.input136{
+    width: 136px;
+
+}
+
+.input146{
+    width: 148px;
+
+}
+.input140 {
+    width: 140px;
+}
+.input142 {
+    width: 141px;
+}
+.input143{
+    width: 143px;
+}
+.input135 {
+    width: 135px;
+}
+.input165 {
+    width: 165px;
+}
+.input170 {
+    width: 170px;
+}
+.input173 {
+    width: 173px;
+}
+.input131{
+    width: 131px;
+}
+.input210 {
+    width: 210px;
+}
+.input226 {
+    width: 226px;
+}
+
+/* table中文本框select*/
+.select {
+    width: 163px;
+}
+.select103 {
+    width: 103px;
+}
+.select120 {
+    width: 120px;
+}
+.select134 {
+    width: 134px;
+}
+.select139 {
+    width: 139px;
+}
+.select143 {
+    width: 143px;
+}
+.select144 {
+    width: 144px;
+}
+.select145 {
+    width: 145px;
+}
+.select146{
+    width: 146px;
+}
+.select176 {
+    width: 176px;
+}
+.select229{
+    width: 229px;
+}
+
+/**line-height*/
+.lh30 {
+    line-height: 30px;
+}
+.lh36 {
+    line-height: 36px;
+}
+.lh37 {
+    line-height: 37px;
+}
+.lh70 {
+    line-height: 70px;
+}
+.lh110 {
+    line-height: 110px;
+}
+
+/**
+    font-weight
+	font-size
+*/
+.bold-size16 {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/**border-bottom
+*/
+.borderbottom {
+    border-bottom: 1px solid #000;
+}
+
+.headCss{
+    cursor:pointer;
+}
+/**input[type=file] 样式修改 start*/
+/*a  upload */
+.a-upload {
+    padding: 0px 10px;
+    margin-left: 0px;
+    height: 32px;
+    line-height: 32px;
+    position: relative;
+    cursor: pointer;
+    color: #ffffff;
+    background: #1bab8f;
+    border: none;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+
+.a-upload  input {
+    position: absolute;
+    font-size: 16px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+
+.a-upload:hover {
+    color: #444;
+    background: #eee;
+    border-color: #ccc;
+    text-decoration: none;
+}
+/**input[type=file] 样式修改 end*/
+
+
+/*
+    一套bootable-table的表格样式
+    参照科东项目设计样式
+**/
+/*更改bootstrap的table表头**/
+.bootstrapTableCssDesign {
+
+}
+.bootstrapTableCssDesign .fixed-table-container thead th .th-inner{
+    height: 36px;
+    background-color: #18ab8e;
+    color: white;
+}
+.bootstrapTableCssDesign .bootstrap-table .table:not(.table-condensed) > tbody > tr > td{
+    padding: 0 0 0 6px;
+    line-height: 31px;
+    height: 32px;
+}
+/*奇偶变色-奇*/
+.bootstrapTableCssDesign .table-striped > tbody > tr:nth-of-type(odd) {
+    /*background-color: #eeeced;*/
+    background-color: #ffffff;
+}
+/*奇偶变色-偶*/
+.bootstrapTableCssDesign .table-striped > tbody > tr:nth-of-type(even) {
+    /*background-color: #f5f5f5;*/
+    background-color: #f5f5f5;
+}
+/**表格悬浮样式*/
+.bootstrapTableCssDesign .table-hover > tbody > tr:hover > td{
+    background-color: #c6f3ee;
+}
+/*表格选中样式 */
+.bootstrapTableCssDesign .fixed-table-container tbody .selected td {
+    background-color: #c6f3ee;
+}
+/**表格隐藏页容量（不能改变页容量pageSize）*/
+.bootstrapTableCssDesign  .fixed-table-pagination .page-list {
+    display: none;
+}
+
+/*
+    一套bootable-table的表格样式
+    参照科东项目设计样式
+**/
+/*更改bootstrap的 子表 table表头**/
+.bootstrapTableSonCssDesign {
+
+}
+.bootstrapTableSonCssDesign .fixed-table-container thead th .th-inner{
+    height: 36px;
+    background-color: #e2e2e2;
+    color: #333333;
+}
+.bootstrapTableSonCssDesign .bootstrap-table .table:not(.table-condensed) > tbody > tr > td{
+    padding: 0 0 0 6px;
+    line-height: 31px;
+    height: 32px;
+}
+/*奇偶变色-奇*/
+.bootstrapTableSonCssDesign .table-striped > tbody > tr:nth-of-type(odd) {
+    /*background-color: #eeeced;*/
+    background-color: #ffffff;
+}
+/*奇偶变色-偶*/
+.bootstrapTableSonCssDesign .table-striped > tbody > tr:nth-of-type(even) {
+    /*background-color: #f5f5f5;*/
+    background-color: #eeeeee;
+}
+/**表格悬浮样式*/
+.bootstrapTableSonCssDesign .table-hover > tbody > tr:hover > td{
+    background-color: #eeeeee;
+}
+/*表格选中样式 */
+.bootstrapTableSonCssDesign .fixed-table-container tbody .selected td {
+    background-color: #eeeeee;
+}
+/**表格隐藏页容量（不能改变页容量pageSize）*/
+.bootstrapTableSonCssDesign  .fixed-table-pagination .page-list {
+    display: none;
+}
+
+/*隐藏表头*/
+.hideTh .fixed-table-container thead th .th-inner {
+    display: none;
+}
+/* 显示表头*/
+.showTh  .fixed-table-container thead th .th-inner {
+    display:block;
+}
+
+/*textarea_mine*/
+/*textarea 文本框样式*/
+.textarea_mine{
+    width: 180px;
+    height:70px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+}

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.templet.dao.tendererDao">
+    <sql id="DefaultTableName">TBL_BBGS_TENDERER </sql>
+    <sql id="DefaultSelects"> ID , BATCH_TITLE , BID_ABBREVIAION , SUPPLIER , TEL , EMAIL , REMIT , SEND </sql>
+    <resultMap id="DefaultResultMap" type="cn.com.hqep.templet.model.tblBbgsTendererModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="BATCH_TITLE" jdbcType="VARCHAR" property="batchTitle"/>
+        <result column="BID_ABBREVIAION" jdbcType="VARCHAR" property="bidAbbreviaion"/>
+        <result column="SUPPLIER" jdbcType="VARCHAR" property="supplier"/>
+        <result column="TEL" jdbcType="VARCHAR" property="tel"/>
+        <result column="EMAIL" jdbcType="VARCHAR" property="email"/>
+        <result column="REMIT" jdbcType="VARCHAR" property="remit"/>
+        <result column="SEND" jdbcType="VARCHAR" property="send"/>
+    </resultMap>
+    <insert id="saveTenderer" parameterType="cn.com.hqep.templet.model.tblBbgsTendererModel">
+        INSERT INTO
+        <include refid="DefaultTableName"/>
+        (
+        <include refid="DefaultSelects"/>
+        )
+        VALUES (
+        #{id,jdbcType=VARCHAR},
+        #{batchTitle,jdbcType=VARCHAR},
+        #{bidAbbreviaion,jdbcType=VARCHAR},
+        #{supplier,jdbcType=VARCHAR},
+        #{tel,jdbcType=VARCHAR},
+        #{email,jdbcType=VARCHAR},
+        #{remit,jdbcType=VARCHAR},
+        #{send,jdbcType=VARCHAR}
+        )
+    </insert>
+    <!--
+       清空批次表数据 TBL_BBGS_BATCH
+       清空投标人表数据 TBL_BBGS_TENDERER
+       清空供应商表数据
+       清空标段信息表数据
+    -->
+    <delete id="delTableData" parameterType="String">
+        DELETE
+        FROM  ${tableName}
+    </delete>
+    <!--新加  查询内容   郭-->
+    <select id="contentAll" parameterType="cn.com.hqep.templet.model.tblBbgsTendererModel" resultMap="DefaultResultMap">
+
+        SELECT
+        SUPPLIER ,BID_ABBREVIAION bidAbbreviaion , TEL , EMAIL , REMIT , SEND
+        FROM TBL_BBGS_TENDERER
+        <where>
+            <if test="(bidAbbreviaion != null)and(bidAbbreviaion != '') ">
+                and BID_ABBREVIAION LIKE '%${bidAbbreviaion}%'
+            </if>
+
+            <if test="(supplier != null)and(supplier != '')">
+                and SUPPLIER LIKE '%${supplier}%'
+            </if>
+        </where>
+        ORDER BY
+        left(BID_ABBREVIAION,3),substring_index(BID_ABBREVIAION,'包',-1)+''
+    </select>
+    <select id="queryAllByModel" parameterType="cn.com.hqep.templet.model.tblBbgsTendererModel"
+            resultMap="DefaultResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM TBL_BBGS_TENDERER
+        <where>
+            1=1
+            <if test="(bidAbbreviaion != null)and(bidAbbreviaion != '') ">
+                and BID_ABBREVIAION = #{bidAbbreviaion,jdbcType=VARCHAR}
+            </if>
+            <if test="(supplier != null)and(supplier != '')">
+                and SUPPLIER = #{supplier,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="deleteAllData">
+  --         删除供应商表
+        DELETE
+        FROM  TBL_BBGS_SUPPLIER;
+--         删除专家表
+        DELETE
+        FROM  TBL_BBGS_EXPERT;
+--         删除专家组表
+        DELETE
+        FROM  BBGS.TBL_BBGS_EXPERT_GROUP;
+
+--         插入技术一组、插入技术专家二组
+        INSERT INTO
+        TBL_BBGS_EXPERT_GROUP VALUES ('2194fd14d2ce4ef8987f673701f842ea', '技术一组', '技术', '1');
+        INSERT INTO
+        TBL_BBGS_EXPERT_GROUP VALUES ('a3d15962bc5441d59fd47b998195c7e8', '商务一组', '商务', '1');
+
+-- 删除批次名单表
+        DELETE
+        FROM  TBL_BBGS_BATCH;
+--         删除电商行价格表数据
+        DELETE
+        FROM  TBL_BBGS_SUPPLIER_ROW_PRICE;
+--         删除标段信息表
+        DELETE
+        FROM  TBL_BBGS_BID_INFORMATION;
+
+--         删除投标人表
+        DELETE
+        FROM  TBL_BBGS_TENDERER;
+-- 删除包-供应商关系表
+        DELETE
+        FROM  TBL_BBGS_PACKAGE_SUPPLIER;
+--         删除价格信息表
+        DELETE
+        FROM  TBL_BBGS_PRICE_INFORMATION;
+--         删除技术、商务打分表
+        DELETE
+        FROM  TBL_BBGS_TECHNOLOGY_BUSINESS;
+    </select>
+
+    <!--导入报价时，先删除表内信息-->
+    <select id="deleteForSaveOffer">
+  --         删除供应商表
+        DELETE
+        FROM  TBL_BBGS_SUPPLIER;
+
+--         删除标段信息表
+        DELETE
+        FROM  TBL_BBGS_BID_INFORMATION;
+
+--         删除投标人表
+        DELETE
+        FROM  TBL_BBGS_TENDERER;
+-- 删除包-供应商关系表
+        DELETE
+        FROM  TBL_BBGS_PACKAGE_SUPPLIER;
+--         删除价格信息表
+        DELETE
+        FROM  TBL_BBGS_PRICE_INFORMATION;
+--         删除技术、商务打分表
+        DELETE
+        FROM  TBL_BBGS_TECHNOLOGY_BUSINESS;
+    </select>
+
+    <insert id="insertRowPrice">
+        INSERT INTO
+        tbl_bbgs_supplier_row_price
+        (
+        id,
+        bid_abbreviaion,
+        supplier,
+        row_type,
+        row_price,
+        row_price_weight,
+        total_price,
+        filename
+        )
+        VALUES
+        (
+        #{id},
+        #{bid_abbreviaion},
+        #{supplier},
+        #{row_type},
+        #{row_price},
+        #{row_price_weight},
+        #{total_price},
+        #{filename}
+        )
+    </insert>
+
+    <select id="querySupplierTotalPriceForBid" resultMap="DefaultResultMap">
+        SELECT T1.bid_abbreviaion,T1.supplier ,FORMAT(AVG(T1.total_price),7) offer from
+        tbl_bbgs_supplier_row_price T1
+        GROUP BY T1.bid_abbreviaion,T1.supplier
+    </select>
+
+    <select id="queryRowPrice" resultType="String">
+        SELECT filename from
+        tbl_bbgs_supplier_row_price
+        where
+        bid_abbreviaion = #{bid_abbreviaion}
+        and
+        supplier = #{supplier}
+        and
+        row_type = #{row_type}
+    </select>
+</mapper>

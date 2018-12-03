@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" href="../css/cutSupplierCss.css">
+
+    <script src="../plugins/jquery-1.9.1.min.js"></script>
+    <script src="../plugins/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="../plugins/bootstrap-table/bootstrap-table.js"></script>
+    <script src="../plugins/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+
+    <script src="../plugins/underscore-min.js"></script>
+</head>
+<body id="body_subFile">
+<div style="height:100%;">
+
+    <!--<div style="height:100%;border: 1px  solid #cccccc;padding: 10px;background-color: #ffffff;">-->
+    <div class="tableThCss" style="width:100%; float:left;padding-left: 8px;padding-right: 8px; background-color: #ffffff;">
+        <div id="searchtoolbar" style="max-height:500px;float: left;line-height: 30px;height: 32px; margin: 5px;"
+             class="b-upload">
+            &emsp;公式：
+            <select
+                    style="background: white;border: 1px solid #cccccc;border-radius: 5px;padding-left: 10px;width:400px;height: 30px;"
+                    id="searchexecutefuncombo"
+                    name="executefunid"
+                    fieldtype="combo"
+                    displayField="descript"
+                    valueField="id"
+                    selectedName="executefunlist"
+            >
+
+            </select>
+            <button style="margin-left: 20px;" class="gw-l-button" id="search" onclick="queryConditions()">查询
+            </button>
+
+        </div>
+        <table
+                class="table table-hover table-striped table-responsive "
+                data-toggle="table"
+                id="tb_conditions">
+        </table>
+    </div>
+    <div class="tableThCss" style="width:100%; float: left;padding: 0 8px; background-color: #ffffff;">
+        <table
+                id="tb_formulas">
+        </table>
+    </div>
+    <!--</div>-->
+    <!-- 新增参数提交 start -->
+    <div id="templetParentId"></div>
+    <div class="modal fade bootstrapModalDesign inputCss" id="editConditionModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="width: 570px;top: 120px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">新增参数</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="addConditionsForm" method="post" style="margin: auto;padding: 10px;">
+                        <table style="border-collapse: separate; border-spacing: 0px 10px;width: 100%;">
+                            <tr>
+                                <td style="width: 100px"><label>应用于公式:</label></td>
+                                <td>
+                                    <select
+                                            style="width: 100%"
+                                            id="executefuncombo"
+                                            name="executefunid"
+                                            fieldtype="combo"
+                                            displayField="descript"
+                                            valueField="id"
+                                            selectedName="executefunlist"
+                                    >
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 100px"><label>参数名:</label>
+                                </td>
+                                <td>
+                                    <select
+                                            style="width: 100%"
+                                            id="conditionstypecombo"
+                                            name="conditionid"
+                                            fieldtype="combo"
+                                            displayField="remark"
+                                            valueField="id"
+                                            selectedName="conditionslist"
+                                    >
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 100px"><label>起始值:</label></td>
+                                <td>
+                                    <input type="number" value="0" min="0" max="10000" step="1" class="flexbox "
+                                           name="startvalue" fieldtype="textfield" style="width: 100%"
+                                           placeholder="请输入起始值,类型为数字">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 100px"><label>结束值:</label></td>
+                                <td>
+                                    <input type="number" value="0" min="0" max="10000" step="1" class="flexbox "
+                                           name="endvalue" fieldtype="textfield" style="width: 100%"
+                                           placeholder="请输入结束值，类型位数字">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 120px"><label>去掉最高价个数:</label></td>
+                                <td>
+                                    <input type="number" value="0" min="0" max="10000" step="1" class="flexbox "
+                                           name="submaxpricecount" fieldtype="textfield" style="width: 100%"
+                                           placeholder="请输入去掉最高价个数,类型为数字">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 120px"><label>去掉最低价个数:</label></td>
+                                <td>
+                                    <input type="number" value="0" min="0" max="10000" step="1" class="flexbox "
+                                           name="subminpricecount" fieldtype="textfield" style="width: 100%"
+                                           placeholder="请输入去掉最低价个数,类型为数字">
+                                </td>
+                            </tr>
+                            <input type="hidden" fieldtype="hiddenfield" name="id" value=""/>
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer textcenter">
+                    <button type="button" class="gw-l-button" onclick="saveConditions()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 新增参数提交 end -->
+    <div class="modal fade bootstrapModalDesign" id="NoticeModal" data-backdrop="static"
+         tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document"
+             style="max-width: 500px;top: 120px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">操作提示</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="line-height:30px; max-height: 500px;text-align: center;">
+                        <img src="../images/操作失败.png" style="margin-top: 10px;"/>
+                        <div id="NoticeShow" class="bold-size16">&nbsp;&nbsp;</div>
+                    </div>
+                </div>
+                <div class="modal-footer textcenter">
+                    <button type="button" class="gw-l-button" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bootstrapModalDesign" id="confirmModal"
+         tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="margin-top: 120px">
+        <div class="modal-dialog" role="document"
+             style="width: 260px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                    </button>
+                    <h4 class="modal-title">警告提示</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="line-height:100px; height: 100px;text-align: center;">
+                        <img src="../images/至少选择.png" style="margin-top: -6px;"></img>
+                        <label id="confirmModalMsg" class="bold-size16">&nbsp;&nbsp;</label>
+                    </div>
+                </div>
+                <div class="modal-footer textcenter">
+                    <button type="button" data-opertype="yes" onclick="confirmBtnClick('yes')"
+                            class="gw-l-button" data-dismiss="modal">确定
+                    </button>
+                    <button type="button" data-opertype="no" onclick="confirmBtnClick('no')"
+                            class="gw-l-button" data-dismiss="modal">取消
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var timeoutId = '000';
+    $(window).resize(function () {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(function () {
+            $('#tb_formulas').bootstrapTable('resetView');
+            $('#tb_conditions').bootstrapTable('resetView');
+        }, 50);
+    });
+
+    // 初始化Table
+    $('#tb_conditions').bootstrapTable({
+        url: "/priceformula/queryConditions", //请求后台的URL（*）
+        method: "post", //请求方式（*）
+        contentType: "application/x-www-form-urlencoded",//post方式必须改请求头
+        striped: true, //是否显示行间隔色
+        cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        clickToSelect: true, //是否启用点击选中行
+//        height: 475, //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        detailView: false, //是否显示父子表
+        uniqueId: "id",
+        height: $(window).height() * 0.7,
+        queryParams: {data: JSON.stringify({})},
+        onLoadSuccess: function () {
+            $('#tb_conditions').bootstrapTable('expandRow', 0);
+        },
+        onExpandRow: function (index, row, $detail) {
+            initSubTable(index, row, $detail);
+        },
+        onCollapseRow: function (index, row) {
+            return false;
+        },
+        columns: [{
+            field: 'id',
+            title: 'id',
+            visible: false,
+            valign: 'middle',
+            align: "center"
+        }, {
+            formatter: function (value, row, index) {
+                return ++index;
+            },
+            title: '序号',
+            valign: 'middle',
+            align: "center",
+            width: "5%"
+        }, {
+            field: 'executefunname',
+            title: '<div style="text-align: center">应用于公式</div>',
+            width: "20%",
+            valign: 'middle',
+            align: "left"
+        }, {
+            field: 'conditionname',
+            title: '参数名',
+            width: "10%",
+            valign: 'middle',
+            align: "center"
+        }, {
+            field: 'startvalue',
+            title: '参数起始值',
+            width: "12.5%",
+            valign: 'middle',
+            align: "center"
+        }, {
+            field: 'endvalue',
+            title: '参数结束值',
+            width: "12.5%",
+            valign: 'middle',
+            align: "center"
+        }, {
+            field: 'submaxpricecount',
+            title: '去掉最高报价(个)',
+            width: "12.5%",
+            valign: 'middle',
+            align: "center"
+        }, {
+            field: 'subminpricecount',
+            title: '去掉最低报价(个)',
+            width: "12.5%",
+            valign: 'middle',
+            align: "center"
+        }, {
+            formatter: function (value, row, index) {
+                var id = row.id;
+                return getOptionLink([
+//                    {text: '新增', id: id, fun: "addConditions"},
+                    {text: '修改', id: id, fun: "updateConditions"},
+                    {text: '删除', id: id, fun: "deleteConditions"}
+                ]);
+            },
+            title: '操作',
+            valign: 'middle',
+            align: "center",
+            width: "15%",
+            visible: parent.window._user.roletype == '1'
+        }]
+    });
+
+
+    $('#tb_formulas').bootstrapTable({
+        url: "/page/bbgs/json/formula/priceFormula.json",          //请求后台的URL（*）
+        method: 'get',                        //请求方式（*）
+        striped: true,                        //是否显示行间隔色
+        cache: false,                         //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        clickToSelect: true,                //是否启用点击选中行
+//        height: 475,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        detailView: false,                   //是否显示父子表
+        uniqueId: "id",
+        height: $(window).height() * 0.3,
+        onLoadSuccess: function () {
+            $('#tb_formulas').bootstrapTable('expandRow', 0);
+        },
+        onExpandRow: function (index, row, $detail) {
+            initSubTable(index, row, $detail);
+        },
+        onCollapseRow: function (index, row) {
+            return false;
+        },
+        columns: [{
+            field: 'id',
+            title: 'id',
+            visible: false,
+            valign: 'middle',
+            align: "center"
+        }, {
+            formatter: function (value, row, index) {
+                return ++index;
+            },
+            title: '序号',
+            valign: 'middle',
+            align: "center",
+            width: "5%"
+        }, {
+            field: 'descript',
+            title: '<div style="text-align: center">公式名称</div>',
+            width: "20%",
+            valign: 'middle',
+            align: "left"
+        }, {
+            field: 'remark',
+            title: '<div style="text-align: center">公式描述</div>',
+            width: "60%",
+            valign: 'middle',
+            align: "left"
+        }, {
+            formatter: function (value, row, index) {
+                var id = row.id
+                return getOptionLink([{text: '新增参数', id: id, fun: "addConditionsByFormula"}]);
+            },
+            title: '操作',
+            valign: 'middle',
+            align: "center",
+            width: "15%",
+            visible: parent.window._user.roletype == '1'
+        }]
+    });
+    $.getJSON("/page/bbgs/json/formula/priceFormula.json", function (data) {
+        loadComboStore("#executefuncombo", data);
+    });
+    $.getJSON("/page/bbgs/json/formula/priceFormula.json", function (data) {
+        data = [{descript: "所有"}].concat(data);
+        loadComboStore("#searchexecutefuncombo", data);
+    });
+
+    $.getJSON("/page/bbgs/json/formula/conditionsType.json", function (data) {
+        loadComboStore("#conditionstypecombo", data);
+    });
+    /**
+     * @param containerId容器id，包含#
+     * @param data，以控件name来取值
+     * */
+    function resetContainer(containerId, data) {
+        data = data || {};
+        var el = $(containerId).find("[fieldtype]");
+        el.each(function () {
+            var conId = containerId;
+            var item = $(this);
+            var fieldtype = item.attr('fieldtype');
+            var name = item.attr("name");
+            if (fieldtype == 'radiogroup') {
+                item.parents(conId).find("[name=" + name + "]:checked").each(function () {
+                    var radio = $(this);
+                    if (data.hasOwnProperty()) {
+                        radio.attr("checked", data[name]);
+                    } else {
+                        radio.attr("checked", false);
+                    }
+                });
+            }
+            if (fieldtype == 'checkboxgroup') {
+                item.parents(conId).find("[name=" + name + "]:checked").each(function () {
+                    var checkbox = $(this);
+                    if (data.hasOwnProperty()) {
+                        checkbox.attr("checked", data[name]);
+                    } else {
+                        checkbox.attr("checked", false);
+                    }
+                });
+            }
+            if (fieldtype == 'combo') {
+                if (data.hasOwnProperty()) {
+                    item.val(data[name]);
+                } else {
+                    item.val('');
+                }
+            }
+            if (fieldtype == 'textfield') {
+                if (data.hasOwnProperty()) {
+                    item.val(data[name]);
+                } else {
+                    item.val('');
+                }
+            }
+            if (fieldtype == 'label') {
+                if (data.hasOwnProperty()) {
+                    item.text(data[name]);
+                } else {
+                    item.text('');
+                }
+            }
+            if (fieldtype == 'hiddenfield') {
+                if (data.hasOwnProperty()) {
+                    item.val(data[name]);
+                } else {
+                    item.val('');
+                }
+            }
+        });
+    }
+    function showConfirmModal(msg, fun) {
+        var window = $("#confirmModal");
+        window.find("#confirmModalMsg").html(msg);
+        window.data("onbtnclick", fun);
+        window.modal('show');
+    }
+    function confirmBtnClick(type) {
+        var window = $("#confirmModal");
+        var fun = window.data("onbtnclick");
+        fun.call(window, type);
+    }
+    /**
+     * @param containerId容器id，包含#
+     * @return 返回以控件name来取值的jsonobject
+     * */
+    function getContainerData(containerId) {
+        var data = {};
+        var el = $(containerId).find("[fieldtype]");
+        el.each(function () {
+            var conId = containerId;
+            var item = $(this);
+            var fieldtype = item.attr('fieldtype');
+            var name = item.attr('name');
+            var textVal = item.text();
+            var nameVal = item.val();
+            data[name] = data[name] || [];
+            if (fieldtype == 'radiogroup') {
+                item.parents(conId).find("[name=" + name + "]:checked").each(function () {
+                    var checkbox = $(this);
+                    data[name].push(checkbox.val());
+                });
+            }
+            if (fieldtype == 'checkboxgroup') {
+                item.parents(conId).find("[name=" + name + "]:checked").each(function () {
+                    var checkbox = $(this);
+                    data[name].push(checkbox.val());
+                });
+            }
+            if (fieldtype == 'combo') {
+                var valueField = item.attr("valueField") || name;
+                var selectedName = item.attr("selectedName");
+                var selections = item.find("option:selected");
+                selections.each(function () {
+                    var op = $(this);
+                    var oprawdata = op.data("rawData");
+                    data[name].push(nameVal);
+                    if (selectedName) {
+                        data[selectedName] = data[selectedName] || [];
+                        data[selectedName].push(oprawdata);
+                    }
+                })
+            }
+            if (fieldtype == 'textfield') {
+                data[name].push(nameVal);
+            }
+            if (fieldtype == 'label') {
+                data[name].push(textVal);
+            }
+            if (fieldtype == 'hiddenfield') {
+                data[name].push(nameVal);
+            }
+        });
+        for (var k in data) {
+            if (data[k].length <= 1) {
+                data[k] = data[k][0];
+            }
+        }
+        return data;
+    }
+    /**
+     * @param containerId容器id，包含#
+     * @param data，以控件name来赋值
+     * */
+    function setContainerData(containerId, data) {
+        data = data || {};
+        var el = $(containerId).find("[fieldtype]");
+        el.each(function () {
+            var conId = containerId;
+            var item = $(this);
+            var fieldtype = item.attr('fieldtype');
+            var name = item.attr('name');
+            var val = data[name];
+            if (data.hasOwnProperty(name)) {
+                if (fieldtype == 'radiogroup') {
+                    item.parents(conId).find("[name=" + name + "][value=" + val + "]").attr("checked", true);
+                }
+                if (fieldtype == 'checkboxgroup') {
+                    item.parents(conId).find("[name=" + name + "]").each(function () {
+                        if (val.indexOf($(this).val()) > -1) {
+                            $(this).attr("checked", true);
+                        }
+                    })
+                }
+                if (fieldtype == 'combo') {
+                    item.val(val);
+                }
+                if (fieldtype == 'textfield') {
+                    item.val(val);
+                }
+                if (fieldtype == 'label') {
+                    item.text(val);
+                }
+                if (fieldtype == 'hiddenfield') {
+                    item.val(val);
+                }
+            }
+        });
+    }
+    /**
+     * @param comboid，下拉控件id，包含#
+     * @param arr，数组
+     * */
+    function loadComboStore(comboid, arr) {
+        var el = $(comboid);
+        var displayField = el.attr("displayField");
+        var valueField = el.attr("valueField");
+        el.empty();
+
+        for (var i = 0; i < arr.length; i++) {
+            var obj = arr[i];
+            var option = $("<OPTION>");
+            option.text(obj[displayField]);
+            option.val(obj[valueField]);
+            option.data("rawData", obj);
+            el.append(option);
+        }
+        el.data("store", arr);
+    }
+    /**
+     * @param comboid，下拉控件id，包含#
+     * @param field，查找字段
+     * @param value，查找值
+     * @return 返回第一条匹配的，如果没有则返回的是undefined
+     * */
+    function findRecord(comboid, field, value) {
+        return findRecordInCombo(comboid, field, value)[0];
+    }
+    /**
+     * @param comboid，下拉控件id，包含#
+     * @param field，查找字段
+     * @param value，查找值
+     * @return 返回匹配的数组，没有匹配则是空数组
+     * */
+    function findRecordInCombo(comboid, field, value) {
+        var el = $(comboid);
+        var store = el.data("store");
+        var arr = [];
+        for (var i = 0; i < store.length; i++) {
+            var obj = $.extend({}, store[i]);
+            if (obj[field] == value) {
+                arr.push(obj);
+            }
+        }
+        return arr;
+    }
+    function getTextField(data) {
+        var r = [];
+        r.push('<td class="textright pl10"><label>' + data.fieldLabel + '</label></td>');
+        r.push('<td class="textleft pl10"><input class="width' + data.width + '" id="' + data.id + '" name="' + data.name + '"');
+        r.push('placeholder="' + data.emptyText + '"></td>');
+        return r.join('');
+    }
+    function getOptionLink(arr) {
+        var r = [];
+        for (var i = 0; i < arr.length; i++) {
+            var item = "<a class='headCss' data-toggle='modal' data-target='#queryModal' onclick='" + arr[i].fun + "(\"" + arr[i].id + "\")\'>" + arr[i].text + "</a>";
+            r.push(item);
+        }
+        return r.join("|");
+    }
+    // table序号函数
+    function indexFormatter(value, row, index) {
+        return index + 1;
+    }
+    // 内容右对齐
+    function rightFormatter(value, row, index) {
+        return "<div style='text-align: right'>" + value + "</div>";
+    }
+    function height() {
+        return 500;
+    }
+    function resetEmpty() {
+        $("#tb_conditions").bootstrapTable('removeAll');
+        $("#importExcelBtn").removeAttr("disabled")
+    }
+
+    function addConditions(id) {
+        $("#editConditionModal").modal();
+        $("#editConditionModal").data("edittype", "add");
+        setContainerData("#editConditionModal", {id: "", endvalue: 10000});
+    }
+    function addConditionsByFormula(id) {
+        $("#editConditionModal").modal();
+        $("#editConditionModal").data("edittype", "add");
+        var formulainfo = $("#tb_formulas").bootstrapTable("getRowByUniqueId", id)
+        var conditionsdefault = findRecord("#conditionstypecombo", "type", formulainfo.type) || {};
+        setContainerData("#editConditionModal", {
+            endvalue: 10000,
+            executefunid: formulainfo.id,
+            conditionid: conditionsdefault.id
+        });
+    }
+    function updateConditions(id) {
+        $("#editConditionModal").modal();
+        $("#editConditionModal").data("edittype", "update");
+        setContainerData("#editConditionModal", $("#tb_conditions").bootstrapTable("getRowByUniqueId", id));
+    }
+    function queryConditions() {
+        var data = getContainerData("#searchtoolbar");
+        $("#tb_conditions").bootstrapTable("refresh", {
+            query: {data: JSON.stringify(data)}
+        });
+    }
+    function checkEditedCondition(data) {
+        var el = $("#tb_conditions");
+        var all = el.bootstrapTable("getData");
+        for (var i = 0; i < all.length; i++) {
+            var obj = all[i];
+            var objstart = parseFloat(obj.startvalue);
+            var objend = parseFloat(obj.endvalue);
+            var datastart = parseFloat(data.startvalue);
+            var dataend = parseFloat(data.endvalue);
+            if (obj.id != data.id && obj.conditionid == data.conditionid && obj.executefunid == data.executefunid) {
+                //相交
+                if (data.conditionid == "1") {
+                    //参数M，start<=M<end，即结束值可以等于其他范围的起始值，起始值可以等于其他范围的结束值
+                    if (!(( dataend <= objstart) || (objend <= datastart))) {
+                        alertModal("存在相交的 起始 ~ 结束 范围<BR>参数M，start&lt;=M&lt;end，即结束值可以等于其他<BR>范围的起始值，起始值可以等于其他范围的结束值!");
+                        return false;
+                    }
+                } else if (data.conditionid == "2") {
+                    //参数N，start<=N<=end，即结束值不可以等于其他范围的起始值，起始值不可以等于其他范围的结束值
+                    if (!(( dataend < objstart) || (objend < datastart))) {
+                        alertModal("存在相交的 起始 ~ 结束 范围<BR>服务类公式参数N的起始值或结束值不允许被包含在其他条件范围内!");
+                        return false;
+                    }
+
+                }
+            }
+        }
+        return true;
+    }
+    function isArray(value) {
+        return Object.prototype.toString.call(value) === '[object Array]';
+    }
+    function alertModal(str) {
+        $("#NoticeShow").html(str);
+        $("#NoticeModal").modal();
+    }
+    function isObject(value) {
+        var toString = Object.prototype.toString;
+        var result;
+        if (toString.call(null) === '[object Object]')
+            result = value !== null && value !== undefined && toString.call(value) === '[object Object]' && value.ownerDocument === undefined;
+        else
+            result = toString.call(value) === '[object Object]';
+        return result;
+    }
+    function saveConditions() {
+        var window = $("#editConditionModal");
+        var formData = getContainerData("#editConditionModal");
+        var type = $("#editConditionModal").data("edittype");
+        formData["executefun"] = formData["executefunlist"].formulafun;
+        formData["executefunid"] = formData["executefunlist"].id;
+        formData["executefunname"] = formData["executefunlist"].descript;
+        formData["conditionname"] = formData["conditionslist"].name;
+        formData["conditionid"] = formData["conditionslist"].id;
+        if (parseFloat(formData.startvalue) > parseFloat(formData.endvalue)) {
+            alertModal("起始值不能大于结束值");
+            return;
+        }
+        if (formData.conditionid == '1' && formData.startvalue == formData.endvalue) {
+            //物资参数M,后台是使用start<=M<end，要是相等的话
+            alertModal("参数M起始值不能等于结束值");
+            return;
+        }
+        if (!checkEditedCondition(formData)) {
+            return;
+        }
+        $.ajax({
+            url: "/priceformula/saveConditions",
+            type: 'POST',
+            data: {data: JSON.stringify(formData), edittype: type},
+            beforeSend: function () {
+            },
+            success: function (responseStr) {
+                var result = JSON.parse(responseStr)
+                if (result.success) {
+                    alertModal("保存成功");
+                    $("#editConditionModal").modal('hide');
+                    $('#tb_conditions').bootstrapTable('refresh');
+                } else {
+                }
+            },
+            error: function (responseStr) {
+                console.log(responseStr);
+            }
+        });
+
+    }
+
+
+    function deleteConditions(id) {
+        showConfirmModal("是否确认删除", function (type) {
+            var win = this;
+            if (type == "yes") {
+                $.ajax({
+                    url: "/priceformula/deleteFormulaConditions",
+                    type: 'POST',
+                    data: {id: id, edittype: 'delete'},
+                    beforeSend: function () {
+                    },
+                    success: function (responseStr) {
+                        var result = JSON.parse(responseStr)
+                        if (result.success) {
+                            alertModal("删除成功");
+                            $(win).modal('hide');
+                            $('#tb_conditions').bootstrapTable('refresh');
+                        } else {
+                        }
+                    },
+                    error: function (responseStr) {
+                        console.log("error");
+                    }
+                });
+            } else {
+                $(win).modal('hide');
+            }
+        });
+
+    }
+    function createWindow(cfg) {
+        var win = $("<div>");
+        var parent, child, temp;
+        win.attr({
+            id: cfg.id,
+            tabindex: -1,
+            role: 'dialog',
+            class: cfg.class || "modal fade bootstrapModalDesign inputCss"
+        });
+        win.css(cfg.style || "");
+        child = $("<div>").attr({class: "modal-dialog", role: "document"});
+        child.appendTo(win);
+        parent = child;
+        child = $("<div>").addClass("modal-content");
+        child.appendTo(parent);
+        parent = child;
+        var header = $("<div>").addClass("modal-header");
+        header.append('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+        header.append('<h4 class="modal-title">' + (cfg.title || "弹出窗") + '</h4>');
+        header.appendTo(parent);
+        var body = $("<div>").addClass("modal-body");
+        body.append($("<form>").attr("method", "post").attr("id", cfg.formId).css(cfg.formStyle));
+    }
+</script>
+</body>
+</html>

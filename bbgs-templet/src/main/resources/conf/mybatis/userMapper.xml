@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.templet.dao.loginDao">
+    <sql id="DefaultTableName">TBL_BBGS_USER</sql>
+    <sql id="DefaultSelects"> USERNAME , USERPASSWORD , REALNAME , ROLETYPE</sql>
+    <resultMap id="DefaultResultMap" type="cn.com.hqep.templet.model.tblBbgsUser">
+        <result column="USERNAME" jdbcType="VARCHAR" property="username"/>
+        <result column="USERPASSWORD" jdbcType="VARCHAR" property="userpassword"/>
+        <result column="REALNAME" jdbcType="VARCHAR" property="realname"/>
+        <result column="ROLETYPE" jdbcType="VARCHAR" property="roletype"/>
+    </resultMap>
+    <select id="queryUser" resultMap="DefaultResultMap">
+        SELECT
+        <include refid="DefaultSelects"/>
+        FROM
+        <include refid="DefaultTableName"/>
+        <trim prefix="where" prefixOverrides="and">
+            <if test="username != null">
+                USERNAME = #{username,jdbcType=VARCHAR}
+            </if>
+            <if test="userpassword != null">
+                AND USERPASSWORD = #{userpassword,jdbcType=VARCHAR}
+            </if>
+            <if test="realname != null">
+                AND REALNAME = #{realname,jdbcType=VARCHAR}
+            </if>
+            <if test="roletype != null">
+                AND ROLETYPE = #{roletype,jdbcType=VARCHAR}
+            </if>
+
+        </trim>
+    </select>
+</mapper>

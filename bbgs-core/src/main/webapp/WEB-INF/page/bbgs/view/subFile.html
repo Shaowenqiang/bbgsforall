@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>导入第一批数据样例页</title>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" href="../css/subFileCss.css">
+
+    <script src="../plugins/jquery-1.9.1.min.js"></script>
+    <script src="../plugins/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="../plugins/bootstrap-table/bootstrap-table.js"></script>
+    <script src="../plugins/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+
+    <script src="../plugins/underscore-min.js"></script>
+</head>
+<body id="body_subFile">
+<div>
+    <div style="border: 1px solid #cccccc;padding: 10px;background-color: #ffffff;">
+        <div style="border: 1px solid #cccccc;border-radius: 5px;width: 300px;float: left;line-height: 30px;height: 32px;" class="b-upload">
+            <div style="float: left">
+                <input id="showFileInfo" style="background: white;padding-left: 10px;height: 30px;border: 0px solid white;width: 100%"
+                       placeholder="请上传文件" disabled>
+            </div>
+            <a href="javascript:;" class="a-upload" style="float: right">
+                <!--<input type="file" id="exampleInputFile" name="file">-->
+                <input  type="file" name="file" id="file">
+                文件上传
+            </a>
+        </div>
+        <div style="float: right;margin-bottom: 10px; ">
+            <button class="gw-l-button" id="importExcelBtn" disabled="disabled">导入</button>
+        </div>
+        <br/>
+
+        <div class="tableThCss">
+            <table class="table table-hover table-striped table-responsive "
+
+                   data-toggle="table"
+                   data-url="/page/bbgs/json/data3.json"
+                   id="tb_ownMaintainStrategy">
+                <thead>
+                <tr>
+                    <!--data-visible="false"-->
+                    <!--<th data-width="34" data-align="center" data-checkbox="true"></th>-->
+                    <th data-width="56" data-align="center" data-formatter="indexFormatter">序号</th>
+                    <th data-field="id" data-visible="false">ID</th>
+                    <th data-field="segm" data-align="center" data-formatter="rightFormatter" >包段</th>
+                    <!--<th data-field="bag" data-formatter="rightFormatter">包号</th>-->
+                    <th data-field="name" data-align="center" >供应商名称</th>
+                    <th data-field="tel" data-align="center" data-formatter="rightFormatter">联系方式</th>
+                    <th data-field="eml" data-align="center" data-formatter="rightFormatter">电子邮箱</th>
+                    <th data-field="ism" data-align="center">是否付款</th>
+                    <th data-field="issend"  data-align="center">是否发送</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+
+<script>
+    $("#tb_ownMaintainStrategy").bootstrapTable({
+        height:($(window).height() - 46)
+    })
+    //上传样式修改后的 把文件名显示的方法
+    $(".a-upload").on("change","input[type='file']",function(){
+        var filePath=$(this).val();
+        if(filePath.indexOf("xlsx")!==-1 || filePath.indexOf("xlsx")!==-1){
+            var arr=filePath.split('\\');
+            var fileName=arr[arr.length-1];
+            $("#showFileInfo").val(fileName);
+        }else if(filePath.length == 0){
+            $(".showFileInfo").val("您未上传文件");
+            return false;
+        }else{
+            $("#showFileInfo").val("您上传文件类型有误！");
+            return false;
+        }
+    });
+    // table序号函数
+    function indexFormatter(value, row, index) {
+        return index + 1;
+    }
+    // 内容右对齐
+    function rightFormatter(value, row, index) {
+
+        return "<div style='text-align: right'>"+value+"</div>";
+    }
+    function  height() {
+        return 500;
+    }
+    function resetEmpty() {
+        $("#tb_ownMaintainStrategy").bootstrapTable('removeAll');
+        $("#importExcelBtn").removeAttr("disabled")
+    }
+    $("#importExcelBtn").click(function () {
+        var allTableData =  $("#tb_ownMaintainStrategy").bootstrapTable('getData');
+        console.log(1)
+        if (_.isEmpty(allTableData)){
+            //执行excle导入操作
+            var formData = new FormData();
+            var name = $("#showFileInfo").val();
+            formData.append("file",$("#file")[0].files[0]);
+            formData.append("name",name);
+            $.ajax({
+                url : '/ExcelImport/ExcelImport',
+                type : 'POST',
+                data : formData,
+// 告诉jQuery不要去处理发送的数据
+                processData : false,
+// 告诉jQuery不要去设置Content-Type请求头
+                contentType : false,
+                beforeSend:function(){
+                    console.log("正在进行，请稍候");
+                },
+                success : function(responseStr) {
+                    if(responseStr === 'success'){
+                        console.log("成功"+responseStr);
+                    }else{
+                        console.log("失败");
+                    }
+                },
+                error : function(responseStr) {
+                    console.log("error");
+                }
+            });
+        }else {
+            parent.window.alertModal("清空数据后才能重新导入！");
+        }
+    })
+
+</script>
+</body>
+</html>

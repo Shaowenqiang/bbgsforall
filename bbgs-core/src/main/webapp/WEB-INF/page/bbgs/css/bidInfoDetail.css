@@ -1,0 +1,124 @@
+html, body {
+    font-size: 16px;
+    overflow: hidden;
+}
+
+a {
+    color: #108EE9;
+}
+
+a:hover {
+    outline-style: none;
+    text-underline: none;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:active {
+    text-decoration: none;
+}
+
+/** 每一个层的容器         */
+.containerMine {
+    display: flex;
+    margin: 8px;
+}
+
+.flexForm {
+    display: flex;
+}
+
+.flexForm label {
+    flex: 0;
+    line-height: 32px;
+    text-align: right;
+    vert-align: middle;
+    font-weight: normal;
+    white-space: nowrap;
+}
+
+.flexForm input {
+    flex: 1;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 3px;
+}
+
+.flexForm select {
+    flex: 1;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-color: rgb(204, 204, 204);
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.flexColumn {
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+}
+
+.flexRow {
+    display: inline-flex;
+    height: 32px;
+}
+
+.flexSpace {
+    display: inline-flex;
+    justify-content: space-between;
+}
+
+.flexRow .form-control {
+    height: 32px;
+    width: 196px;
+}
+
+select > option {
+    font-size: 16px;
+}
+
+.mt8 {
+    margin-top: 8px;
+}
+
+.ml3 {
+    margin-left: 3px;
+}
+
+.ml8 {
+    margin-left: 8px;
+}
+
+.gw-l-button {
+    height: 32px;
+}
+
+.flex1 {
+    flex: 1;
+}
+
+.bootstrap-table {
+    width: 100%;
+}
+
+.flex0 {
+    flex: 0;
+}
+
+.pl16 {
+    padding-left: 16px;
+}

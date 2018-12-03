@@ -1,0 +1,102 @@
+/*科东table样式*/
+/*更改bootstrap的table表头**/
+.bootstrapTableCssDesign {
+
+}
+
+.bootstrapTableCssDesign .fixed-table-container thead th .th-inner {
+    height: 36px;
+    background-color: #18ab8e;
+    color: white;
+}
+
+.bootstrapTableCssDesign .bootstrap-table .table:not(.table-condensed) > tbody > tr > td {
+    padding: 0 0 0 6px;
+    line-height: 31px;
+    height: 32px;
+}
+
+/*奇偶变色-奇*/
+.bootstrapTableCssDesign .table-striped > tbody > tr:nth-of-type(odd) {
+    /*background-color: #eeeced;*/
+    background-color: #ffffff;
+}
+
+/*奇偶变色-偶*/
+.bootstrapTableCssDesign .table-striped > tbody > tr:nth-of-type(even) {
+    /*background-color: #f5f5f5;*/
+    background-color: #f5f5f5;
+}
+
+/**表格悬浮样式*/
+.bootstrapTableCssDesign .table-hover > tbody > tr:hover > td {
+    background-color: #c6f3ee;
+}
+
+/*表格选中样式 */
+.bootstrapTableCssDesign .fixed-table-container tbody .selected td {
+    background-color: #c6f3ee;
+}
+
+/**表格隐藏页容量（不能改变页容量pageSize）*/
+.bootstrapTableCssDesign .fixed-table-pagination .page-list {
+    display: none;
+}
+
+/*
+    一套bootable-table的表格样式
+    参照科东项目设计样式
+**/
+/*更改bootstrap的 子表 table表头**/
+.bootstrapTableSonCssDesign {
+
+}
+
+.bootstrapTableSonCssDesign .fixed-table-container thead th .th-inner {
+    height: 36px;
+    background-color: #e2e2e2;
+    color: #333333;
+}
+
+.bootstrapTableSonCssDesign .bootstrap-table .table:not(.table-condensed) > tbody > tr > td {
+    padding: 0 0 0 6px;
+    line-height: 31px;
+    height: 32px;
+}
+
+/*奇偶变色-奇*/
+.bootstrapTableSonCssDesign .table-striped > tbody > tr:nth-of-type(odd) {
+    /*background-color: #eeeced;*/
+    background-color: #ffffff;
+}
+
+/*奇偶变色-偶*/
+.bootstrapTableSonCssDesign .table-striped > tbody > tr:nth-of-type(even) {
+    /*background-color: #f5f5f5;*/
+    background-color: #eeeeee;
+}
+
+/**表格悬浮样式*/
+.bootstrapTableSonCssDesign .table-hover > tbody > tr:hover > td {
+    background-color: #eeeeee;
+}
+
+/*表格选中样式 */
+.bootstrapTableSonCssDesign .fixed-table-container tbody .selected td {
+    background-color: #eeeeee;
+}
+
+/**表格隐藏页容量（不能改变页容量pageSize）*/
+.bootstrapTableSonCssDesign .fixed-table-pagination .page-list {
+    display: none;
+}
+
+/*隐藏表头*/
+.hideTh .fixed-table-container thead th .th-inner {
+    display: none;
+}
+
+/* 显示表头*/
+.showTh .fixed-table-container thead th .th-inner {
+    display: block;
+}

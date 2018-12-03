@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.templet.dao.flowStateDao">
+    <select id="queryMinIdByState" resultType="cn.com.hqep.templet.model.tblBbgsFlowStateModel">
+        SELECT MIN(id) id,alert_message alertMessage from tbl_bbgs_flow_state where flow_state = '0'
+    </select>
+    <update id="updateStateById">
+        UPDATE TBL_BBGS_FLOW_STATE SET flow_state = #{state}
+        <if test="id != null">
+           WHERE id = #{id}
+        </if>
+    </update>
+
+</mapper>

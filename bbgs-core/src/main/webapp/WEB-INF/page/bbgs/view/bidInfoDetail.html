@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模板明细</title>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" href="../css/boostrapTableCss.css">
+    <link rel="stylesheet" href="../css/bidInfoDetail.css">
+</head>
+<body>
+
+<div class="flexForm containerMine">
+    <div class="flexColumn flex1">
+        <div class="flexRow">
+            <label>模板类别：</label>
+            <select id="templateType" onclick="clickType()" title="">
+                <option>=== 请选择 ===</option>
+                <option value="0">技术评分表模板</option>
+                <option value="1" onclick="clickType()">商务评分表模板</option>
+                <option value="2" onclick="clickType()">报价评分表模板</option>
+                <option value="3" onclick="clickType()">技术阅览记录模板</option>
+                <option value="4" onclick="clickType()">技术阅览记录模板</option>
+                <option value="5" onclick="clickType()">投标人清单模板</option>
+            </select>
+        </div>
+        <div class="flexRow mt8">
+            <label>模板名称：</label>
+            <select id="templateName" title="">
+                <option>=== 请选择 ===</option>
+            </select>
+        </div>
+    </div>
+    <div class="flexColumn flex1 pl16">
+        <div class="flexRow">
+            <label>技术专家组：</label>
+            <select class="" id="expertGroup_t" title="">
+                <option value>=== 请选择 ===</option>
+            </select>
+        </div>
+        <div class="flexRow mt8">
+            <label>商务专家组：</label>
+            <select id="expertGroup_b" title="">
+                <option value>=== 请选择 ===</option>
+            </select>
+        </div>
+    </div>
+    <div class="flexColumn flex1 pl16">
+        <div class="flexRow">
+            <label>标段简称：</label>
+            <input class="form-control" id="bidName" oninput="selectTable()" title=""/>
+        </div>
+        <div class="flexSpace mt8 ">
+            <div>
+                <button class="gw-l-button" onclick="selectTable()">查询</button>
+                <button class="gw-l-button ml3" onclick="resetZero()">重置</button>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="containerMine bootstrapTableCssDesign flex1">
+    <table id="table"></table>
+</div>
+<div id="data"></div>
+<script src="../plugins/jquery-1.9.1.min.js"></script>
+<script src="../plugins/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="../plugins/bootstrap-table/bootstrap-table.js"></script>
+<script src="../plugins/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+<script src="../js/bidInfoDetail.js"></script>
+</body>
+</html>

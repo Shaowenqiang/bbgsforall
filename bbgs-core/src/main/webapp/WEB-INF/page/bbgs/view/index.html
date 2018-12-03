@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.3.7/css/bootstrap.css">
+    <link rel="stylesheet" href="../css/iconfont.css">
+    <link rel="stylesheet"
+          href="../plugins/zTree_v3/css/zTreeStyle/zTreeStyle.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/modalCSS.css">
+    <link rel="stylesheet" href="../css/templateDemoCss.css">
+    <link rel="stylesheet" href="../css/inputFileCss.css">
+    <link rel="stylesheet" href="../css/button.css">
+    <link rel="stylesheet" href="../plugins/enjoyhint/enjoyhint.css">
+    <style>
+        .inputFileWrapper label{
+            display: block;
+            float: left;
+            position: relative;
+        }
+        .inputFileWrapper input[type="file"]{
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            clip:rect(0,0,0,0);
+        }
+        .inputFileWrapper .custorm-style{
+            height: 50px;
+        }
+        .inputFileWrapper .custorm-style .left-button{
+            -moz-border-radius-topleft: 4px;
+            width: 80px;
+            line-height: 32px;
+            background: #1bab8f;
+            color: #fff;
+            display: block;
+            text-align: center;
+            float: left;
+        }
+        .inputFileWrapper .custorm-style .left-button:hover{
+            background:#d75000;
+        }
+        .inputFileWrapper .custorm-style .right-text{
+            width: 437px;
+            height: 32px;
+            line-height: 32px;
+            float: right;
+            border: 1px solid #cccccc;
+            overflow: hidden;
+            text-align: right;
+            padding-right: 8px;
+            -ms-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="logo"><img src="../img/LOGO-1.png"></div>
+    <div class="borderLine"></div>
+    <div class="logoText">招标智能评分系统</div>
+    <div class="rightInfo text-center">
+        <h4 class="text-center flexbox" id="infoTittle"></h4>
+    </div>
+    <div id="login-area">
+        <ul class="logined">
+            <li class="user-card-box">
+                <div class="dropdown">
+                    <a href="#" id="user-dropdown" data-target="#" role="button" aria-haspopup="true"
+                       aria-expanded="false" class="dropdown-toggle" data-toggle="dropdown">
+                        <img width="39" height="39" src="../images/touxiang.png"/>
+                        <span id="loginName">管理员</span>
+                        <i class="iconfont icon-index"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" onclick="userHelper()">用户手册下载</a></li>
+                        <li><a href="#" id="rightInfoBtn"
+                               onclick="$('#delAllModal').modal();$.post('/basicInfo/backup')">清空数据</a></li>
+                        <li><a href="#" onclick="loginOut()">退出</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</header>
+<div class="containerBox">
+    <div class="left" id="left">
+        <div class="l-tree">
+            <div id="fixDiv"></div>
+            <ul id="treeDemo" class="ztree"></ul>
+        </div>
+    </div>
+    <div class="right" id="right">
+        <!--Tab区-->
+        <div class="tabNav">
+            <!--Tab页 title区-->
+            <ul id="myTab" class="nav nav-tabs">
+                <div class="dropdown" style="float: right;margin-right: 10px">
+                    <a href="#" id="myTabDrop1" class="dropdown-toggle"
+                       data-toggle="dropdown">
+                        <b class="caret"></b>
+                    </a>
+                    <ul id="tabs_dropdown" class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+                        <li><a tabindex="-1" class="dorpdown_item1" data-toggle="tab" onclick="closeAllTab()">关闭所有</a>
+                        </li>
+                        <li style="border-bottom: 1px #aaaaaa dotted"><a tabindex="-1" class="dorpdown_item1"
+                                                                         data-toggle="tab"
+                                                                         onclick="intoIndex()">进入首页</a>
+                        </li>
+                    </ul>
+                </div>
+            </ul>
+            <!--Tab页内容区-->
+            <div id="myTabContent" class="tab-content">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 新增模版 start -->
+
+<div class="modal fade bootstrapModalDesign inputCss" id="addTemplateModal" tabindex="-1" role="dialog"
+     data-backdrop="static"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width: 535px;top: 120px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">新增模版</h4>
+            </div>
+            <div class="modal-body">
+                <form id="addDataSourceForm" onsubmit="saveReport()" class="flexColumn" method="post"
+                      enctype="multipart/form-data">
+                    <div class="flexRow m8">
+                        <label>模版名称：</label>
+                        <input type="text" id="DemoName" name="templateName" placeholder="请输入模版名称">
+                    </div>
+                    <input type="text" style="display:none" id="templetParentId" name="templetParentId"
+                           placeholder="请输入模版名称">
+                    <div class="flexRow m8">
+                        <div class="inputFileWrapper">
+                            <label for="inputFile">
+                                <input type="file" id="inputFile" name="file"/>
+                                <span class="custorm-style">
+                                 <span class="left-button">文件上传</span>
+                                 <span class="right-text" id="rightText"></span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" onclick="saveDemo()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 新增模版 end -->
+<!-- 修改模版 start -->
+<div class="modal fade bootstrapModalDesign inputCss" id="editDemoModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width: 570px;top: 120px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">修改模版</h4>
+            </div>
+            <div class="modal-body">
+                <label class="flexbox ml10">模版名称：</label>
+                <input class="flexbox" placeholder="请输入模版名称">
+                <label class="flexbox ml15">模版描述：</label>
+                <span class="flexbox">
+                                  <textarea class="textarea_mine" placeholder="请输入模版描述"></textarea>
+                               </span>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" data-dismiss="modal">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 修改模版 end -->
+<div class="modal fade DataSourceModal" id="delAllModal" data-backdrop="static"
+     tabindex="-1" role="dialog" aria-labelledby="delAllModal">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;top: 120px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/垃圾桶.png" style="margin-top: -6px;"><label
+                        class="bold-size16">&nbsp;&nbsp;确定要删除所有数据吗？</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button mr10" data-dismiss="modal" onclick="delAllData()">确定</button>
+                <button type="button" class="gw-l-button" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 是否确认删除  end -->
+<!-- 是否确认删除 start -->
+<div id="deleteId" style="display: none"></div>
+<div class="modal fade DataSourceModal" id="promptChoiseModal" data-backdrop="static"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;top: 120px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/垃圾桶.png" style="margin-top: -6px;"><label
+                        class="bold-size16">&nbsp;&nbsp;是否确认删除？</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" data-dismiss="modal" onclick="confirmDel()">确定</button>
+                <button type="button" class="gw-l-button" data-dismiss="modal" style="margin-left: 10px;">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 是否确认删除  end -->
+<!-- 不能为空 start -->
+<div class="modal fade DataSourceModal" id="NoticeModal" data-backdrop="static"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;top: 120px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex;flex-direction: row;height: 100px; align-items: center;justify-content: center;">
+                    <div><img src="../images/操作失败.png" style="margin-left: 16px;height: 25px;"/></div>
+                    <div id="NoticeShow"
+                         style="font-size: 16px;font-weight:bold;max-width: 210px;padding: 10px;display:block;"></div>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" data-dismiss="modal">确定</button>
+                <!--<button type="button" class="gw-l-button" data-dismiss="modal">取消</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 不能为空  end -->
+<!-- 操作成功 start -->
+<div class="modal fade DataSourceModal" id="promptSuccessModal" data-backdrop="static"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;top: 120px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/创建成功.png" style="margin-top: -6px;"><label
+                        class="bold-size16">&nbsp;&nbsp;<span id="successText"></span></label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" data-dismiss="modal">知道了</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 操作成功  end -->
+<!-- 导入中 start -->
+<div class="modal fade DataSourceModal" id="importingModal" data-backdrop="static"
+     tabindex="-1" role="dialog" aria-labelledby="importingModal">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;top: 120px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="textcenter" style="margin-bottom:15px">
+                    <div class="textcenter bold-size18" style="margin-top:10px">&nbsp;&nbsp;进行中！</div>
+                    <img src="../img/waitImg.gif" style="margin-bottom:0px;margin-top:10px" width="" height=""/>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 操作成功  end -->
+<!--删除权重-->
+<div class="modal fade DataSourceModal" id="delWeightModal" data-backdrop="static"
+     tabindex="-1" role="dialog" aria-labelledby="delWeightModal">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;top: 120px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/垃圾桶.png" style="margin-top: -6px;"><label
+                        class="bold-size16">&nbsp;&nbsp;是否删除？</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button mr10" data-dismiss="modal" onclick="deletePercent()">确定
+                </button>
+                <button type="button" class="gw-l-button" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="box" class="box">
+    <div class="loader">
+        <div class="loading-3">
+            <i></i> <i></i> <i></i> <i></i> <i></i> <i></i> <i></i> <i></i>
+        </div>
+        <div id="desc" class="desc">请稍等</div>
+    </div>
+</div>
+<!-- 操作成功 start -->
+<div class="modal fade bootstrapModalDesign" id="expertPromptSuccessModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="margin-top: 120px">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/创建成功.png" style="margin-top: -6px;"><label id="optionSucc"
+                                                                                         class="bold-size16">&nbsp;&nbsp;操作成功！</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" id="successKnown" class="gw-l-button" style="margin: 0 auto; display: block;"
+                        data-dismiss="modal">知道了
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 操作成功  end -->
+
+<!-- 不能为空 start -->
+<div class="modal fade bootstrapModalDesign" id="delNoticeModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="margin-top: 120px">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">警告提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="height: 100px;text-align: center;vertical-align: middle;display: flex">
+                    <div style="flex: 0;display:flex;justify-content: center;align-items: center">
+                        <img src="../images/垃圾桶.png" style="margin-left: 30px;margin-right:10px">
+                    </div>
+                    <div style="flex: 1;display:flex;align-items: center">
+                        <label id="optionDel" class="bold-size16">&nbsp;&nbsp;</label>
+
+                    </div>
+
+                  </div>
+            </div>
+            <div class="modal-footer textcenter" id="delBtn">
+                <button type="button" style="margin: 0 auto; display: block;" class="gw-l-button" data-dismiss="modal">
+                    确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 不能为空  end -->
+
+<!--删除标段信息-->
+<div class="modal fade DataSourceModal" id="delBidDetail" data-backdrop="static"
+     tabindex="-1" role="dialog" aria-labelledby="delBidDetail">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;top: 120px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/垃圾桶.png" style="margin-top: -6px;"><label
+                        class="bold-size16">&nbsp;&nbsp;是否删除？</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button mr10" data-dismiss="modal" onclick="delBidDetail()">确定</button>
+                <button type="button" class="gw-l-button" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--删除标段信息结束-->
+<!--删除所有专家组、专家开始-->
+<div class="modal fade DataSourceModal" id="delAllExpertModal" data-backdrop="static"
+     tabindex="-1" role="dialog" aria-labelledby="delAllExpertModal">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;top: 120px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/垃圾桶.png" style="margin-top: -6px;"><label
+                        class="bold-size16">&nbsp;&nbsp;是否删除全部专家组、专家？</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button mr10" data-dismiss="modal" onclick="delAllExpert()">确定</button>
+                <button type="button" class="gw-l-button" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--删除所有专家组、专家结束-->
+<div id="stepA" class="stepA"></div>
+<!-- sssJL modal start -->
+<!-- 是否确认流标 start -->
+<div class="modal fade bootstrapModalDesign" id="promptBidModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;top: 120px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/垃圾桶.png" style="margin-top: -6px;"><label
+                        class="bold-size16" id="optionBid">&nbsp;&nbsp;</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button mr10" id="btn_promptBid">确定</button>
+                <button type="button" class="gw-l-button" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 是否确认流标  end -->
+
+<!-- 至少选择一条 start -->
+<div class="modal fade bootstrapModalDesign" id="promptLessOneModal"
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document"
+         style="width: 260px;;top: 120px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true" class="iconfont icon-typecar"></span>
+                </button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <div style="line-height:100px; height: 100px;text-align: center;">
+                    <img src="../images/至少选择.png" style="margin-top: -6px;"><label
+                        class="bold-size16">&nbsp;&nbsp;至少选择一条记录！</label>
+                </div>
+            </div>
+            <div class="modal-footer textcenter">
+                <button type="button" class="gw-l-button" data-dismiss="modal">知道了</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 至少选择一条  end -->
+
+
+<!-- sssJL modal end -->
+<script src="../plugins/jquery-1.9.1.min.js"></script>
+<script src="../plugins/enjoyhint/enjoyhint.min.js"></script>
+<script src="../plugins/jquery.form.js"></script>
+<script type="text/javascript"
+        src="../plugins/zTree_v3/js/jquery.ztree.core.min.js"></script>
+<script src="../plugins/zTree_v3/js/jquery.ztree.exedit.js"></script>
+<script src="../plugins/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="../js/index.js"></script>
+<script src="../js/tabPage.js"></script>
+<script src="../js/templateOfIndex.js"></script>
+<script src="../js/basicInfoOfIndex.js"></script>
+<script src="../js/progressOfIndex.js"></script>
+<script src="../js/expertOfIndex.js"></script>
+<script src="../js/bidInfoDetailOfIndex.js"></script>
+</body>
+</html>

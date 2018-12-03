@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>中标结果展示</title>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" href="../css/supplierWinInfoCss.css">
+    <link rel="stylesheet" href="../css/button.css">
+    <script src="../plugins/jquery-1.9.1.min.js"></script>
+    <script src="../plugins/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="../plugins/bootstrap-table/bootstrap-table.js"></script>
+    <script src="../plugins/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+
+    <script src="../plugins/underscore-min.js"></script>
+
+</head>
+<body id="body_subFile">
+<div style="height:100%;">
+    <div style="background-color: #ffffff;padding: 8px;">
+        <button class="gw-l-button" id="openBidInfoWin"
+                onclick="openBidInfoWin()">计算中标结果
+        </button>
+        <button style="margin-left:8px;" class="gw-l-button" id="exportWin" onclick="exportWin()">导出中标结果
+        </button>
+        <button style="margin-right:8px; float: right" class="gw-l-button" id="exportReport" onclick="exportReport()">导出评标汇报
+        </button>
+        <button style="margin-right:8px; float: right" class="gw-l-button" id="btn_minutes" onclick="exportMinutesExcel()">导出定标纪要
+        </button>
+    </div>
+    <div class="tableThCss" style="width:100%;padding:0 8px; float: left; background-color: #ffffff;">
+        <table
+                id="tb_supplierwininfo">
+        </table>
+    </div>
+    <a id="downloadFileLink" href="" style="visibility: hidden"></a>
+    <div class="modal fade bootstrapModalDesign" id="bidInfoModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="width: 800px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">选择授标标段</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="background-color: #ffffff;">
+                        <button style="margin-left: 20px; margin-top: 7px; margin-bottom: 7px;" class="gw-l-button"
+                                id="supplierWin"
+                                onclick="supplierWin('sort')">&emsp;&emsp;按排序计算&emsp;&emsp;
+                        </button>
+                        <button style="margin-left: 20px; margin-top: 7px; margin-bottom: 7px;" class="gw-l-button"
+                                id="supplierWin2"
+                                onclick="supplierWin('price')">&emsp;&emsp;按价格计算&emsp;&emsp;
+                        </button>
+                    </div>
+                    <div class="tableThCss"
+                         style="margin-left: 20px; margin-top: 7px; margin-bottom: 7px;padding-bottom: 10px;">
+                        <table
+                                id="tb_bid_info">
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+
+    $('#tb_supplierwininfo').bootstrapTable({
+        url: "/priceformula/querySupplierWinInfo",          //请求后台的URL（*）
+        method: 'post',                        //请求方式（*）
+        contentType: "application/x-www-form-urlencoded",//post方式必须改请求头
+        striped: true,                        //是否显示行间隔色
+        cache: false,                         //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        clickToSelect: true,                //是否启用点击选中行
+        //height: 475,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        detailView: false,                   //是否显示父子表
+        uniqueId: "id",
+        sortable: true, //是否启用排序
+        sortOrder: "is_win asc", //排序方式
+        height: $(window).height() * 0.9,
+        queryParams: {data: JSON.stringify({orderby: "bid_abbreviaion,ifnull(is_win,'0') desc"})},
+        onLoadSuccess: function () {
+            $('#tb_supplierwininfo').bootstrapTable('expandRow', 0);
+        },
+        onExpandRow: function (index, row, $detail) {
+            initSubTable(index, row, $detail);
+        },
+        onCollapseRow: function (index, row) {
+            return false;
+        },
+        columns: [{
+            field: 'bid',
+            title: 'bid',
+            visible: false,
+            valign: 'middle',
+            align: "center"
+        }, {
+            field: 'id',
+            title: 'id',
+            visible: false,
+            valign: 'middle',
+            align: "center"
+        }, {
+            formatter: function (value, row, index) {
+                return ++index;
+            },
+            title: '序号',
+            valign: 'middle',
+            align: "center",
+            width: "5%"
+        }, {
+            field: 'bid_abbreviaion',
+            title: '标段简称',
+            width: "15%",
+            valign: 'middle',
+            align: "center"
+        }, {
+            field: 'supplier',
+            title: '<div style="text-align: center">供应商名称</div>',
+            width: "30%",
+            valign: 'middle',
+            align: "left"
+        }, {
+            formatter: function (value, row, index) {
+                return value == '1' ? getColorTextSpan('是', '#CC3366') : '';
+            },
+            field: 'is_win',
+            title: '是否中标',
+            width: "5%",
+            valign: 'middle',
+            align: "center",
+            sortable: true
+        }, {
+            field: 'offer',
+            title: '<div style="text-align: center">报价</div>',
+            width: "9%",
+            valign: 'middle',
+            align: "right"
+        }, {
+            field: 'technology_score',
+            title: '技术得分',
+            width: "9%",
+            valign: 'middle',
+            align: "center"
+        }, {
+            field: 'price_score',
+            title: '价格得分',
+            width: "9%",
+            valign: 'middle',
+            align: "center"
+        }, {
+            field: 'business_score',
+            title: '商务得分',
+            width: "9%",
+            valign: 'middle',
+            align: "center"
+        }, {
+            field: 'total_score',
+            title: '总分',
+            width: "9%",
+            valign: 'middle',
+            align: "center"
+        }]
+    });
+    $('#tb_bid_info').bootstrapTable({
+        striped: true,                        //是否显示行间隔色
+        cache: false,                         //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        sortable: false,                     //是否启用排序
+        strictSearch: true,                	//设置为 true启用 全匹配搜索，否则为模糊搜索
+        clickToSelect: true,                //是否启用点击选中行
+        height: 480,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+//        height: $(window).height() * 0.9,
+        sortable: true, //是否启用排序
+        detailView: false,                   //是否显示父子表
+        singleSelect: false,
+        uniqueId: "id",
+        sortOrder: "is_win asc", //排序方式
+        queryParams: {data: JSON.stringify({orderby: "bid_abbreviaion,ifnull(is_win,'0') desc"})},
+        columns: [
+            {
+                checkbox: true,
+                width: '10%'
+            },
+            {
+                field: 'bid',
+                title: 'bid',
+                visible: false,
+                valign: 'middle',
+                align: "center"
+            }, {
+                field: 'id',
+                title: 'id',
+                visible: false,
+                valign: 'middle',
+                align: "center"
+            }, {
+                formatter: function (value, row, index) {
+                    return ++index;
+                },
+                title: '序号',
+                valign: 'middle',
+                align: "center",
+                width: "35%"
+            }, {
+                field: 'bid',
+                title: '标段',
+                width: "55%",
+                valign: 'middle',
+                align: "center"
+            }]
+    });
+    function isArray(value) {
+        return Object.prototype.toString.call(value) === '[object Array]';
+    }
+    function pluckFields(arr, fields) {
+        var result = [];
+        if (isArray(arr) && isArray(fields)) {
+            for (var i = 0; i < arr.length; i++) {
+                var obj = arr[i];
+                var item = {};
+                if (fields.length == 1) {
+                    item = obj[fields[0]];
+                } else {
+                    for (var j = 0; j < fields.length; j++) {
+                        var key = fields[j];
+                        item[key] = obj[key];
+                    }
+                }
+                result.push(item);
+            }
+        }
+        return result;
+    }
+    // table序号函数
+    function indexFormatter(value, row, index) {
+        return index + 1;
+    }
+    // 内容右对齐
+    function rightFormatter(value, row, index) {
+        return "<div style='text-align: right'>" + value + "</div>";
+    }
+    // 行高
+    function height() {
+        return 500;
+    }
+    function getColorTextSpan(text, color) {
+        return "<span style='color:" + color + "'>" + text + "</span>";
+    }
+    function openBidInfoWin() {
+        $('#bidInfoModal').on('shown.bs.modal ', function (e) {
+            var url = '/priceformula/queryBidInSupplier';
+            $.post(url,{data: JSON.stringify({orderby: "bid_abbreviaion,ifnull(is_win,'0') desc"})},function (data) {
+                $("#tb_bid_info").bootstrapTable('load', data);
+            });
+        });
+        //查询流程 查看是否可以计算中标
+        $.post('/priceformula/queryMinIdByState',{"id":"901"},function (data) {
+            if (!data.result){
+                parent.window.alertModal(data.msg);
+                return false;
+            }else{
+                $("#bidInfoModal").modal('show');
+            }
+        });
+
+    }
+    function supplierWin(type) {
+        parent.loadingOn('正在计算,请稍后…');
+        var sel = $("#tb_bid_info").bootstrapTable("getSelections");
+        var bids = pluckFields(sel, ["bid"]);
+        if (bids.length > 0) {
+            bids = "'" + bids.join("','") + "'";
+        } else {
+            bids = '';
+        }
+        $.ajax({
+            url: "/priceformula/calculateIfWin",
+            type: 'POST',
+            dataType: "json",
+            data: {bid: bids,type:type||''},
+            success: function (responseStr) {
+                var result = responseStr;
+                if (result.success) {
+                    parent.window.alertModal("计算成功");
+                    $("#tb_supplierwininfo").bootstrapTable("refresh");
+                    $("#bidInfoModal").modal("hide");
+                } else {
+                    if (result.msg === null || result.msg === undefined) {
+                        parent.window.alertModal("计算失败！");
+                    } else {
+                        parent.window.alertModal(result.msg);
+                    }
+                }
+                parent.loadingOff();
+            },
+            error: function (responseStr) {
+                console.log("error");
+                parent.loadingOff();
+            }
+        });
+    }
+
+
+    function exportWin() {
+        $.ajax({
+            url: "/priceformula/exportWin",
+            type: 'POST',
+            dataType: "json",
+            //data: data,
+            success: function (responseStr) {
+                console.log(responseStr);
+                if (responseStr.success) {
+                    if (responseStr.filename === undefined) {
+                        parent.window.alertModal('无有效数据生成导出文件');
+                        return
+                    }
+                    //$('#downloadFileLink').attr('href', '/priceformula/download?fileName=' + responseStr);
+//                    window.open('/priceformula/download?fileName=' + responseStr.filename)
+                    window.location.target = "_blank"
+                    window.location.href = '/priceformula/download?fileName=' + responseStr.filename
+                } else {
+                    parent.window.alertModal(responseStr.msg);
+                }
+            },
+            error: function (responseStr) {
+                console.log("error");
+            }
+        });
+    }
+//************************ sssjl start *************************
+    /**
+     * 导出评标汇报
+     * */
+    function exportReport() {
+        $.post("/wordExport/queryMinIdByState",function (result) {
+            if (!result.result){
+                parent.alertModal(result.msg);
+                return;
+            }else {
+                window.location.target = "_blank";
+                window.location.href = "/wordExport/export";
+            }
+        });
+    }
+
+    /**
+     * 导出定标纪要
+     */
+    function exportMinutesExcel(){
+        parent.loadingOn('正在导出,请稍后…');
+        var url = "/bidder/exportMinutesExcel";
+        $.post(url,function (data) {
+            if (data.result == "success"){
+                window.location.target = '_blank';
+                window.location.href = "/page/bbgs/excel/"+"定标纪要.zip";
+                parent.window.alertModal(data.msg);
+            }else if(data.result == "fail"){
+                parent.window.alertModal(data.msg);
+            }
+            parent.loadingOff();
+        });
+    }
+    //************************ sssjl end *************************
+
+</script>
+</body>
+</html>

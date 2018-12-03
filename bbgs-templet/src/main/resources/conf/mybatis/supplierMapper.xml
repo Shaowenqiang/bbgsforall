@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.hqep.templet.dao.supplierDao">
+    <sql id="DefaultTableName">TBL_BBGS_SUPPLIER</sql>
+    <sql id="DefaultSelects"> ID , SUPPLIER </sql>
+    <resultMap id="DefaultResultMap" type="cn.com.hqep.templet.model.tblBbgsBatchModel">
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="SUPPLIER" jdbcType="VARCHAR" property="supplier"/>
+    </resultMap>
+    <insert id="saveSupplier" parameterType="String">
+        INSERT INTO
+        <include refid="DefaultTableName"/>
+        (
+        <include refid="DefaultSelects"/>
+        )
+        VALUES (
+        replace(uuid(), '-', ''),
+        #{supplier,jdbcType=VARCHAR}
+        )
+    </insert>
+</mapper>

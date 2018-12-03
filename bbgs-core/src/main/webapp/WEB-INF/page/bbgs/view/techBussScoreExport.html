@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>技术商务评分表导出</title>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" href="../css/boostrapTableCss.css">
+    <link rel="stylesheet" href="../css/techBussScoreExport.css">
+    <link rel="stylesheet" href="../css/button.css">
+</head>
+<body>
+<div class="containerMine">
+    <button class="gw-l-button" onclick="exportExcel()" id="exportBtn">导出专家评分表（空）</button>
+</div>
+<div class="greenLine"></div>
+<div class="flexRow" style="width: 100%;padding-left: 8px;">
+    <div class="bootstrapTableCssDesign flex1 " style="width: 50%">
+        <table id="table"></table>
+    </div>
+    <div class="flex1 flexColumn rightDiv" style="width: 50%;min-width: 480px;">
+        <form id="filesForm" onsubmit="return saveReport()" action="/scoreImport/scoreImport" method="post"
+              enctype="multipart/form-data">
+            <div class="flexSpace" style="text-align: center;width: 100%">
+                <div class="inputFileWrapper flexRow">
+                    <label for="inputFile">
+                        <input type="file" id="inputFile" name="file" webkitdirectory="" title=""/>
+                        <span class="custorm-style">
+                    <span class="left-button">选择组文件夹</span>
+                    <span class="right-text" id="rightText" title="请选择组文件夹"></span>
+                    </span>
+                    </label>
+                </div>
+                <div class="flexRow mr8">
+                    <button class="gw-l-button" type="submit">导入专家评分数据</button>
+                </div>
+            </div>
+        </form>
+        <div id="msgArea" class="flex1 mt8 mr8" style="border: 1px #cccccc solid;">
+
+        </div>
+    </div>
+</div>
+<script src="../plugins/jquery-1.9.1.min.js"></script>
+<script src="../plugins/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="../plugins/bootstrap-table/bootstrap-table.js"></script>
+<script src="../plugins/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+<script src="../plugins/jquery.form.js"></script>
+<script>
+    function saveReport() {
+        if ($("#inputFile").val() === "") {
+            parent.alertModal("请选择组文件夹")
+            return false
+        }
+        parent.loadingOn("导入中...")
+        $("#filesForm").ajaxSubmit(function (message) {
+            var p = ''
+            var b = true
+            for (var i = message.length-1; i >-1; i--) {
+                if (message[i].state === 'error') {
+                    if (message[i].msg !== null && message[i].msg !== "" && message[i].msg !== undefined){
+                        p = '<p style="color:red">' + message[i].msg + '</p>';
+                        $("#msgArea").append(p)
+                        b=false
+                        break
+                    }
+                }
+                if (message[i].state === 'success') {
+                    p = '<p>' + message[i].msg + '</p>';
+                    $("#msgArea").append(p)
+                }
+
+            }
+            if(b){
+                parent.alertModal("导入成功")
+            }else{
+                parent.alertModal("导入失败")
+            }
+            $("#table").bootstrapTable("refresh")
+            parent.window.loadingOff()
+
+// 对于表单提交成功后处理，message为提交页面saveReport.htm的返回内容
+        });
+        return false
+    }
+
+    function importAllFiles() {
+        var formData = new FormData($("#filesForm")[0]);
+        if (upFile.length > 0) {
+            $.ajax({
+                url: "/scoreImport/scoreImport",
+                type: 'POST',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                enctype: "multipart/form-data",
+//                processData: false,
+//                // 告诉jQuery不要去设置Content-Type请求头
+//                contentType: false,
+//                beforeSend: function () {
+//                    parent.window.importingModal()
+//                },
+//                complete: function () {
+//                    parent.window.closeImportingModal()
+//                },
+                success: function (result) {
+                },
+                error: function (responseStr) {
+                }
+            });
+        }
+    }
+
+    //初始化Table
+    $('#table').bootstrapTable({
+        url: "/scoreImport/getAllExpert",          //请求后台的URL（*）
+        method: 'get',                        //请求方式（*）
+        striped: true,                        //是否显示行间隔色
+        cache: false,                         //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        clickToSelect: true,                //是否启用点击选中行
+        height: $(window).height() - 58,
+        width: "100%",
+        onLoadSuccess: function (data) {
+            if(data.length > 0){
+//                $("#exportBtn").removeAttr("disabled");
+            }else {
+//                $("#exportBtn").attr("disabled","disable");
+            }
+        },
+        columns: [{
+            field: 'id',
+            title: 'ID',
+            visible: false,
+            align: "center"
+        }, {
+            formatter: function (value, row, index) {
+                return ++index;
+            },
+            title: '<div>序号</div>',
+            align: "center",
+            width: 40
+        }, {
+            formatter: function (value, row, index) {
+                return '<div style="text-align: left">' + value + '</div>';
+            },
+            field: 'expertGroupName',
+            title: '专家组名称',
+            align: "center"
+
+        }, {
+            formatter: function (value, row, index) {
+                return '<div style="text-align: left">' + value + '</div>';
+            },
+            field: 'expertName',
+            title: '专家',
+            align: "center"
+        }, {
+            field: 'scoreNum_b',
+            title: '评分数量',
+            align: "center",
+            formatter: function (value, row, index) {
+                var b = row.scoreNum_b
+                var t = row.scoreNum_t
+                if (b > t) {
+                    return '<div style="text-align: right">' + b + '</div>';
+                }
+                return '<div style="text-align: right">' + t + '</div>';
+            }
+        }
+            , {
+                formatter: function (value, row, index) {
+                    return '<div style="text-align: right">' + value + '</div>';
+                },
+                field: 'importNum',
+                title: '导入数量',
+                align: "center"
+            }
+//            {
+//            field: 'state',
+//            title: '状态',
+//            align: "center",
+//        }
+        ]
+    });
+    /**
+     * 处理 文件数组
+     *   localStorage.setItem("allFiles", JSON.stringify(result));
+     JSON.parse(localStorage.getItem("allFiles"))
+     * @type {*}
+     */
+    var fileBtn = $("input[type=file]");
+    //储存将要上传的files文件
+    var upFile = []
+    var files = {}
+    fileBtn.on("change", function () {
+        upFile = []
+        files = $("#inputFile")[0].files;
+        for (var i = 0; i < files.length; i++) {
+            var name = files[0].name
+            if (name.indexOf("$") !== 1 && (name.indexOf(".xls") > -1 || name.indexOf(".xlsx") > -1)) {
+                upFile.push(files[i])
+            }
+        }
+//        var index = $(this).val().lastIndexOf("\\");
+//        var sFileName = $(this).val().substr((index + 1));
+        $("#rightText").html("选择了" + upFile.length + "个EXCEL文件");
+    });
+
+    /**
+     * 导出技术商务Excel模板
+     */
+    function exportExcel() {
+        parent.loadingOn("技术、商务评分模板生成中...")
+        $.post("/scoreImport/templetExport", function (result) {
+            console.log(result)
+            if(result.state==="success"){
+                window.location.target = '_blank'
+                window.location.href = '/page/bbgs/excel/技术、商务评分表.zip'
+            }
+            if(result.state === "error"){
+                if (result.msg!==null){
+                    parent.alertModal(result.msg)
+                }else {
+                    parent.alertModal("技术、商务评分表不存在")
+                }
+
+            }
+            parent.loadingOff()
+        })
+    }
+
+    /**
+     * 合并单元格
+     * @param data  原始数据（在服务端完成排序）
+     * @param fieldName 合并属性名称
+     * @param colspan   合并列
+     * @param target    目标表格对象
+     */
+    function mergeCells(data, fieldName, colspan, target) {
+        //声明一个map计算相同属性值在data对象出现的次数和
+        var sortMap = {};
+        for (var i = 0; i < data.length; i++) {
+            for (var prop in data[i]) {
+                if (prop == fieldName) {
+                    var key = data[i][prop]
+                    if (sortMap.hasOwnProperty(key)) {
+                        sortMap[key] = sortMap[key] * 1 + 1;
+                    } else {
+                        sortMap[key] = 1;
+                    }
+                    break;
+                }
+            }
+        }
+        for (var prop in sortMap) {
+        }
+        var index = 0;
+        for (var prop in sortMap) {
+            var count = sortMap[prop] * 1;
+            $(target).bootstrapTable('mergeCells', {index: index, field: fieldName, colspan: colspan, rowspan: count});
+            index += count;
+        }
+    }
+
+    var timeoutId = '000'
+    $(window).resize(function () {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(function () {
+            $("#table").bootstrapTable('resetView')
+        }, 50);
+    })
+</script>
+</body>
+</html>

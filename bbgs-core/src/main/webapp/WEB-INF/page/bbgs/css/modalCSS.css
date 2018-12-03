@@ -1,0 +1,466 @@
+.inputCss input {
+    border: 1px solid #cccccc;
+    padding-left: 10px;
+    line-height: 28px;
+    height: 32px;
+    border-radius:3px;
+}
+.inputCss select{
+    border: 1px solid #cccccc;
+    padding-left: 10px;
+    line-height: 28px;
+    height: 32px;
+    border-radius:3px;
+}
+label{
+    font-weight: normal;
+}
+
+/*隐藏表头*/
+.hideTh .fixed-table-container thead th .th-inner {
+	display: none;
+}
+/*表头颜色样式（一）*/
+.addthCssOne table thead tr:nth-of-type(1){
+    background-color: #18ab8f;
+}
+/*表头颜色样式（二）*/
+.addthCssTwo table thead tr:nth-of-type(1){
+    background-color: #eeeeee;
+}
+/*奇偶变色*/
+.hideThtable-striped .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #eeeced;
+}
+/*奇偶变色*/
+.hideThtable-striped .table-striped > tbody > tr:nth-of-type(even) {
+    background-color: #f5f5f5;
+}
+/*table行高*/
+.DataSourceModal  .bootstrap-table .table:not(.table-condensed) > tbody > tr > td{
+    padding: 0 0 0 6px;
+    line-height: 31px;
+    height: 32px;
+}
+/*表头内边距*/
+.DataSourceModal .fixed-table-container thead th .th-inner{
+    padding: 6px;
+}
+/*表头第二行的内边距*/
+.DataSourceModal .fixed-table-container thead tr:nth-of-type(2) .th-inner{
+    padding: 0px;
+}
+/*隐藏表头第二行第一列内容*/
+.DataSourceModal .fixed-table-container thead tr:nth-of-type(2) th:nth-of-type(1) .th-inner{
+    display: none;
+}
+/*表格悬浮样式*/
+.DataSourceModal .table-hover > tbody > tr:hover > td{
+    background-color: #aee7d6;
+}
+/*表格选中样式*/
+.DataSourceModal .fixed-table-container tbody .selected td {
+    background-color: #aee7d6;
+}
+
+/*模态框 X（退出） 的样式*/
+.DataSourceModal .modal-header span{
+    color: #ffffff;
+}
+/*模态框header样式*/
+.DataSourceModal .modal-header{
+    padding:5px 10px 5px 15px ;
+    background-color: #273947;
+    color: #ffffff;
+    font-size: 18px;
+}
+/*取消模态框body内边距*/
+.DataSourceModal .modal-body{
+    padding: 0px;
+}
+
+/*模态框footer样式修改*/
+.DataSourceModal .modal-footer {
+    padding: 5px 0px 13px 0px;
+    border-top: 0px solid #e5e5e5;
+}
+
+/*词库维护的表格样式**/
+/*奇偶变色*/
+.LexiconModal-striped .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #ffffff;
+}
+/*奇偶变色*/
+.LexiconModal-striped .table-striped > tbody > tr:nth-of-type(even) {
+    background-color: #f9f9f9;
+}
+
+/*table行高*/
+.LexiconModal  .bootstrap-table .table:not(.table-condensed) > tbody > tr > td{
+    padding: 0 0 0 6px;
+    line-height: 31px;
+    height: 32px;
+}
+/*表头内边距*/
+.LexiconModal .fixed-table-container thead th .th-inner{
+    padding: 6px;
+}
+/* /*表头第二行的内边距*/
+/* .LexiconModal .fixed-table-container thead tr:nth-of-type(2) .th-inner{ */
+/*     padding: 0px; */
+/* } */
+/* /*隐藏表头第二行第一列内容*/
+/* .LexiconModal .fixed-table-container thead tr:nth-of-type(2) th:nth-of-type(1) .th-inner{ */
+/*     display: none; */
+/* } */
+/*表格悬浮样式 */
+.LexiconModal .table-hover > tbody > tr:hover > td{
+    background-color: #f9f9f9;
+}
+/*表格选中样式 */
+.LexiconModal .fixed-table-container tbody .selected td {
+    background-color: #f9f9f9;
+}
+
+
+/*模态框 X（退出） 的样式*/
+.LexiconModal .modal-header span{
+    font-size: 21px;
+    color: #ffffff;
+}
+/*模态框header样式*/
+.LexiconModal .modal-header{
+    padding:5px 10px 5px 15px ;
+    background-color: #273947;
+    color: #ffffff;
+    font-size: 18px;
+}
+/*取消模态框body内边距*/
+.LexiconModal .modal-body{
+    padding: 0px;
+}
+
+/*模态框footer样式修改*/
+.LexiconModal .modal-footer {
+    padding: 5px 0px 13px 0px;
+    border-top: 0px solid #e5e5e5;
+}
+/*词库维护样式 end**/
+
+/*  取消下边框
+    解决表格在模态框的高度超出范围问题
+*/
+.tableBorderHide .fixed-table-container{
+    border: 0px solid #d7d7d7;
+    border-bottom: 0px solid #dddddd;
+}
+
+.addTableBorder{
+    border: 1px solid #d7d7d7;
+    border-radius:3px;
+}
+
+.tabletitle{
+	height: 36px;
+	line-height:36px;
+	padding-left:6px;
+	font-size:16px;
+	font-weight:bold;
+	border-bottom: 1px solid #cccccc;
+	border-radius:3px 3px 0px 0px;
+	background: #18ab8f;
+	color:#ffffff;
+}
+.tablebody{
+	height: 97px;
+	overflow-y: scroll;
+}
+.textright {
+    text-align: right;
+}
+
+.textleft {
+    text-align: left;
+}
+
+.textcenter {
+    text-align: center;
+}
+
+/*padding-left*/
+.pl2 {
+    padding-left: 2px;
+}
+.pl3{
+    padding-left: 3px;
+}
+.pl4{
+    padding-left: 4px;
+}
+.pl5 {
+    padding-left: 5px;
+}
+
+.pl10 {
+    padding-left: 10px;
+}
+
+.pl15 {
+    padding-left: 15px;
+}
+
+.pl16 {
+    padding-left: 16px;
+}
+
+.pl20 {
+    padding-left: 20px;
+}
+.pl28 {
+    padding-left: 28px;
+}
+
+.pl30 {
+    padding-left: 30px;
+}
+
+/*padding-right*/
+.pr2 {
+    padding-right: 2px;
+}
+.pr4 {
+    padding-right: 4px;
+}
+.pr5 {
+    padding-right: 5px;
+}
+
+.pr10 {
+    padding-right: 10px;
+}
+
+/* margin-top*/
+.mt15 {
+    margin-top: 15px;
+}
+
+.mt-6 {
+    margin-top: -6px;
+}
+
+/**margin-right*/
+.mr70 {
+    margin-right: 70px;
+}
+
+.mr76 {
+    margin-right: 76px;
+}
+
+
+/**margin-left*/
+.ml10{
+    margin-left: 10px;
+}
+.ml15{
+    margin-left: 15px;
+}
+.ml20{
+    margin-left: 20px;
+}
+.ml30{
+    margin-left: 30px;
+}
+/* table中文本框input*/
+.width205{
+    width: 205px;
+}
+.width181{
+    width: 181px;
+}
+.width300{
+    width: 300px;
+}
+.width438{
+	 width: 438px;
+}
+.width440{
+    width: 440px;
+}
+.dialog-table-input {
+    width: 160px;
+
+}
+
+.dialog-table-input95 {
+    width: 90px;
+
+}
+
+.dialog-table-input100 {
+    width: 100px;
+
+}
+
+.dialog-table-input110 {
+    width: 110px;
+
+}
+
+.dialog-table-input120 {
+    width: 120px;
+
+}
+
+.dialog-table-input125 {
+    width: 125px;
+
+}
+
+.dialog-table-input135 {
+    width: 135px;
+
+}
+.dialog-table-input136{
+    width: 136px;
+
+}
+
+.dialog-table-input146{
+    width: 148px;
+
+}
+.dialog-table-input140 {
+    width: 140px;
+
+}
+
+.dialog-table-input142 {
+    width: 141px;
+
+}
+.dialog-table-input143{
+    width: 143px;
+
+}
+.dialog-table-input135 {
+    width: 135px;
+
+}
+
+.dialog-table-input165 {
+    width: 165px;
+
+}
+
+.dialog-table-input170 {
+    width: 170px;
+}
+
+.dialog-table-input173 {
+    width: 173px;
+}
+.dialog-table-input131{
+    width: 131px;
+}
+
+.dialog-table-input210 {
+    width: 210px;
+}
+.dialog-table-input226 {
+    width: 226px;
+}
+
+/* table中文本框select*/
+.dialog-table-select {
+    width: 163px;
+}
+
+.dialog-table-select103 {
+    width: 103px;
+}
+
+.dialog-table-select120 {
+    width: 120px;
+}
+
+.dialog-table-select134 {
+    width: 134px;
+}
+.dialog-table-select139 {
+    width: 139px;
+}
+
+.dialog-table-select143 {
+    width: 143px;
+}
+
+.dialog-table-select144 {
+    width: 144px;
+}
+
+.dialog-table-select145 {
+    width: 145px;
+}
+.dialog-table-select146{
+    width: 146px;
+}
+.dialog-table-select176 {
+    width: 176px;
+}
+.dialog-table-select229{
+    width: 229px;
+}
+/**line-height*/
+.lh30 {
+    line-height: 30px;
+}
+
+.lh36 {
+    line-height: 36px;
+}
+
+.lh37 {
+    line-height: 37px;
+}
+
+.lh70 {
+    line-height: 70px;
+}
+
+.lh110 {
+    line-height: 110px;
+}
+
+/**font-weight
+	font-size
+*/
+.bold-size16 {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/**border-bottom
+	color
+*/
+.borderbottom {
+    border-bottom: 1px solid #000;
+    color: #B79050;
+}
+
+/***
+labelwidth
+ */
+.labelwidth {
+    width: 105px;
+}
+.addTitleCss{
+    background-color: #eeeced;
+    line-height: 36px;
+    height: 36px;
+    color: #333333;
+    border-bottom: 1px solid #d7d7d7
+}
+.badge{
+	cursor:pointer;
+}

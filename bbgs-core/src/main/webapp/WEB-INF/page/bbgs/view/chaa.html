@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查询</title>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" href="../css/subFileCss.css">
+    <link rel="stylesheet" href="../css/button.css">
+    <script src="../plugins/jquery-1.9.1.min.js"></script>
+    <script src="../plugins/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="../plugins/bootstrap-table/bootstrap-table.js"></script>
+    <script src="../plugins/bootstrap-table/bootstrap-table-zh-CN.js"></script>
+
+    <script src="../plugins/underscore-min.js"></script>
+
+    <style>
+        html {
+            height: 100%;
+        }
+
+        /*body 背景设置为白色*/
+        body {
+            height: 100%;
+            background-color: #ffffff
+        }
+
+        input {
+            width: 350px;
+            padding: 3px 10px 5px 10px;
+            border-color: rgb(204, 204, 204);
+            height: 32px;
+            line-height: 28px;
+            vertical-align: middle;
+            border-radius: 4px;
+        }
+
+        .flexRow {
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 8px;
+        }
+
+        .flexRow > label {
+            line-height: 32px;
+            font-weight: normal;
+            font-size: 16px
+        }
+
+        .flexRow > input {
+            width: 196px;
+            height: 32px;
+        }
+    </style>
+
+</head>
+<body>
+<!--将 标段名称 和 投标单位 设置为 一组 写一列 两行-->
+<div class="flexRow">
+
+    <div style="text-align: left;flex: 1;">
+            <button id="exportBtn" class="gw-l-button" style="min-width:300px" onclick="exportFirstExcel()" type="button">导出投标人清单</button>
+    </div>
+    <label>标段简称：</label>
+    <input oninput="chaaquery()" class="form-control" type="text" id="sbdname" placeholder="标段简称"
+    ><br>
+    <label style="margin-left: 16px;">供应商名称：</label>
+    <input oninput="chaaquery()" type="text" class="form-control" id="gysname" placeholder="供应商名称"
+    >
+</div>
+<!--建立表格-->
+<div class="bootstrapTableCssDesign">
+    <table class="table table-hover table-striped table-responsive"
+           id="selecttable"
+           data-toggle="table"
+           data-pagination="true"
+           data-page-list="[10, 30, 50]"
+           data-url="/tenderer/all">
+        <!--表头-->
+        <thead>
+        <tr>
+            <!--序号自增-->
+            <th data-width="40" data-align="center" data-formatter="indexformatter">序号</th>
+            <th data-field="bidAbbreviaion" data-align="center" data-formatter="leftformatter">标段简称</th>
+            <th data-field="supplier" data-align="center" data-formatter="leftformatter">供应商名称</th>
+            <th data-field="tel" data-align="center" data-formatter="rightformatter">联系电话</th>
+            <th data-field="email" data-align="center" data-formatter="rightformatter">电子邮箱</th>
+            <th data-field="remit" data-align="center">是否付款</th>
+            <th data-field="send" data-align="center">是否发送</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<script>
+//    $.post("/tenderer/all",function (result) {
+//        console.log(result)
+//        if(result.length>0){
+//            $("#exportBtn").removeAttr("disabled")
+//        }else {
+//            $("#exportBtn").attr("disabled","disabled")
+//        }
+//    })
+    var $table = $('#selecttable')
+    $(function () {
+        $table.bootstrapTable('resetView', {height: $("body").height()-40})
+    })
+
+    /*序号自增*/
+    function indexformatter(value, row, index) {
+        return index + 1
+    }
+
+    /*格式*/
+    function rightformatter(value, row, index) {
+        if (value == null) {
+            value = "-"
+        }
+        return "<div style='text-align: right'>" + value + "</div>"
+    }
+
+    function leftformatter(value, row, index) {
+        if (value === null) {
+            value = "-"
+        }
+        return "<div style='text-align: left'>" + value + "</div>"
+    }
+
+    /*输入触发查询操作*/
+    function chaaquery() {
+        selectAction()
+    }
+
+    /*查询*/
+    function selectAction() {
+        var url = "/tenderer/all"
+        var data = {
+            "sbdname": $("#sbdname").val(),
+            "gysname": $("#gysname").val()
+        }
+        tiao(url, data)
+    }
+
+    //页面传参 公用方法
+    function tiao(url, data) {
+        $.post(url, data, function (obj) {
+            $table.bootstrapTable('load', obj)
+
+        })
+    }
+    var timeoutId = '000'
+    $(window).resize(function () {
+        clearTimeout(timeoutId)
+        timeoutId = setTimeout(function () {
+            $table.bootstrapTable('resetView', {height: $("body").height()-40})
+        }, 50)
+    })
+
+    /**
+     * 导出唱标清单和投标人清单
+     */
+    function exportFirstExcel() {
+        parent.exportFirstExcel()
+    }
+</script>
+
+</body>
+</html>

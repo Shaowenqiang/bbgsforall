@@ -1,0 +1,66 @@
+<tr style='mso-yfti-irow:1;height:18.0pt;border-bottom:$p_style$'>
+  <td width=80 style='width:48.0pt;border-top:none;border-left:none;border-bottom:
+  $p_style$border-right:solid windowtext 1.0pt;mso-border-top-alt:
+  solid windowtext .25pt;mso-border-top-alt:solid windowtext .25pt;mso-border-right-alt:solid windowtext .25pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:18.0pt'>
+  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
+  lang=EN-US style='font-size:12.0pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  Arial;mso-bidi-font-family:Arial;mso-font-kerning:0pt;mso-bidi-font-weight:
+  bold'>$分标编号$<o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width=238 style='width:143.0pt;border-top:none;border-left:none;border-bottom:none;
+  border-bottom:$p_style$border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .25pt;mso-border-left-alt:solid windowtext .25pt;
+  padding:0cm 5.4pt 0cm 5.4pt;height:
+  18.0pt'>
+  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
+  lang=EN-US style='font-size:12.0pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  Arial;mso-bidi-font-family:Arial;mso-font-kerning:0pt;mso-bidi-font-weight:
+  bold'>$分标号$</span><span style='font-size:12.0pt;font-family:仿宋_GB2312;
+  mso-hansi-font-family:Arial;mso-bidi-font-family:Arial;mso-font-kerning:0pt;
+  mso-bidi-font-weight:bold'>$分标名称$<span lang=EN-US><o:p></o:p></span></span></p>
+  </td>
+  <td width=80 style='width:48.0pt;border-top:none;border-left:none;border-bottom:
+  $p_style$border-right:solid windowtext 1.0pt;mso-border-top-alt:
+  solid windowtext .25pt;mso-border-left-alt:solid windowtext .25pt;padding:0cm 5.4pt 0cm 5.4pt;height:18.0pt'>
+  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
+  lang=EN-US style='font-size:12.0pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  Arial;mso-bidi-font-family:Arial;mso-font-kerning:0pt;mso-bidi-font-weight:
+  bold'>$投标人数$<o:p></o:p></span></p>
+  </td>
+  <td width=80 style='width:48.0pt;border-top:none;border-left:none;border-bottom:
+  $p_style$border-right:solid windowtext 1.0pt;mso-border-top-alt:
+  solid windowtext .25pt;mso-border-left-alt:solid windowtext .25pt;padding:0cm 5.4pt 0cm 5.4pt;height:18.0pt'>
+  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
+  lang=EN-US style='font-size:12.0pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  Arial;mso-bidi-font-family:Arial;mso-font-kerning:0pt;mso-bidi-font-weight:
+  bold'>$投标文件份数$<o:p></o:p></span></p>
+  </td>
+  <td width=80 style='width:48.0pt;border-top:none;border-left:none;border-bottom:
+  $p_style$border-right:solid windowtext 1.0pt;mso-border-top-alt:
+  solid windowtext .25pt;mso-border-left-alt:solid windowtext .25pt;padding:0cm 5.4pt 0cm 5.4pt;height:18.0pt'>
+  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
+  lang=EN-US style='font-size:12.0pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  Arial;mso-bidi-font-family:Arial;mso-font-kerning:0pt;mso-bidi-font-weight:
+  bold'>$详评人数$<o:p></o:p></span></p>
+  </td>
+  <td width=80 style='width:48.0pt;border-top:none;border-left:none;border-bottom:
+  $p_style$border-right:solid windowtext 1.0pt;mso-border-top-alt:
+  solid windowtext .25pt;mso-border-left-alt:solid windowtext .25pt;padding:0cm 5.4pt 0cm 5.4pt;height:18.0pt'>
+  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
+  lang=EN-US style='font-size:12.0pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  Arial;mso-bidi-font-family:Arial;mso-font-kerning:0pt;mso-bidi-font-weight:
+  bold'>$未响应份数$<o:p></o:p></span></p>
+  </td>
+  <td width=80 style='width:48.0pt;border:none;border-bottom:$p_style$
+  mso-border-top-alt:solid windowtext .25pt;mso-border-left-alt:solid windowtext .25pt;
+  mso-border-top-alt:solid windowtext .25pt;mso-border-left-alt:solid windowtext .25pt;
+  padding:0cm 5.4pt 0cm 5.4pt;
+  height:18.0pt'>
+  <p class=MsoNormal align=center style='text-align:center;mso-pagination:widow-orphan'><span
+  lang=EN-US style='font-size:12.0pt;font-family:仿宋_GB2312;mso-hansi-font-family:
+  Arial;mso-bidi-font-family:Arial;mso-font-kerning:0pt;mso-bidi-font-weight:
+  bold'>$否决率$<o:p></o:p></span></p>
+  </td>
+ </tr>
+ 

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "1",
+    "descript": "【物资】区间复合平均价法",
+    "remark": "根据起始值结束值去掉最高价最低价等条件计算",
+    "type": "0",
+    "formulafun": "formulaService@materials_priceFormula_1"
+  },
+  {
+    "id": "2",
+    "descript": "【物资】最低评标价法",
+    "remark": "根据最低评标价计算",
+    "type": "0",
+    "formulafun": "formulaService@materials_priceFormula_2"
+  },
+  {
+    "id": "6",
+    "descript": "【物资】电商公式",
+    "remark": "采用平均浮动双曲线计算报价得分",
+    "type": "0",
+    "formulafun": "formulaService@materials_priceFormula_3"
+  },
+  {
+    "id": "3",
+    "descript": "【服务】服务公式1",
+    "remark": "价格得分=(投标报价权重-投标报价权重×n×(|投标人的评标价-基准价1|/基准价1))×100",
+    "type": "1",
+    "formulafun": "formulaService@notmaterials_priceFormula_1"
+  },
+  {
+    "id": "4",
+    "descript": "【服务】服务公式2",
+    "remark": "价格得分＝(基准价2/投标人的评标价)×100",
+    "type": "1",
+    "formulafun": "formulaService@notmaterials_priceFormula_2"
+  },
+  {
+    "id": "5",
+    "descript": "【服务竞谈】",
+    "remark": "标段包内按最终金额报价或最终折扣比例计算价格得分",
+    "type": "1",
+    "formulafun": "formulaService@notmaterials_priceFormula_3"
+  }
+]
